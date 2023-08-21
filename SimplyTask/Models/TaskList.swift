@@ -5,12 +5,12 @@
 //  Created by Тимофей Юдин on 13.07.2023.
 //
 
-import SwiftUI
+import RealmSwift
 
-struct TaskList {
-    var title: String
-    var numberOfTasks: Int
-    var colorOfImportant: Color
-    var isPrivate: Bool
-    var tasks: [Task]
+class TaskList: Object {
+    var title = ""
+    var numberOfTasks = 0
+    var colorOfImportant = 0
+    var isPrivate = false
+    var tasks = List<Task>()
 }

@@ -5,19 +5,9 @@
 //  Created by Тимофей Юдин on 17.07.2023.
 //
 
-import Foundation
+import RealmSwift
 
-struct Task {
-    let title: String
-    var isDone: Bool
-}
-
-extension Task {
-    static func getTasks() -> [Task] {
-        return [
-            Task(title: "Tasd sf djnnfsjndskndsndjsndjnsdjnjandkdbfjdasfjfbsbndnddsbfnbdnfbdnbfndbfnbdnfbdk", isDone: true),
-            Task(title: "Task2", isDone: false),
-            Task(title: "Task3", isDone: false)
-        ]
-    }
+class Task: Object {
+    var title = ""
+    var isDone = false
 }
