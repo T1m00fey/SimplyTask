@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import Foundation
 
-struct TaskList {
+struct TaskList: Codable {
     var title: String
     var numberOfTasks: Int
-    var colorOfImportant: Color
+    var colorOfImportant: Int
     var isPrivate: Bool
     var tasks: [Task]
 }
+

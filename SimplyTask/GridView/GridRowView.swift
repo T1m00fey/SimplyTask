@@ -10,6 +10,8 @@ import SwiftUI
 struct GridRowView: View {
     let index: Int
     
+    private let storageManager = StorageManager.shared
+    
     @EnvironmentObject var gridViewModel: GridViewModel
     @EnvironmentObject var listViewModel: ListViewModel
     
@@ -31,7 +33,7 @@ struct GridRowView: View {
             
             Circle()
                 .frame(width: 10, height: 10)
-                .foregroundColor(listViewModel.lists[index].colorOfImportant)
+                .foregroundColor(gridViewModel.getColorOfImportant(byNum: listViewModel.lists[index].colorOfImportant))
                 .offset(x: 60, y: -50)
             
             if listViewModel.lists[index].isPrivate {
@@ -62,12 +64,14 @@ struct GridRowView: View {
                         
                         if listViewModel.lists[index].isPrivate {
                             listViewModel.requestBiometricUnlock {
-                                DispatchQueue.main.sync {
-                                    listViewModel.lists.remove(at: gridViewModel.selectedIndexForDelete)
-                                }
+                                storageManager.deleteList(atIndex: gridViewModel.selectedIndexForDelete)
+                                
+                                listViewModel.reloadData()
                             }
                         } else {
-                            listViewModel.lists.remove(at: gridViewModel.selectedIndexForDelete)
+                            storageManager.deleteList(atIndex: gridViewModel.selectedIndexForDelete)
+                            
+                            listViewModel.reloadData()
                         }
                         
                         if listViewModel.lists.count <= 1 {

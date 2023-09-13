@@ -10,6 +10,8 @@ import SwiftUI
 struct EditListView: View {
     let indexOfList: Int
     
+    private let storageManager = StorageManager.shared
+    
     @FocusState private var isFocused: Bool
     @StateObject private var viewModel = EditListViewModel()
     
@@ -97,8 +99,15 @@ struct EditListView: View {
                         DispatchQueue.main.async {
                             if !viewModel.textFromTF.isEmpty {
                                 listViewModel.lists[indexOfList].title = viewModel.textFromTF
-                                listViewModel.lists[indexOfList].colorOfImportant = viewModel.getColorOfImportant()
+                                listViewModel.lists[indexOfList].colorOfImportant = viewModel.getNewColorOfImportant()
                                 listViewModel.lists[indexOfList].isPrivate = viewModel.isListPrivate
+                                
+                                storageManager.resave(
+                                    title: viewModel.textFromTF,
+                                    colorOfImportant: viewModel.getNewColorOfImportant(),
+                                    isPrivate: viewModel.isListPrivate,
+                                    atIndex: indexOfList
+                                )
                             }
                         }
                         

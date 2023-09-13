@@ -26,13 +26,13 @@ final class EditListViewModel: ObservableObject {
         }
     }
     
-    func getLevelOfImportant(_ color: Color) {
+    func getLevelOfImportant(_ color: Int) {
         switch color {
-        case .green:
+        case 1:
             selectedLevel = 1
-        case .yellow:
+        case 2:
             selectedLevel = 2
-        case .red:
+        case 3:
             selectedLevel = 3
         default:
             selectedLevel = 0
@@ -43,16 +43,29 @@ final class EditListViewModel: ObservableObject {
         isListPrivate = isPrivate ? true : false
     }
     
-    func getColorOfImportant() -> Color {
+    func getNewColorOfImportant() -> Int {
         switch selectedLevel {
         case 0:
-            return .gray
+            return 4
+        case 1:
+            return 1
+        case 2:
+            return 2
+        default:
+            return 3
+        }
+    }
+    
+    func getColorOfImportant(byNum num: Int) -> Color {
+        switch num {
         case 1:
             return .green
         case 2:
             return .yellow
-        default:
+        case 3:
             return .red
+        default:
+            return .gray
         }
     }
 }

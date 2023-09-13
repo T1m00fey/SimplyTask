@@ -7,12 +7,10 @@
 
 import SwiftUI
 import LocalAuthentication
-import CoreData
 
 final class ListViewModel: ObservableObject {
-    @Published var lists: [TaskList] = [
-        TaskList(title: "cxcxcxcxcxcxcxcxc", numberOfTasks: 0, colorOfImportant: .gray, isPrivate: true, tasks: [])
-    ]
+    
+    @Published var lists: [TaskList] = StorageManager().fetchData()
     
     @Published var isFaceIDSuccess = false
     @Published var isFaceIDError = false
@@ -76,5 +74,9 @@ final class ListViewModel: ObservableObject {
         default:
             return .gray
         }
+    }
+    
+    func reloadData() {
+        lists = StorageManager().fetchData()
     }
 }

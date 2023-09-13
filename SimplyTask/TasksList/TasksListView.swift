@@ -10,6 +10,8 @@ import SwiftUI
 struct TasksListView: View {
     let indexOfList: Int
     
+    private let storageManager = StorageManager.shared
+    
     @StateObject private var viewModel = TasksListViewModel()
     
     @EnvironmentObject var listViewModel: ListViewModel
@@ -50,17 +52,19 @@ struct TasksListView: View {
                                             .foregroundColor(viewModel.getTitleOfTask(task.isDone))
                                         
                                         Button {
-                                            listViewModel.lists[indexOfList].tasks[index].isDone.toggle()
+                                            storageManager.toggleIsDone(indexOfTask: index, indexOfList: indexOfList)
                                             
                                             if task.isDone {
-                                                listViewModel.lists[indexOfList].numberOfTasks += 1
+                                                storageManager.plusOneTask(atIndex: indexOfList)
                                             } else {
-                                                listViewModel.lists[indexOfList].numberOfTasks -= 1
+                                                storageManager.deleteOneTask(atIndex: indexOfList)
                                             }
                                             
                                             if listViewModel.lists[indexOfList].numberOfTasks < 1 {
                                                 viewModel.isListEditing = false
                                             }
+                                            
+                                            listViewModel.reloadData()
                                         } label: {
                                             if task.isDone {
                                                 CheckmarkCircleView()
@@ -86,8 +90,10 @@ struct TasksListView: View {
                                                 Button("Удалить", role: .destructive) {
                                                     viewModel.isAlertForDeletePresenting.toggle()
                                                     
-                                                    listViewModel.lists[indexOfList].tasks.remove(at: viewModel.selectedIndexForDelete)
-                                                    listViewModel.lists[indexOfList].numberOfTasks -= 1
+                                                    storageManager.deleteTask(atList: indexOfList, atIndex: viewModel.selectedIndexForDelete)
+                                                    storageManager.deleteOneTask(atIndex: indexOfList)
+                                                    
+                                                    listViewModel.reloadData()
                                                     
                                                     if listViewModel.lists[indexOfList].numberOfTasks < 1 {
                                                         viewModel.isListEditing.toggle()
@@ -133,12 +139,16 @@ struct TasksListView: View {
                                 
                                 Button("ОК", role: .none, action: {
                                     if !viewModel.textFromAlert.isEmpty {
-                                        listViewModel.lists[indexOfList].tasks.append(
-                                            Task(title: viewModel.textFromAlert, isDone: false)
+                                        storageManager.newTask(
+                                            toList: indexOfList, newTask: Task(
+                                                title: viewModel.textFromAlert,
+                                                isDone: false
+                                            )
                                         )
-                                        
-                                        listViewModel.lists[indexOfList].numberOfTasks += 1
+                                        storageManager.plusOneTask(atIndex: indexOfList)
                                     }
+                                    
+                                    listViewModel.reloadData()
                                     
                                     viewModel.textFromAlert = ""
                                     viewModel.isAlertForNewTaskPresenting.toggle()

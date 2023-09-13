@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct GridView: View {
+    private let storageManager = StorageManager.shared
+    
     @EnvironmentObject var viewModel: GridViewModel
     @EnvironmentObject var listViewModel: ListViewModel
 
@@ -63,27 +65,27 @@ struct GridView: View {
                             
                             Button("OK", role: .none) {
                                 if viewModel.textFromAlert != "" {
-                                    listViewModel.lists.removeLast()
+                                    if listViewModel.lists.count == 0{
+                                        storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: []))
+                                    }
                                     
-                                    listViewModel.lists.append(
-                                        TaskList(
+                                    storageManager.deleteLastList()
+                                    
+                                    storageManager.new(
+                                        list: TaskList(
                                             title: viewModel.textFromAlert,
                                             numberOfTasks: 0,
-                                            colorOfImportant: .gray,
+                                            colorOfImportant: 4,
                                             isPrivate: false,
                                             tasks: []
                                         )
                                     )
                                     
-                                    listViewModel.lists.append(
-                                        TaskList(
-                                            title: viewModel.textFromAlert,
-                                            numberOfTasks: 0,
-                                            colorOfImportant: .gray,
-                                            isPrivate: false,
-                                            tasks: []
-                                        )
-                                    )
+                                    storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: []))
+                                    
+                                    listViewModel.reloadData()
+                                    
+                                    print(listViewModel.lists)
                                 }
                                 
                                 viewModel.isAlertPresenting.toggle()
@@ -115,7 +117,12 @@ struct GridView: View {
                     }
                 }
             }
-            .navigationTitle("Simply Task")
+            .onAppear {
+                //storageManager.deleteAll()
+                
+                print(listViewModel.lists)
+            }
+            .navigationTitle(viewModel.getWeekday())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
