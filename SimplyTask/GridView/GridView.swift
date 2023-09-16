@@ -32,7 +32,7 @@ struct GridView: View {
                         ScrollView {
                             LazyVGrid(columns: viewModel.items, spacing: 15) {
                                 ForEach(0..<listViewModel.lists.count - 1, id: \.self) { index in
-                                    NavigationLink(destination: TasksListView(indexOfList: index)) {
+                                    NavigationLink(destination: TasksListView(indexOfList: index).environmentObject(TasksListViewModel())) {
                                         if listViewModel.lists[index].title != "" {
                                             GridRowView(index: index)
                                         }
@@ -66,7 +66,7 @@ struct GridView: View {
                             Button("OK", role: .none) {
                                 if viewModel.textFromAlert != "" {
                                     if listViewModel.lists.count == 0{
-                                        storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: []))
+                                        storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: [], isDoneShowing: false))
                                     }
                                     
                                     storageManager.deleteLastList()
@@ -77,11 +77,12 @@ struct GridView: View {
                                             numberOfTasks: 0,
                                             colorOfImportant: 4,
                                             isPrivate: false,
-                                            tasks: []
+                                            tasks: [],
+                                            isDoneShowing: true
                                         )
                                     )
                                     
-                                    storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: []))
+                                    storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: [], isDoneShowing: false))
                                     
                                     listViewModel.reloadData()
                                     
@@ -118,11 +119,11 @@ struct GridView: View {
                 }
             }
             .onAppear {
-                //storageManager.deleteAll()
+//                storageManager.deleteAll()
                 
-                print(listViewModel.lists)
+//                listViewModel.lists = storageManager.fetchData()
             }
-            .navigationTitle(viewModel.getWeekday())
+            .navigationTitle("Списки")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -136,6 +137,10 @@ struct GridView: View {
                                 .foregroundColor(viewModel.isGridEditing ? .red : .gray)
                         }
                     }
+                }
+                
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Text(viewModel.getWeekday())
                 }
             }
             .ignoresSafeArea(.keyboard)

@@ -92,6 +92,35 @@ struct EditListView: View {
                             }
                         }
                     }
+                    
+                    HStack {
+                        Text("Индикатор Выполнено:")
+                            .frame(width: 250, alignment: .bottomLeading)
+                            .font(.system(size: 20))
+                            .padding(.top, 50)
+                            .offset(x: -50)
+                            .padding(.leading, 30)
+                            
+                        
+                        Button {
+                            withAnimation {
+                                viewModel.isDoneShowing.toggle()
+                            }
+                        } label: {
+                            if viewModel.isDoneShowing {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .resizable()
+                                    .frame(width: 23, height: 23)
+                                    .foregroundColor(.green)
+                            } else {
+                                Circle()
+                                    .frame(width: 23, height: 23)
+                                    .overlay(Circle().stroke(Color(uiColor: .label), lineWidth: 1))
+                                    .foregroundColor(Color(uiColor: .systemBackground))
+                            }
+                        }
+                        .offset(x: -30, y: 27)
+                    }
                    
                     Spacer()
                     
@@ -101,11 +130,13 @@ struct EditListView: View {
                                 listViewModel.lists[indexOfList].title = viewModel.textFromTF
                                 listViewModel.lists[indexOfList].colorOfImportant = viewModel.getNewColorOfImportant()
                                 listViewModel.lists[indexOfList].isPrivate = viewModel.isListPrivate
+                                listViewModel.lists[indexOfList].isDoneShowing = viewModel.isDoneShowing
                                 
                                 storageManager.resave(
                                     title: viewModel.textFromTF,
                                     colorOfImportant: viewModel.getNewColorOfImportant(),
                                     isPrivate: viewModel.isListPrivate,
+                                    isDoneShowing: viewModel.isDoneShowing,
                                     atIndex: indexOfList
                                 )
                             }
@@ -157,6 +188,9 @@ struct EditListView: View {
 //                        }
 //                    }
                 }
+            }
+            .onAppear {
+                viewModel.isDoneShowing = listViewModel.lists[indexOfList].isDoneShowing
             }
             .navigationTitle("Редактировние списка")
             .navigationBarTitleDisplayMode(.inline)

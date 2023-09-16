@@ -38,11 +38,12 @@ final class StorageManager {
         userDefaults.set(data, forKey: key)
     }
     
-    func resave(title: String, colorOfImportant: Int, isPrivate: Bool, atIndex index: Int) {
+    func resave(title: String, colorOfImportant: Int, isPrivate: Bool, isDoneShowing: Bool, atIndex index: Int) {
         var lists = fetchData()
         lists[index].title = title
         lists[index].colorOfImportant = colorOfImportant
         lists[index].isPrivate = isPrivate
+        lists[index].isDoneShowing = isDoneShowing
         
         guard let data = try? JSONEncoder().encode(lists) else { return }
         userDefaults.set(data, forKey: key)
@@ -96,11 +97,31 @@ final class StorageManager {
         userDefaults.set(data, forKey: key)
     }
     
+    func editTask(indexOfList listIndex: Int, indexOfTask taskIndex: Int, newTitle: String) {
+        var lists = fetchData()
+        lists[listIndex].tasks[taskIndex].title = newTitle
+        
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
+    }
+    
     func deleteAll() {
         var lists = fetchData()
         lists = []
         
         guard let data = try? JSONEncoder().encode(lists) else { return }
         userDefaults.set(data, forKey: key)
+    }
+    
+    func isNotificationAllowed() -> Bool {
+        if userDefaults.data(forKey: "notification") != nil {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func setNotificationAllow() {
+        userDefaults.set(true, forKey: "notification")
     }
 }

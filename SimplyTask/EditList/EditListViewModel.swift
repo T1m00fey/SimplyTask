@@ -13,10 +13,12 @@ final class EditListViewModel: ObservableObject {
     
     var textFromTF = ""
     var selectedLevel = 0
+    
     @Published var isListPrivate = false
     @Published var selectedColor = Color.gray
     @Published var isDeleteAlertPresenting = false
     @Published var isBiometricSuccess = false
+    @Published var isDoneShowing = true
     
     func getTittleColor(_ index: Int) -> Color {
         if index == selectedLevel {

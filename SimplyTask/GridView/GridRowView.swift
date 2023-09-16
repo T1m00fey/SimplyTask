@@ -36,11 +36,11 @@ struct GridRowView: View {
                 .foregroundColor(gridViewModel.getColorOfImportant(byNum: listViewModel.lists[index].colorOfImportant))
                 .offset(x: 60, y: -50)
             
-            if listViewModel.lists[index].isPrivate {
+            if listViewModel.lists[index].isPrivate && !gridViewModel.isGridEditing {
                 Image(systemName: "lock")
                     .resizable()
                     .frame(width: 17, height: 25)
-                    .offset(x: 55, y: 55)
+                    .offset(x: -55, y: -49)
                     .foregroundColor(Color(uiColor: .label))
             }
             

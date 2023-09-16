@@ -14,9 +14,13 @@ final class TasksListViewModel: ObservableObject {
     @Published var isAlertForDeletePresenting = false
     @Published var isErrorAlertPresenting = false
     @Published var isEditScreenPresenting = false
+    @Published var isAlertForEditingPresenting = false
+    @Published var isNotificationMenuShowing = false
     
     var selectedIndexForDelete = 0
     var textFromAlert = ""
+    var textFromEditAlert = ""
+    var date = Date.now
     
     func getDoneOfTask(_ isDone: Bool) -> Int {
         if isDone {

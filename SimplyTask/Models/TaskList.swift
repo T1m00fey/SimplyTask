@@ -14,5 +14,6 @@ struct TaskList: Codable {
     var colorOfImportant: Int
     var isPrivate: Bool
     var tasks: [Task]
+    var isDoneShowing: Bool
 }
 
