@@ -64,9 +64,11 @@ struct GridRowView: View {
                         
                         if listViewModel.lists[index].isPrivate {
                             listViewModel.requestBiometricUnlock {
-                                storageManager.deleteList(atIndex: gridViewModel.selectedIndexForDelete)
-                                
-                                listViewModel.reloadData()
+                                DispatchQueue.main.async {
+                                    storageManager.deleteList(atIndex: gridViewModel.selectedIndexForDelete)
+                                    
+                                    listViewModel.reloadData()
+                                }
                             }
                         } else {
                             storageManager.deleteList(atIndex: gridViewModel.selectedIndexForDelete)

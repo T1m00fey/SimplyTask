@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 struct GridView: View {
     private let storageManager = StorageManager.shared
@@ -122,6 +123,8 @@ struct GridView: View {
 //                storageManager.deleteAll()
                 
 //                listViewModel.lists = storageManager.fetchData()
+                
+                UIApplication.shared.applicationIconBadgeNumber = 0
             }
             .navigationTitle("Списки")
             .navigationBarTitleDisplayMode(.inline)

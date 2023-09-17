@@ -86,6 +86,14 @@ struct TasksListView: View {
                                                 }
                                             }
                                             
+                                            if listViewModel.lists[indexOfList].tasks[index].notificationDate != nil && !viewModel.isListEditing {
+                                                Image(systemName: "bell")
+                                                    .resizable()
+                                                    .frame(width: 23, height: 23)
+                                                    .padding(.leading, 280)
+                                                    .foregroundColor(Color.gray)
+                                            }
+                                            
                                             if viewModel.isListEditing {
                                                 if !listViewModel.lists[indexOfList].tasks[index].isDone {
                                                     Button {
@@ -202,7 +210,8 @@ struct TasksListView: View {
                                             storageManager.newTask(
                                                 toList: indexOfList, newTask: Task(
                                                     title: viewModel.textFromAlert,
-                                                    isDone: false
+                                                    isDone: false,
+                                                    notificationDate: nil
                                                 )
                                             )
                                             storageManager.plusOneTask(atIndex: indexOfList)
@@ -270,6 +279,8 @@ struct TasksListView: View {
         .navigationBarBackButtonHidden()
         .onAppear {
             listViewModel.requestBiometricUnlock(index: indexOfList)
+            
+            UIApplication.shared.applicationIconBadgeNumber = 0
         }
         .onDisappear {
             listViewModel.isFaceIDSuccess = false

@@ -191,6 +191,8 @@ struct EditListView: View {
             }
             .onAppear {
                 viewModel.isDoneShowing = listViewModel.lists[indexOfList].isDoneShowing
+                
+                UIApplication.shared.applicationIconBadgeNumber = 0
             }
             .navigationTitle("Редактировние списка")
             .navigationBarTitleDisplayMode(.inline)

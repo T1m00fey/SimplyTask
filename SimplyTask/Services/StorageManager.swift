@@ -105,6 +105,14 @@ final class StorageManager {
         userDefaults.set(data, forKey: key)
     }
     
+    func addDateToTask(taskIndex: Int, listIndex: Int, date: Date) {
+        var lists = fetchData()
+        lists[listIndex].tasks[taskIndex].notificationDate = date
+        
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
+    }
+    
     func deleteAll() {
         var lists = fetchData()
         lists = []
@@ -119,9 +127,5 @@ final class StorageManager {
         } else {
             return false
         }
-    }
-    
-    func setNotificationAllow() {
-        userDefaults.set(true, forKey: "notification")
     }
 }

@@ -45,6 +45,7 @@
 		C493AA8A2A602119007E99F3 /* GridRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridRowView.swift; sourceTree = "<group>"; };
 		C493AA8D2A602E80007E99F3 /* EditListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditListView.swift; sourceTree = "<group>"; };
 		C493AA8F2A608291007E99F3 /* EditListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditListViewModel.swift; sourceTree = "<group>"; };
+		C4A4F4942AB6CABE0074DFD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +98,7 @@
 		C493AA672A601E3F007E99F3 /* SimplyTask */ = {
 			isa = PBXGroup;
 			children = (
+				C4A4F4942AB6CABE0074DFD9 /* Info.plist */,
 				C48979172AB1EF2F001E9697 /* Services */,
 				C493AA812A601EC6007E99F3 /* Models */,
 				C493AA7C2A601E64007E99F3 /* GridView */,
@@ -370,6 +372,7 @@
 				DEVELOPMENT_TEAM = 7PV9N4T7V4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SimplyTask/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Simply Task";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Это нужно для того чтобы делать списки приватными";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -405,6 +408,7 @@
 				DEVELOPMENT_TEAM = 7PV9N4T7V4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SimplyTask/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Simply Task";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Это нужно для того чтобы делать списки приватными";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

@@ -18,9 +18,16 @@ struct NotificationView: View {
     
     @Binding var isShowing: Bool
     
-    
     let listIndex: Int
     let taskIndex: Int
+    
+    func getDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yy hh:mm"
+        let dateString = dateFormatter.string(from: date)
+        
+        return dateString
+    }
     
     var body: some View {
         
@@ -42,9 +49,23 @@ struct NotificationView: View {
             }
             .offset(x: 110, y: -110)
             
+            if listViewModel.lists[listIndex].tasks[taskIndex].notificationDate != nil {
+                VStack {
+                    HStack {
+                        Image(systemName: "bell")
+                        
+                        Text("Записано на:")
+                    }
+                    
+                    Text(getDate(listViewModel.lists[listIndex].tasks[taskIndex].notificationDate ?? Date.now))
+                        .offset(x: 0, y: 10)
+                }
+                .offset(x: -60, y: -125)
+            }
+            
             RoundedRectangle(cornerRadius: 10)
                 .frame(width: 250, height: 60)
-                .padding(.bottom, 90)
+                .padding(.bottom, 70)
                 .foregroundColor(Color(uiColor: .systemGray5))
             
             Image("Logo")
@@ -58,17 +79,17 @@ struct NotificationView: View {
                         lineWidth: 3
                     )
                 )
-                .offset(x: -90, y: -45)
+                .offset(x: -90, y: -35)
             
             Text("Simply Task")
                 .font(.system(size: 13))
                 .bold()
-                .offset(x: -20, y: -55)
+                .offset(x: -20, y: -47)
             
             Text(listViewModel.lists[listIndex].tasks[taskIndex].title)
                 .font(.system(size: 13))
                 .frame(width: 150, height: 10, alignment: .leading)
-                .offset(x: 18, y: -35)
+                .offset(x: 18, y: -25)
             
             DatePicker("", selection: $date, in: Date.now...)
                 .frame(width: 80, height: 80)
@@ -81,6 +102,8 @@ struct NotificationView: View {
                         index: taskIndex,
                         date: date
                     )
+                    
+                    storageManager.addDateToTask(taskIndex: taskIndex, listIndex: listIndex, date: date)
                 } else {
                     isErrorAlertShowing = true
                 }
@@ -95,7 +118,7 @@ struct NotificationView: View {
                         .foregroundColor(Color(uiColor: .systemGray5))
                         .opacity(0.7)
                     
-                    Text("Готово")
+                    Text("Уведомить")
                         .foregroundColor(Color(uiColor: .label))
                 }
             }
@@ -111,7 +134,7 @@ struct NotificationView: View {
 
 struct NotificationView_Previews: PreviewProvider {
     static var previews: some View {
-        NotificationView(isShowing: .constant(true), listIndex: 0, taskIndex: 0)
+        NotificationView(isShowing: .constant(true), listIndex: 0, taskIndex: 1)
             .environmentObject(ListViewModel())
     }
 }
