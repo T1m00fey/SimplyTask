@@ -262,7 +262,7 @@ struct TasksListView: View {
                                         .resizable()
                                         .frame(width: 170, height: 170)
                                     
-                                    Text("Создайте свою первую задачу!")
+                                    Text("Запишите свою первую задачу!")
                                         .font(.system(size: 22))
                                         .bold()
                                         .foregroundColor(.gray)
