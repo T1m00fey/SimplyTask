@@ -14,10 +14,9 @@ struct SettingsView: View {
     
     @State private var mailData = ComposeMailData(
         subject: "Разработчику",
-         recipients: ["simplyapp@mail.ru"],
+         recipients: ["simply.develop@mail.ru"],
          message: """
                     Приложение: Simply Task
-                    Устройство: \(UIDevice.current.name)
                     iOS: \(UIDevice.current.systemVersion)
                     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
                 

@@ -47,7 +47,7 @@ struct GridView: View {
                                     NavigationLink(destination: TasksListView(indexOfList: indexOfList).environmentObject(TasksListViewModel())) {
                                         if listViewModel.lists[indexOfList].title != "" {
                                             GridRowView(index: indexOfList)
-                                                .scaleEffect(0.96)
+                                                .scaleEffect(0.97)
                                             .alert("Удалить список?", isPresented: $viewModel.isDeleteAlertPresenting) {
                                                 Button("Отмена", role: .cancel) {
                                                     viewModel.isDeleteAlertPresenting.toggle()

@@ -51,9 +51,9 @@ final class GridViewModel: ObservableObject {
             result = "Доброй ночи"
         } else if (6...11).contains(Int(time) ?? 12) {
             result = "Доброе утро"
-        } else if (12...18).contains(Int(time) ?? 12) {
+        } else if (12...17).contains(Int(time) ?? 12) {
             result = "Добрый день"
-        } else if (19...21).contains(Int(time) ?? 12) {
+        } else if (18...21).contains(Int(time) ?? 12) {
             result = "Добрый вечер"
         }
         
@@ -73,9 +73,9 @@ final class GridViewModel: ObservableObject {
             result = "moon"
         } else if (6...11).contains(Int(time) ?? 12) {
             result = "sunrise"
-        } else if (12...18).contains(Int(time) ?? 12) {
+        } else if (12...17).contains(Int(time) ?? 12) {
             result = "sun.max"
-        } else if (19...21).contains(Int(time) ?? 12) {
+        } else if (18...21).contains(Int(time) ?? 12) {
             result = "sunset"
         }
         

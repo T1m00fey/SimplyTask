@@ -186,10 +186,12 @@ struct TasksListView: View {
                                                                 }
 
                                                                 task = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete]
-
-                                                                notificationManager.scheduleNotification(text: task.title, date: task.notificationDate ?? Date.now)
                                                                 
-                                                                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(title)\(task.notificationDate ?? Date())"])
+                                                                if task.notificationDate != nil && task.notificationDate ?? Date.now > Date.now {
+                                                                    notificationManager.scheduleNotification(text: task.title, date: task.notificationDate ?? Date.now)
+                                                                    
+                                                                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(title)\(task.notificationDate ?? Date())"])
+                                                                }
                                                                 
                                                                 viewModel.textFromEditAlert = ""
                                                             }
