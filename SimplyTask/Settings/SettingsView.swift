@@ -13,9 +13,10 @@ struct SettingsView: View {
     private let storageManager = StorageManager.shared
     
     @State private var mailData = ComposeMailData(
-        subject: "Поддержка",
+        subject: "Разработчику",
          recipients: ["simplyapp@mail.ru"],
          message: """
+                    Приложение: Simply Task
                     Устройство: \(UIDevice.current.name)
                     iOS: \(UIDevice.current.systemVersion)
                     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
