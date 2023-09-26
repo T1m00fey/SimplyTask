@@ -124,13 +124,13 @@ struct GridView: View {
                                 .frame(width: 25, height: 25)
                                 .foregroundColor(.green)
                                 .padding(.leading, 20)
-                                .padding(.bottom, 5)
+                                .padding(.bottom, 15)
                             
                             Text("Новый список")
                                 .font(.system(size: 20))
                                 .fontWeight(.semibold)
                                 .foregroundColor(.gray)
-                                .padding(.bottom, 5)
+                                .padding(.bottom, 15)
                         }
                         .alert("Новый список", isPresented: $viewModel.isAlertPresenting) {
                             TextField("Название", text: $viewModel.textFromAlert)
@@ -181,7 +181,7 @@ struct GridView: View {
                                 .resizable()
                                 .frame(width: 25, height: 25)
                                 .foregroundColor(.gray)
-                                .padding(.bottom, 5)
+                                .padding(.bottom, 15)
                                 .padding(.trailing, 20)
                         }
                         .sheet(isPresented: $viewModel.isSettingsScreenPresenting) {
