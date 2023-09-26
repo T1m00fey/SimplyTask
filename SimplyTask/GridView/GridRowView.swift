@@ -40,7 +40,6 @@ struct GridRowView: View {
                 .frame(width: 170, height: 170)
                 .foregroundColor(Color(uiColor: .systemBackground))
                 .shadow(radius: 3)
-                .padding(.bottom, 5)
             
             Circle()
                 .frame(width: 10, height: 10)
