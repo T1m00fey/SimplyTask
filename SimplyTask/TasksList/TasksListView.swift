@@ -277,13 +277,13 @@ struct TasksListView: View {
                                         .frame(width: 25, height: 25)
                                         .foregroundColor(.green)
                                         .padding(.leading, 20)
-                                        .padding(.bottom, 5)
+                                        .padding(.bottom, 15)
                                     
                                     Text("Новая задача")
                                         .foregroundColor(.gray)
                                         .font(.system(size: 20))
                                         .fontWeight(.semibold)
-                                        .padding(.bottom, 5)
+                                        .padding(.bottom, 15)
                                         .fixedSize(horizontal: true, vertical: true)
                                 }
                                 .alert("Новая задача", isPresented: $viewModel.isAlertForNewTaskPresenting) {
@@ -325,7 +325,7 @@ struct TasksListView: View {
                                         .resizable()
                                         .frame(width: 25, height: 25)
                                         .foregroundColor(.gray)
-                                        .padding(.bottom, 5)
+                                        .padding(.bottom, 15)
                                         .padding(.trailing, 20)
                                 }
                                 .sheet(isPresented: $viewModel.isEditScreenPresenting) {
