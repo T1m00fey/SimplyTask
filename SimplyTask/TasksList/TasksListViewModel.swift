@@ -16,6 +16,7 @@ final class TasksListViewModel: ObservableObject {
     @Published var isEditScreenPresenting = false
     @Published var isAlertForEditingPresenting = false
     @Published var isNotificationMenuShowing = false
+    @Published var isList = false
     
     var selectedIndexForDelete = 0
     var textFromAlert = ""

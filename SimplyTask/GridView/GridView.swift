@@ -9,17 +9,28 @@ import SwiftUI
 import UserNotifications
 
 struct GridView: View {
+    
+    @Binding var name: String
+    
     private let storageManager = StorageManager.shared
     
     @EnvironmentObject var viewModel: GridViewModel
     @EnvironmentObject var listViewModel: ListViewModel
-
+    @Environment(\.scenePhase) var scenePhase
     
-    init() {
+    init(name: Binding<String>) {
+        self._name = name
+        
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = UIColor.systemGray6
         
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+    }
+    
+    func move(from source: IndexSet, to destination: Int) {
+        listViewModel.lists.move(fromOffsets: source, toOffset: destination)
+        
+        storageManager.newLists(lists: listViewModel.lists)
     }
     
     var body: some View {
@@ -29,19 +40,79 @@ struct GridView: View {
                     .ignoresSafeArea()
                 
                 VStack {
-                    if listViewModel.lists.count > 1 {
+                    if listViewModel.lists.count > 1 && !viewModel.isList {
                         ScrollView {
                             LazyVGrid(columns: viewModel.items, spacing: 15) {
-                                ForEach(0..<listViewModel.lists.count - 1, id: \.self) { index in
-                                    NavigationLink(destination: TasksListView(indexOfList: index).environmentObject(TasksListViewModel())) {
-                                        if listViewModel.lists[index].title != "" {
-                                            GridRowView(index: index)
+                                ForEach(0..<listViewModel.lists.count, id: \.self) { indexOfList in
+                                    NavigationLink(destination: TasksListView(indexOfList: indexOfList).environmentObject(TasksListViewModel())) {
+                                        if listViewModel.lists[indexOfList].title != "" {
+                                            GridRowView(index: indexOfList)
+                                            .alert("Удалить список?", isPresented: $viewModel.isDeleteAlertPresenting) {
+                                                Button("Отмена", role: .cancel) {
+                                                    viewModel.isDeleteAlertPresenting.toggle()
+                                                }
+                                                
+                                                Button("Удалить", role: .destructive) {
+                                                    viewModel.isDeleteAlertPresenting.toggle()
+                                                    
+                                                    if listViewModel.lists[indexOfList].isPrivate && viewModel.isPrivateListPermitForDelete {
+                                                        storageManager.deleteList(atIndex: viewModel.selectedIndexForDelete)
+                                                        viewModel.isPrivateListPermitForDelete = false
+                                                    } else {
+                                                        storageManager.deleteList(atIndex: viewModel.selectedIndexForDelete)
+                                                    }
+                                                    
+                                                    if listViewModel.lists.count <= 1 {
+                                                        viewModel.isGridEditing = false
+                                                    }
+                                                    
+                                                    withAnimation {
+                                                        listViewModel.reloadData()
+                                                    }
+                                                }
+                                            }
+                                            .onChange(of: scenePhase) { scenePhase in
+                                                if scenePhase == .active {
+                                                    storageManager.getDoneOfNotifications()
+                                                    withAnimation {
+                                                        listViewModel.reloadData()
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
                             .padding()
                         }
+                    } else if viewModel.isList {
+                        List {
+                            ForEach(listViewModel.lists) { list in
+                                if list.title != "" {
+                                    HStack {
+                                        Circle()
+                                            .frame(width: 10, height: 10)
+                                            .foregroundColor(viewModel.getColorOfImportant(byNum: list.colorOfImportant))
+                                        
+                                        Text(list.title)
+                                    }
+                                }
+                            }
+                            .onMove(perform: move)
+                        }
+                        .environment(\.editMode, .constant(viewModel.isList ? EditMode.active : EditMode.inactive))
+                    } else if listViewModel.lists.count <= 1 {
+                        VStack(spacing: 20) {
+                            Image(systemName: "tree")
+                                .resizable()
+                                .frame(width: 170, height: 170)
+                            
+                            Text("Создайте свой первый список!")
+                                .font(.system(size: 22))
+                                .bold()
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.top, 170)
                     }
                     
                     Spacer()
@@ -67,7 +138,7 @@ struct GridView: View {
                             Button("OK", role: .none) {
                                 if viewModel.textFromAlert != "" {
                                     if listViewModel.lists.count == 0{
-                                        storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: [], isDoneShowing: false))
+                                        storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: [], isDoneShowing: false, isMoveDoneToEnd: false))
                                     }
                                     
                                     storageManager.deleteLastList()
@@ -79,15 +150,16 @@ struct GridView: View {
                                             colorOfImportant: 4,
                                             isPrivate: false,
                                             tasks: [],
-                                            isDoneShowing: true
+                                            isDoneShowing: true,
+                                            isMoveDoneToEnd: true
                                         )
                                     )
                                     
-                                    storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: [], isDoneShowing: false))
+                                    storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: [], isDoneShowing: false, isMoveDoneToEnd: false))
                                     
-                                    listViewModel.reloadData()
-                                    
-                                    print(listViewModel.lists)
+                                    withAnimation {
+                                        listViewModel.reloadData()
+                                    }
                                 }
                                 
                                 viewModel.isAlertPresenting.toggle()
@@ -102,58 +174,69 @@ struct GridView: View {
                         
                         Spacer()
                         
-//                        Button {
-//                            viewModel.isSettingsScreenPresenting.toggle()
-//                        } label: {
-//                            Image(systemName: "gearshape.fill")
-//                                .resizable()
-//                                .frame(width: 25, height: 25)
-//                                .foregroundColor(.gray)
-//                                .padding(.bottom, 5)
-//                                .padding(.trailing, 20)
-//                        }
-//                        .sheet(isPresented: $viewModel.isSettingsScreenPresenting) {
-//                            SettingsView(isScreenPresenting: $viewModel.isSettingsScreenPresenting)
-//                                .environmentObject(ThemesViewModel())
-//                        }
+                        Button {
+                            viewModel.isSettingsScreenPresenting.toggle()
+                        } label: {
+                            Image(systemName: "info.circle")
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.gray)
+                                .padding(.bottom, 5)
+                                .padding(.trailing, 20)
+                        }
+                        .sheet(isPresented: $viewModel.isSettingsScreenPresenting) {
+                            SettingsView(isScreenPresenting: $viewModel.isSettingsScreenPresenting)
+                        }
                     }
                 }
             }
             .onAppear {
-//                storageManager.deleteAll()
-                
-//                listViewModel.lists = storageManager.fetchData()
-                
                 UIApplication.shared.applicationIconBadgeNumber = 0
             }
-            .navigationTitle("Списки")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     if listViewModel.lists.count > 1 {
-                        Button {
-                            withAnimation {
-                                viewModel.isGridEditing.toggle()
+                        HStack {
+                            Button {
+                                withAnimation {
+                                    viewModel.isList.toggle()
+                                }
+                            } label: {
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(viewModel.isList ? Color(uiColor: .label) : .gray)
                             }
-                        } label: {
-                            Image(systemName: "minus.circle")
-                                .foregroundColor(viewModel.isGridEditing ? .red : .gray)
+
+                            Button {
+                                withAnimation {
+                                    viewModel.isGridEditing.toggle()
+                                }
+                            } label: {
+                                Image(systemName: "minus.circle")
+                                    .foregroundColor(viewModel.isGridEditing ? .red : .gray)
+                            }
                         }
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Text(viewModel.getWeekday())
+                    HStack {
+                        Image(systemName: viewModel.getGreetingImage())
+                            .foregroundColor(Color(uiColor: .label))
+                        
+                        Text("\(viewModel.getGreeting()), \(name)")
+                    }
                 }
             }
             .ignoresSafeArea(.keyboard)
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
 struct GridView_Previews: PreviewProvider {
     static var previews: some View {
-        GridView()
+        GridView(name: .constant("Name"))
             .environmentObject(GridViewModel())
             .environmentObject(ListViewModel())
     }

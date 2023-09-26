@@ -15,9 +15,20 @@ struct GridRowView: View {
     @EnvironmentObject var gridViewModel: GridViewModel
     @EnvironmentObject var listViewModel: ListViewModel
     
-    
     init(index: Int) {
         self.index = index
+    }
+    
+    func getIsDoneNotification() -> Bool {
+        var result = false
+        
+        listViewModel.lists[index].tasks.forEach { task in
+            if task.isNotificationDone {
+                result = true
+            }
+        }
+        
+        return result
     }
     
     var body: some View {
@@ -29,7 +40,7 @@ struct GridRowView: View {
                 .frame(width: 170, height: 170)
                 .foregroundColor(Color(uiColor: .systemBackground))
                 .shadow(radius: 3)
-                //.padding(.bottom, 1)
+                .padding(.bottom, 5)
             
             Circle()
                 .frame(width: 10, height: 10)
@@ -44,44 +55,33 @@ struct GridRowView: View {
                     .foregroundColor(Color(uiColor: .label))
             }
             
+            if getIsDoneNotification() {
+                Image(systemName: "bell")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(.red)
+                    .offset(x: 60, y: 57)
+            }
+            
             if gridViewModel.isGridEditing {
                 Button {
-                    gridViewModel.isDeleteAlertPresenting.toggle()
                     gridViewModel.selectedIndexForDelete = index
+                    
+                    if listViewModel.lists[index].isPrivate {
+                        listViewModel.requestBiometricUnlock {
+                            DispatchQueue.main.async {
+                                gridViewModel.isPrivateListPermitForDelete = true
+                                gridViewModel.isDeleteAlertPresenting.toggle()
+                            }
+                        }
+                    } else {
+                        gridViewModel.isDeleteAlertPresenting.toggle()
+                    }
                 } label: {
                     Image(systemName: "minus.circle")
                         .resizable()
                         .frame(width: 25, height: 25)
                         .foregroundColor(.red)
-                }
-                .alert("Удалить список?", isPresented: $gridViewModel.isDeleteAlertPresenting) {
-                    Button("Отмена", role: .cancel) {
-                        gridViewModel.isDeleteAlertPresenting.toggle()
-                    }
-                    
-                    Button("Удалить", role: .destructive) {
-                        gridViewModel.isDeleteAlertPresenting.toggle()
-                        
-                        if listViewModel.lists[index].isPrivate {
-                            listViewModel.requestBiometricUnlock {
-                                DispatchQueue.main.async {
-                                    storageManager.deleteList(atIndex: gridViewModel.selectedIndexForDelete)
-                                    
-                                    listViewModel.reloadData()
-                                }
-                            }
-                        } else {
-                            storageManager.deleteList(atIndex: gridViewModel.selectedIndexForDelete)
-                            
-                            listViewModel.reloadData()
-                        }
-                        
-                        if listViewModel.lists.count <= 1 {
-                            gridViewModel.isGridEditing = false
-                        }
-                        
-                        print(listViewModel.lists)
-                    }
                 }
                 .offset(x: -53, y: -47)
             }
@@ -97,8 +97,10 @@ struct GridRowView: View {
             Text("Задач: \(listViewModel.lists[index].numberOfTasks)")
                 .foregroundColor(.gray)
                 .font(.headline)
-                .frame(width: 140, height: 25, alignment: .bottomLeading)
+                .frame(width: 110, height: 25, alignment: .bottomLeading)
+//                .background(Color.yellow)
                 .padding(.top, 110)
+                .padding(.trailing, 30)
         }
     }
 }

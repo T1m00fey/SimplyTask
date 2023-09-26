@@ -86,7 +86,7 @@ struct EditListView: View {
                                     .foregroundColor(viewModel.selectedLevel == index ? Color(uiColor: .label) : .gray)
                                     .font(.system(size: 15))
                             }
-                            .onTapGesture {
+                            .onTapGesture {  
                                 viewModel.selectedLevel = index
                                 viewModel.selectedColor = viewModel.colors[index]
                             }
@@ -119,30 +119,62 @@ struct EditListView: View {
                                     .foregroundColor(Color(uiColor: .systemBackground))
                             }
                         }
-                        .offset(x: -30, y: 27)
+                        .offset(x: -70, y: 27)
                     }
+                    
+                    HStack {
+                        Text("Перемещать выполненные задачи в конец:")
+                            .frame(width: 250, alignment: .bottomLeading)
+                            .font(.system(size: 20))
+                            .foregroundColor(viewModel.isDoneShowing ? Color(uiColor: .label) : .gray)
+                            .padding(.top, 30)
+                            
+                        Button {
+                            withAnimation {
+                                if viewModel.isDoneShowing {
+                                    viewModel.isMoveDoneToEnd.toggle()
+                                }
+                            }
+                        } label: {
+                            if viewModel.isMoveDoneToEnd && viewModel.isDoneShowing {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .resizable()
+                                    .frame(width: 23, height: 23)
+                                    .foregroundColor(.green)
+                            } else {
+                                Circle()
+                                    .frame(width: 23, height: 23)
+                                    .overlay(Circle().stroke(viewModel.isDoneShowing ? Color(uiColor: .label) : .gray, lineWidth: 1))
+                                    .foregroundColor(viewModel.isDoneShowing ? Color(uiColor: .systemBackground) : Color(uiColor: .systemGray6))
+                            }
+                        }
+                        .offset(x: 20, y: 15)
+                        
+                        Spacer()
+                    }
+                    .offset(x: 30)
                    
                     Spacer()
                     
                     Button(action: {
-                        DispatchQueue.main.async {
-                            if !viewModel.textFromTF.isEmpty {
-                                listViewModel.lists[indexOfList].title = viewModel.textFromTF
-                                listViewModel.lists[indexOfList].colorOfImportant = viewModel.getNewColorOfImportant()
-                                listViewModel.lists[indexOfList].isPrivate = viewModel.isListPrivate
-                                listViewModel.lists[indexOfList].isDoneShowing = viewModel.isDoneShowing
-                                
-                                storageManager.resave(
-                                    title: viewModel.textFromTF,
-                                    colorOfImportant: viewModel.getNewColorOfImportant(),
-                                    isPrivate: viewModel.isListPrivate,
-                                    isDoneShowing: viewModel.isDoneShowing,
-                                    atIndex: indexOfList
-                                )
-                            }
+                        if !viewModel.textFromTF.isEmpty {
+                            listViewModel.lists[indexOfList].title = viewModel.textFromTF
+                            listViewModel.lists[indexOfList].colorOfImportant = viewModel.getNewColorOfImportant()
+                            listViewModel.lists[indexOfList].isPrivate = viewModel.isListPrivate
+                            listViewModel.lists[indexOfList].isDoneShowing = viewModel.isDoneShowing
+                            
+                            storageManager.resave(
+                                title: viewModel.textFromTF,
+                                colorOfImportant: viewModel.getNewColorOfImportant(),
+                                isPrivate: viewModel.isListPrivate,
+                                isDoneShowing: viewModel.isDoneShowing,
+                                isMoveDoneToEnd: viewModel.isMoveDoneToEnd,
+                                atIndex: indexOfList
+                            )
                         }
                         
                         isScreenPresenting.toggle()
+                        listViewModel.reloadData()
                     }) {
                         HStack {
                             Image(systemName: "checkmark.square.fill")
@@ -155,8 +187,10 @@ struct EditListView: View {
                                 .font(.system(size: 20))
                                 .fontWeight(.semibold)
                         }
-                        .padding(.bottom, 80)
                     }
+                    
+                    
+                    Spacer()
                     
 //                    Button {
 //
@@ -191,6 +225,7 @@ struct EditListView: View {
             }
             .onAppear {
                 viewModel.isDoneShowing = listViewModel.lists[indexOfList].isDoneShowing
+                viewModel.isMoveDoneToEnd = listViewModel.lists[indexOfList].isMoveDoneToEnd
                 
                 UIApplication.shared.applicationIconBadgeNumber = 0
             }

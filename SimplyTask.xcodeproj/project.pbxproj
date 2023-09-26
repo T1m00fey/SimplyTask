@@ -13,6 +13,8 @@
 		C455061A2AB5D56F00B64B54 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45506192AB5D56E00B64B54 /* NotificationManager.swift */; };
 		C459C1602A653F080051179A /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = C459C15F2A653F080051179A /* Task.swift */; };
 		C45D6DB52A8675BD00C8196F /* ErrorFaceIDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45D6DB42A8675BD00C8196F /* ErrorFaceIDView.swift */; };
+		C4746C422ABD5D1300FE9EF6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4746C412ABD5D1300FE9EF6 /* SettingsView.swift */; };
+		C4746C462ABD5D9800FE9EF6 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4746C452ABD5D9800FE9EF6 /* SettingsViewModel.swift */; };
 		C48251102AB22B81006EB5CE /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C482510F2AB22B81006EB5CE /* NotificationView.swift */; };
 		C48979192AB1EF47001E9697 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48979182AB1EF47001E9697 /* StorageManager.swift */; };
 		C493AA692A601E3F007E99F3 /* SimplyTaskApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C493AA682A601E3F007E99F3 /* SimplyTaskApp.swift */; };
@@ -24,6 +26,7 @@
 		C493AA8B2A602119007E99F3 /* GridRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C493AA8A2A602119007E99F3 /* GridRowView.swift */; };
 		C493AA8E2A602E80007E99F3 /* EditListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C493AA8D2A602E80007E99F3 /* EditListView.swift */; };
 		C493AA902A608291007E99F3 /* EditListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C493AA8F2A608291007E99F3 /* EditListViewModel.swift */; };
+		C4A4F4962AB758470074DFD9 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4F4952AB758470074DFD9 /* StartView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +36,8 @@
 		C45506192AB5D56E00B64B54 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		C459C15F2A653F080051179A /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		C45D6DB42A8675BD00C8196F /* ErrorFaceIDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorFaceIDView.swift; sourceTree = "<group>"; };
+		C4746C412ABD5D1300FE9EF6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		C4746C452ABD5D9800FE9EF6 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		C482510F2AB22B81006EB5CE /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		C48979182AB1EF47001E9697 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		C493AA652A601E3E007E99F3 /* SimplyTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimplyTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,7 +50,8 @@
 		C493AA8A2A602119007E99F3 /* GridRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridRowView.swift; sourceTree = "<group>"; };
 		C493AA8D2A602E80007E99F3 /* EditListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditListView.swift; sourceTree = "<group>"; };
 		C493AA8F2A608291007E99F3 /* EditListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditListViewModel.swift; sourceTree = "<group>"; };
-		C4A4F4942AB6CABE0074DFD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C4A4F4942AB6CABE0074DFD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C4A4F4952AB758470074DFD9 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +74,23 @@
 				C482510F2AB22B81006EB5CE /* NotificationView.swift */,
 			);
 			path = TasksList;
+			sourceTree = "<group>";
+		};
+		C4746C3D2ABD5B5100FE9EF6 /* StartViews */ = {
+			isa = PBXGroup;
+			children = (
+				C4A4F4952AB758470074DFD9 /* StartView.swift */,
+			);
+			path = StartViews;
+			sourceTree = "<group>";
+		};
+		C4746C402ABD5CB200FE9EF6 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C4746C412ABD5D1300FE9EF6 /* SettingsView.swift */,
+				C4746C452ABD5D9800FE9EF6 /* SettingsViewModel.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		C48979172AB1EF2F001E9697 /* Services */ = {
@@ -98,15 +121,16 @@
 		C493AA672A601E3F007E99F3 /* SimplyTask */ = {
 			isa = PBXGroup;
 			children = (
-				C4A4F4942AB6CABE0074DFD9 /* Info.plist */,
+				C4746C402ABD5CB200FE9EF6 /* Settings */,
 				C48979172AB1EF2F001E9697 /* Services */,
 				C493AA812A601EC6007E99F3 /* Models */,
+				C4746C3D2ABD5B5100FE9EF6 /* StartViews */,
 				C493AA7C2A601E64007E99F3 /* GridView */,
-				C493AA8C2A602E5D007E99F3 /* EditList */,
 				C447D2962A6521A900630F29 /* TasksList */,
+				C493AA8C2A602E5D007E99F3 /* EditList */,
 				C493AA7B2A601E51007E99F3 /* App */,
-				C493AA6C2A601E40007E99F3 /* Assets.xcassets */,
 				C493AA6E2A601E40007E99F3 /* Preview Content */,
+				C493AA6C2A601E40007E99F3 /* Assets.xcassets */,
 			);
 			path = SimplyTask;
 			sourceTree = "<group>";
@@ -122,6 +146,7 @@
 		C493AA7B2A601E51007E99F3 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				C4A4F4942AB6CABE0074DFD9 /* Info.plist */,
 				C493AA682A601E3F007E99F3 /* SimplyTaskApp.swift */,
 			);
 			path = App;
@@ -193,11 +218,12 @@
 			};
 			buildConfigurationList = C493AA602A601E3E007E99F3 /* Build configuration list for PBXProject "SimplyTask" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = C493AA5C2A601E3E007E99F3;
 			productRefGroup = C493AA662A601E3E007E99F3 /* Products */;
@@ -228,7 +254,10 @@
 			files = (
 				C48979192AB1EF47001E9697 /* StorageManager.swift in Sources */,
 				C493AA902A608291007E99F3 /* EditListViewModel.swift in Sources */,
+				C4746C422ABD5D1300FE9EF6 /* SettingsView.swift in Sources */,
 				C45D6DB52A8675BD00C8196F /* ErrorFaceIDView.swift in Sources */,
+				C4746C462ABD5D9800FE9EF6 /* SettingsViewModel.swift in Sources */,
+				C4A4F4962AB758470074DFD9 /* StartView.swift in Sources */,
 				C493AA892A6020A6007E99F3 /* GridViewModel.swift in Sources */,
 				C493AA832A601EEF007E99F3 /* TaskList.swift in Sources */,
 				C447D2982A65247500630F29 /* TasksListView.swift in Sources */,
@@ -372,7 +401,7 @@
 				DEVELOPMENT_TEAM = 7PV9N4T7V4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SimplyTask/Info.plist;
+				INFOPLIST_FILE = SimplyTask/App/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Simply Task";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Это нужно для того чтобы делать списки приватными";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -408,7 +437,7 @@
 				DEVELOPMENT_TEAM = 7PV9N4T7V4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SimplyTask/Info.plist;
+				INFOPLIST_FILE = SimplyTask/App/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Simply Task";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Это нужно для того чтобы делать списки приватными";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

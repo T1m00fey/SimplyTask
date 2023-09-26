@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 final class StorageManager {
     
@@ -38,12 +39,13 @@ final class StorageManager {
         userDefaults.set(data, forKey: key)
     }
     
-    func resave(title: String, colorOfImportant: Int, isPrivate: Bool, isDoneShowing: Bool, atIndex index: Int) {
+    func resave(title: String, colorOfImportant: Int, isPrivate: Bool, isDoneShowing: Bool, isMoveDoneToEnd: Bool, atIndex index: Int) {
         var lists = fetchData()
         lists[index].title = title
         lists[index].colorOfImportant = colorOfImportant
         lists[index].isPrivate = isPrivate
         lists[index].isDoneShowing = isDoneShowing
+        lists[index].isMoveDoneToEnd = isMoveDoneToEnd
         
         guard let data = try? JSONEncoder().encode(lists) else { return }
         userDefaults.set(data, forKey: key)
@@ -66,7 +68,16 @@ final class StorageManager {
     }
     
     func deleteList(atIndex index: Int) {
+        var notificationIdentifiers: [String] = []
+        
         var lists = fetchData()
+        
+        for indexOfTask in 0..<lists[index].tasks.count {
+            notificationIdentifiers.append("\(lists[index].tasks[indexOfTask].title)\(lists[index].tasks[indexOfTask].notificationDate ?? Date.now)")
+        }
+        
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: notificationIdentifiers)
+        
         lists.remove(at: index)
         
         guard let data = try? JSONEncoder().encode(lists) else { return }
@@ -108,6 +119,16 @@ final class StorageManager {
     func addDateToTask(taskIndex: Int, listIndex: Int, date: Date) {
         var lists = fetchData()
         lists[listIndex].tasks[taskIndex].notificationDate = date
+        lists[listIndex].tasks[taskIndex].isNotificationDone = false
+        
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
+    }
+    
+    func deleteDateInTask(taskIndex: Int, listIndex: Int) {
+        var lists = fetchData()
+        lists[listIndex].tasks[taskIndex].notificationDate = nil
+        lists[listIndex].tasks[taskIndex].isNotificationDone = false
         
         guard let data = try? JSONEncoder().encode(lists) else { return }
         userDefaults.set(data, forKey: key)
@@ -121,11 +142,77 @@ final class StorageManager {
         userDefaults.set(data, forKey: key)
     }
     
-    func isNotificationAllowed() -> Bool {
-        if userDefaults.data(forKey: "notification") != nil {
-            return true
-        } else {
-            return false
+    func save(name: String) {
+        userDefaults.set(name, forKey: "name")
+    }
+    
+    func fetchName() -> String {
+        let name = userDefaults.string(forKey: "name")
+        
+        return name ?? ""
+    }
+    
+    func deleteName() {
+        userDefaults.set("", forKey: "name")
+    }
+    
+    func newLists(lists: [TaskList]) {
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
+    }
+    
+    func toggleIsNotificationDone(taskIndex: Int, listIndex: Int) {
+        var lists = fetchData()
+        lists[listIndex].tasks[taskIndex].isNotificationDone = true
+        
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
+    }
+    
+    func moveTaskToEnd(listIndex: Int, taskIndex: Int) {
+        var lists = fetchData()
+        lists[listIndex].tasks.move(fromOffsets: IndexSet(integer: taskIndex), toOffset: lists[listIndex].tasks.count)
+        
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
+    }
+    
+    func moveTaskToBegin(listIndex: Int, taskIndex: Int) {
+        var lists = fetchData()
+        
+        for indexOfTask in 0..<taskIndex {
+            if lists[listIndex].tasks[indexOfTask].isDone {
+                lists[listIndex].tasks.move(fromOffsets: IndexSet(integer: taskIndex), toOffset: 0)
+                break;
+            }
         }
+        
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
+    }
+    
+    func setTheme(isDark: Bool) {
+        userDefaults.set(isDark, forKey: "theme")
+    }
+    
+    func getTheme() -> Bool {
+        return userDefaults.bool(forKey: "theme")
+    }
+    
+    func getDoneOfNotifications() {
+        var lists = fetchData()
+        
+        for listIndex in 0..<lists.count {
+            for taskIndex in 0..<lists[listIndex].tasks.count {
+                if lists[listIndex].tasks[taskIndex].notificationDate != nil {
+                    if lists[listIndex].tasks[taskIndex].notificationDate ?? Date.now <= Date.now {
+                        lists[listIndex].tasks[taskIndex].isNotificationDone = true
+                    }
+                }
+            }
+        }
+        
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
     }
 }
