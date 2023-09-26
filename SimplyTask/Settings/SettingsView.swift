@@ -7,11 +7,21 @@
 
 import SwiftUI
 import MessageUI
+import SwiftUIMailView
 
 struct SettingsView: View {
     private let storageManager = StorageManager.shared
     
-    @State var result: Result<MFMailComposeResult, Error>? = nil
+    @State private var mailData = ComposeMailData(subject: "Поддержка",
+                                                     recipients: ["simplyapp@mail.ru"],
+                                                     message: """
+                                                                Устройство: \(UIDevice.current.name)
+                                                                iOS: \(UIDevice.current.systemVersion)
+                                                                _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                                                            
+                                                                Ваш вопрос...
+                                                            """,
+                                                     attachments: [])
     @StateObject var viewModel = SettingsViewModel()
     
     @Binding var isScreenPresenting: Bool
@@ -33,7 +43,7 @@ struct SettingsView: View {
                 
                 List {
                     Button {
-                        
+                        viewModel.isShareSheetPresenting.toggle()
                     } label: {
                         HStack {
                             Text(viewModel.settings[0])
@@ -43,7 +53,9 @@ struct SettingsView: View {
                             Image(systemName: "square.and.arrow.up")
                         }
                     }
-                    
+                    .sheet(isPresented: $viewModel.isShareSheetPresenting) {
+                        ShareSheet(activityItems: ["app URL"])
+                    }
                     
                     Button {
                         
@@ -59,7 +71,7 @@ struct SettingsView: View {
                     
                     
                     Button {
-                        
+                        viewModel.isEmailViewPresenting.toggle()
                     } label: {
                         HStack {
                             Text(viewModel.settings[2])
@@ -67,6 +79,12 @@ struct SettingsView: View {
                             Spacer()
                             
                             Image(systemName: "envelope")
+                        }
+                    }
+                    .disabled(!MailView.canSendMail)
+                    .sheet(isPresented: $viewModel.isEmailViewPresenting) {
+                        MailView(data: $mailData) { result in
+                            print(result)
                         }
                     }
                 }
