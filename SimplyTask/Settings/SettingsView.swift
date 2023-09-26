@@ -12,16 +12,18 @@ import SwiftUIMailView
 struct SettingsView: View {
     private let storageManager = StorageManager.shared
     
-    @State private var mailData = ComposeMailData(subject: "Поддержка",
-                                                     recipients: ["simplyapp@mail.ru"],
-                                                     message: """
-                                                                Устройство: \(UIDevice.current.name)
-                                                                iOS: \(UIDevice.current.systemVersion)
-                                                                _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-                                                            
-                                                                Ваш вопрос...
-                                                            """,
-                                                     attachments: [])
+    @State private var mailData = ComposeMailData(
+        subject: "Поддержка",
+         recipients: ["simplyapp@mail.ru"],
+         message: """
+                    Устройство: \(UIDevice.current.name)
+                    iOS: \(UIDevice.current.systemVersion)
+                    _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                
+                    Ваш вопрос...
+                """,
+         attachments: []
+    )
     @StateObject var viewModel = SettingsViewModel()
     
     @Binding var isScreenPresenting: Bool
