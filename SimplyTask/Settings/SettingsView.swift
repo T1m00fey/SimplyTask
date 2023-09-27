@@ -27,9 +27,11 @@ struct SettingsView: View {
     @StateObject var viewModel = SettingsViewModel()
     
     @Binding var isScreenPresenting: Bool
+    @Binding var name: String
     
-    init(isScreenPresenting: Binding<Bool>) {
+    init(isScreenPresenting: Binding<Bool>, name: Binding<String>) {
         self._isScreenPresenting = isScreenPresenting
+        self._name = name
         
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = UIColor.systemGray6
@@ -45,10 +47,34 @@ struct SettingsView: View {
                 
                 List {
                     Button {
-                        viewModel.isShareSheetPresenting.toggle()
+                        viewModel.isEditAlertPresenting.toggle()
+                        viewModel.text = storageManager.fetchName()
                     } label: {
                         HStack {
                             Text(viewModel.settings[0])
+                            
+                            Spacer()
+                            
+                            Image(systemName: "person")
+                        }
+                    }
+                    .alert("Изменить имя", isPresented: $viewModel.isEditAlertPresenting) {
+                        TextField("", text: $viewModel.text)
+                        
+                        Button("Отмена", role: .cancel) {}
+                        
+                        Button("Изменить", role: .none) {
+                            storageManager.save(name: viewModel.text)
+                        }
+                    }
+
+                    
+                    
+                    Button {
+                        viewModel.isShareSheetPresenting.toggle()
+                    } label: {
+                        HStack {
+                            Text(viewModel.settings[1])
                             
                             Spacer()
                             
@@ -63,7 +89,7 @@ struct SettingsView: View {
                         
                     } label: {
                         HStack {
-                            Text(viewModel.settings[1])
+                            Text(viewModel.settings[2])
                             
                             Spacer()
                             
@@ -76,7 +102,7 @@ struct SettingsView: View {
                         viewModel.isEmailViewPresenting.toggle()
                     } label: {
                         HStack {
-                            Text(viewModel.settings[2])
+                            Text(viewModel.settings[3])
                             
                             Spacer()
                             
@@ -89,6 +115,11 @@ struct SettingsView: View {
                             print(result)
                         }
                     }
+                }
+            }
+            .onDisappear {
+                withAnimation {
+                    name = viewModel.text
                 }
             }
             .navigationTitle("Информация")
@@ -108,6 +139,6 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(isScreenPresenting: .constant(true))
+        SettingsView(isScreenPresenting: .constant(true), name: .constant("Name"))
     }
 }

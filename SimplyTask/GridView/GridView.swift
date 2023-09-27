@@ -186,7 +186,7 @@ struct GridView: View {
                                 .padding(.trailing, 20)
                         }
                         .sheet(isPresented: $viewModel.isSettingsScreenPresenting) {
-                            SettingsView(isScreenPresenting: $viewModel.isSettingsScreenPresenting)
+                            SettingsView(isScreenPresenting: $viewModel.isSettingsScreenPresenting, name: $name)
                         }
                     }
                 }

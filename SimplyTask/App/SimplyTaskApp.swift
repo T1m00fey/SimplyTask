@@ -11,14 +11,14 @@ import SwiftUI
 struct SimplyTaskApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    private let storageManager = StorageManager.shared
+    @State private var name = StorageManager().fetchName()
     
     var body: some Scene {
         WindowGroup {
-            if storageManager.fetchName() == "" {
+            if name == "" {
                 StartView()
             } else {
-                GridView(name: .constant(storageManager.fetchName()))
+                GridView(name: $name)
                     .environmentObject(ListViewModel())
                     .environmentObject(GridViewModel())
             }
