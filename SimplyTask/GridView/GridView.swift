@@ -41,7 +41,7 @@ struct GridView: View {
                 
                 VStack {
                     if listViewModel.lists.count > 1 && !viewModel.isList {
-                        ScrollView {
+                        ScrollView(showsIndicators: false) {
                             LazyVGrid(columns: viewModel.items, spacing: 15) {
                                 ForEach(0..<listViewModel.lists.count, id: \.self) { indexOfList in
                                     NavigationLink(destination: TasksListView(indexOfList: indexOfList).environmentObject(TasksListViewModel())) {
@@ -186,7 +186,7 @@ struct GridView: View {
                                 .padding(.trailing, 20)
                         }
                         .sheet(isPresented: $viewModel.isSettingsScreenPresenting) {
-                            SettingsView(isScreenPresenting: $viewModel.isSettingsScreenPresenting, name: $name)
+                            SettingsView(isScreenPresenting: $viewModel.isSettingsScreenPresenting)
                         }
                     }
                 }
@@ -226,6 +226,13 @@ struct GridView: View {
                             .foregroundColor(Color(uiColor: .label))
                         
                         Text("\(viewModel.getGreeting()), \(name)")
+                    }
+                    .onChange(of: viewModel.isSettingsScreenPresenting) { isPresenting in
+                        if !isPresenting {
+                            withAnimation {
+                                name = storageManager.fetchName()
+                            }
+                        }
                     }
                 }
             }

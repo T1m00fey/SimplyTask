@@ -20,6 +20,13 @@ final class StorageManager {
         var lists = fetchData()
         lists[index].tasks.append(task)
         
+        for indexOfTask in 0..<lists[index].tasks.count {
+            if lists[index].tasks[indexOfTask].isDone {
+                lists[index].tasks.move(fromOffsets: IndexSet(integer: lists[index].tasks.count - 1), toOffset: indexOfTask)
+                break;
+            }
+        }
+        
         guard let data = try? JSONEncoder().encode(lists) else { return }
         userDefaults.set(data, forKey: key)
     }
@@ -182,7 +189,7 @@ final class StorageManager {
         
         for indexOfTask in 0..<taskIndex {
             if lists[listIndex].tasks[indexOfTask].isDone {
-                lists[listIndex].tasks.move(fromOffsets: IndexSet(integer: taskIndex), toOffset: 0)
+                lists[listIndex].tasks.move(fromOffsets: IndexSet(integer: taskIndex), toOffset: indexOfTask)
                 break;
             }
         }

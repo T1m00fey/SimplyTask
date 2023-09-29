@@ -27,11 +27,9 @@ struct SettingsView: View {
     @StateObject var viewModel = SettingsViewModel()
     
     @Binding var isScreenPresenting: Bool
-    @Binding var name: String
     
-    init(isScreenPresenting: Binding<Bool>, name: Binding<String>) {
+    init(isScreenPresenting: Binding<Bool>) {
         self._isScreenPresenting = isScreenPresenting
-        self._name = name
         
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = UIColor.systemGray6
@@ -64,6 +62,7 @@ struct SettingsView: View {
                         Button("Отмена", role: .cancel) {}
                         
                         Button("Изменить", role: .none) {
+                            viewModel.isEditAlertPresenting.toggle()
                             storageManager.save(name: viewModel.text)
                         }
                     }
@@ -117,11 +116,6 @@ struct SettingsView: View {
                     }
                 }
             }
-            .onDisappear {
-                withAnimation {
-                    name = viewModel.text
-                }
-            }
             .navigationTitle("Информация")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -139,6 +133,6 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(isScreenPresenting: .constant(true), name: .constant("Name"))
+        SettingsView(isScreenPresenting: .constant(true))
     }
 }

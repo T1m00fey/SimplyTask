@@ -16,6 +16,7 @@
 		C4746C422ABD5D1300FE9EF6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4746C412ABD5D1300FE9EF6 /* SettingsView.swift */; };
 		C4746C462ABD5D9800FE9EF6 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4746C452ABD5D9800FE9EF6 /* SettingsViewModel.swift */; };
 		C48251102AB22B81006EB5CE /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C482510F2AB22B81006EB5CE /* NotificationView.swift */; };
+		C482A1F32AC6F6F8000C2ED0 /* EditSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C482A1F22AC6F6F8000C2ED0 /* EditSheetView.swift */; };
 		C48979192AB1EF47001E9697 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48979182AB1EF47001E9697 /* StorageManager.swift */; };
 		C493AA692A601E3F007E99F3 /* SimplyTaskApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C493AA682A601E3F007E99F3 /* SimplyTaskApp.swift */; };
 		C493AA6D2A601E40007E99F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C493AA6C2A601E40007E99F3 /* Assets.xcassets */; };
@@ -41,6 +42,7 @@
 		C4746C412ABD5D1300FE9EF6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C4746C452ABD5D9800FE9EF6 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		C482510F2AB22B81006EB5CE /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		C482A1F22AC6F6F8000C2ED0 /* EditSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSheetView.swift; sourceTree = "<group>"; };
 		C48979182AB1EF47001E9697 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		C493AA652A601E3E007E99F3 /* SimplyTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimplyTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C493AA682A601E3F007E99F3 /* SimplyTaskApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplyTaskApp.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 			children = (
 				C493AA8D2A602E80007E99F3 /* EditListView.swift */,
 				C493AA8F2A608291007E99F3 /* EditListViewModel.swift */,
+				C482A1F22AC6F6F8000C2ED0 /* EditSheetView.swift */,
 			);
 			path = EditList;
 			sourceTree = "<group>";
@@ -279,6 +282,7 @@
 				C447D2952A650CD100630F29 /* ListViewModel.swift in Sources */,
 				C455061A2AB5D56F00B64B54 /* NotificationManager.swift in Sources */,
 				C493AA692A601E3F007E99F3 /* SimplyTaskApp.swift in Sources */,
+				C482A1F32AC6F6F8000C2ED0 /* EditSheetView.swift in Sources */,
 				C4FFB3812AC2FD3A007B2322 /* ShareSheet.swift in Sources */,
 				C447D29A2A652BB300630F29 /* TasksListViewModel.swift in Sources */,
 				C48251102AB22B81006EB5CE /* NotificationView.swift in Sources */,

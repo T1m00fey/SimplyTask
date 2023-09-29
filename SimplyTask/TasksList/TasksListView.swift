@@ -172,34 +172,42 @@ struct TasksListView: View {
                                                                 .foregroundColor(Color(uiColor: .label))
                                                         }
                                                         .padding(.leading, 200)
-                                                        .alert("Изменить задачу", isPresented: $viewModel.isAlertForEditingPresenting) {
-                                                            TextField("", text: $viewModel.textFromEditAlert)
-                                                            
-                                                            Button("Изменить", role: .none) {
-                                                                
-                                                                let title = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].title
-                                                                
-                                                                storageManager.editTask(indexOfList: indexOfList, indexOfTask: viewModel.selectedIndexForDelete, newTitle: viewModel.textFromEditAlert)
-
-                                                                withAnimation {
-                                                                    listViewModel.reloadData()
-                                                                }
-
-                                                                task = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete]
-                                                                
-                                                                if task.notificationDate != nil && task.notificationDate ?? Date.now > Date.now {
-                                                                    notificationManager.scheduleNotification(text: task.title, date: task.notificationDate ?? Date.now)
-                                                                    
-                                                                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(title)\(task.notificationDate ?? Date())"])
-                                                                }
-                                                                
-                                                                viewModel.textFromEditAlert = ""
-                                                            }
-                                                            
-                                                            Button("Отмена", role: .cancel) {
-                                                                viewModel.textFromEditAlert = ""
-                                                            }
+                                                        .sheet(isPresented: $viewModel.isAlertForEditingPresenting) {
+                                                            EditSheetView(
+                                                                isScreenPresenting: $viewModel.isAlertForEditingPresenting,
+                                                                navigationTitle: "Редактирование",
+                                                                listIndex: indexOfList,
+                                                                taskIndex: viewModel.selectedIndexForDelete
+                                                            )
                                                         }
+//                                                        .alert("Изменить задачу", isPresented: $viewModel.isAlertForEditingPresenting) {
+//                                                            TextField("", text: $viewModel.textFromEditAlert)
+//
+//                                                            Button("Изменить", role: .none) {
+//
+//                                                                let title = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].title
+//
+//                                                                storageManager.editTask(indexOfList: indexOfList, indexOfTask: viewModel.selectedIndexForDelete, newTitle: viewModel.textFromEditAlert)
+//
+//                                                                withAnimation {
+//                                                                    listViewModel.reloadData()
+//                                                                }
+//
+//                                                                task = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete]
+//
+//                                                                if task.notificationDate != nil && task.notificationDate ?? Date.now > Date.now {
+//                                                                    notificationManager.scheduleNotification(text: task.title, date: task.notificationDate ?? Date.now)
+//
+//                                                                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(title)\(task.notificationDate ?? Date())"])
+//                                                                }
+//
+//                                                                viewModel.textFromEditAlert = ""
+//                                                            }
+//
+//                                                            Button("Отмена", role: .cancel) {
+//                                                                viewModel.textFromEditAlert = ""
+//                                                            }
+//                                                        }
                                                     }
                                                     
                                                     Button(action: {
@@ -224,9 +232,11 @@ struct TasksListView: View {
                                                                 storageManager.deleteOneTask(atIndex: indexOfList)
                                                             }
                                                             
-                                                            UNUserNotificationCenter.current().removePendingNotificationRequests(
-                                                                withIdentifiers: ["\(listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].title)\(listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].notificationDate ?? Date())"]
-                                                            )
+                                                            if task.notificationDate != nil {
+                                                                UNUserNotificationCenter.current().removePendingNotificationRequests(
+                                                                    withIdentifiers: ["\(task.title)\(task.notificationDate ?? Date())"]
+                                                                )
+                                                            }
                                                             
                                                             withAnimation {
                                                                 listViewModel.reloadData()
@@ -288,35 +298,51 @@ struct TasksListView: View {
                                         .padding(.bottom, 15)
                                         .fixedSize(horizontal: true, vertical: true)
                                 }
-                                .alert("Новая задача", isPresented: $viewModel.isAlertForNewTaskPresenting) {
-                                    TextField("Название", text: $viewModel.textFromAlert)
-                                    
-                                    Button("Отмена", role: .cancel, action: {
-                                        viewModel.isAlertForNewTaskPresenting.toggle()
-                                        viewModel.textFromAlert = ""
-                                    })
-                                    
-                                    Button("ОК", role: .none, action: {
-                                        if !viewModel.textFromAlert.isEmpty {
-                                            storageManager.newTask(
-                                                toList: indexOfList, newTask: Task(
-                                                    title: viewModel.textFromAlert,
-                                                    isDone: false,
-                                                    notificationDate: nil,
-                                                    isNotificationDone: false
-                                                )
-                                            )
-                                            storageManager.plusOneTask(atIndex: indexOfList)
-                                        }
-                                        
+                                .sheet(isPresented: $viewModel.isAlertForNewTaskPresenting) {
+                                    EditSheetView(
+                                        isScreenPresenting: $viewModel.isAlertForNewTaskPresenting,
+                                        navigationTitle: "Новая задача",
+                                        listIndex: indexOfList,
+                                        taskIndex: 0
+                                    )
+                                    .environmentObject(ListViewModel())
+                                }
+                                .onChange(of: viewModel.isAlertForNewTaskPresenting) { isPresenting in
+                                    if isPresenting == false {
                                         withAnimation {
                                             listViewModel.reloadData()
                                         }
-                                        
-                                        viewModel.textFromAlert = ""
-                                        viewModel.isAlertForNewTaskPresenting.toggle()
-                                    })
+                                    }
                                 }
+//                                .alert("Новая задача", isPresented: $viewModel.isAlertForNewTaskPresenting) {
+//                                    TextField("Название", text: $viewModel.textFromAlert)
+//
+//                                    Button("Отмена", role: .cancel, action: {
+//                                        viewModel.isAlertForNewTaskPresenting.toggle()
+//                                        viewModel.textFromAlert = ""
+//                                    })
+//
+//                                    Button("ОК", role: .none, action: {
+//                                        if !viewModel.textFromAlert.isEmpty {
+//                                            storageManager.newTask(
+//                                                toList: indexOfList, newTask: Task(
+//                                                    title: viewModel.textFromAlert,
+//                                                    isDone: false,
+//                                                    notificationDate: nil,
+//                                                    isNotificationDone: false
+//                                                )
+//                                            )
+//                                            storageManager.plusOneTask(atIndex: indexOfList)
+//                                        }
+//
+//                                        withAnimation {
+//                                            listViewModel.reloadData()
+//                                        }
+//
+//                                        viewModel.textFromAlert = ""
+//                                        viewModel.isAlertForNewTaskPresenting.toggle()
+//                                    })
+//                                }
                                 
                                 Spacer()
                                 

@@ -110,6 +110,12 @@ struct NotificationView: View {
                         date: date
                     )
                     
+                    if listViewModel.lists[listIndex].tasks[taskIndex].notificationDate != nil {
+                        let task = listViewModel.lists[listIndex].tasks[taskIndex]
+                        
+                        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(task.title)\(task.notificationDate ?? Date())"])
+                    }
+                    
                     storageManager.addDateToTask(taskIndex: taskIndex, listIndex: listIndex, date: date)
                     
                 } else {
