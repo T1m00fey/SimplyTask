@@ -67,7 +67,7 @@ struct PremiumView: View {
                         }
                         
                         HStack {
-                            Text("Отслеживайте свой прогресс - приложение запише дату создания задач")
+                            Text("Отслеживайте свой прогресс - приложение запишет дату создания задач")
                                 .font(.system(size: 18))
                                 .padding(.top, 20)
                                 .padding(.leading, 20)
