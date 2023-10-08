@@ -11,6 +11,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var isEmailViewPresenting = false
     @Published var isShareSheetPresenting = false
     @Published var isEditAlertPresenting = false
+    @Published var isPremiumViewPresenting = false
     
     var text = ""
     

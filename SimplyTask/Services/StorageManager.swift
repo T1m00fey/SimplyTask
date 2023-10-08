@@ -16,7 +16,7 @@ final class StorageManager {
     private let userDefaults = UserDefaults.standard
     private let key = "lists"
     
-    func newTask(toList index: Int, newTask task: Task) {
+    func newTask(toList index: Int, newTask task: StructTask) {
         var lists = fetchData()
         lists[index].tasks.append(task)
         
@@ -218,6 +218,79 @@ final class StorageManager {
                 }
             }
         }
+        
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
+    }
+    
+    func addImage(toList listIndex: Int, image: String?) {
+        var lists = fetchData()
+        lists[listIndex].image = image
+        
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
+    }
+    
+    func deleteImage(atList listIndex: Int) {
+        var lists = fetchData()
+        lists[listIndex].image = nil
+        
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
+    }
+    
+    func getPro() {
+        let isPro = isPro()
+       
+        if isPro {
+            userDefaults.set(false, forKey: "isPro")
+        } else {
+            userDefaults.set(true, forKey: "isPro")
+        }
+    }
+    
+    func isPro() -> Bool {
+        return userDefaults.bool(forKey: "isPro")
+    }
+    
+    func addImage(toList listIndex: Int, andTask taskIndex: Int, photos: [UIImage]) {
+        var data: [Data] = []
+        
+        for photo in photos {
+            data.append(photo.jpegData(compressionQuality: 1) ?? Data())
+        }
+        
+        var lists = fetchData()
+        lists[listIndex].tasks[taskIndex].images = data
+        
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
+    }
+    
+    func getImage(fromList listIndex: Int, fromTask taskIndex: Int) -> [UIImage] {
+        let lists = fetchData()
+        
+        var images: [UIImage] = []
+        let imagesData = lists[listIndex].tasks[taskIndex].images
+        
+        for image in imagesData {
+            images.append(UIImage(data: image) ?? UIImage(systemName: "bell")!)
+        }
+        
+        return images
+    }
+    
+    func deleteImage(atList listIndex: Int, atTask taskIndex: Int, indexOfPhoto: Int) {
+        var lists = fetchData()
+        lists[listIndex].tasks[taskIndex].images.remove(at: indexOfPhoto)
+        
+        guard let data = try? JSONEncoder().encode(lists) else { return }
+        userDefaults.set(data, forKey: key)
+    }
+    
+    func toggleIsShowingDate(listIndex: Int, taskIndex: Int) {
+        var lists = fetchData()
+        lists[listIndex].tasks[taskIndex].isDateShowing.toggle()
         
         guard let data = try? JSONEncoder().encode(lists) else { return }
         userDefaults.set(data, forKey: key)

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct EditListView: View {
+    @State private var image = ""
+    
     let indexOfList: Int
     
     private let storageManager = StorageManager.shared
@@ -171,6 +173,12 @@ struct EditListView: View {
                                 isMoveDoneToEnd: viewModel.isMoveDoneToEnd,
                                 atIndex: indexOfList
                             )
+                            
+                            if image != "" {
+                                storageManager.addImage(toList: indexOfList, image: image)
+                            } else {
+                                storageManager.deleteImage(atList: indexOfList)
+                            }
                         }
                         
                         isScreenPresenting.toggle()
@@ -188,7 +196,9 @@ struct EditListView: View {
                                 .fontWeight(.semibold)
                         }
                     }
-                    
+                    .sheet(isPresented: $viewModel.isImagesScreenPresenting) {
+                        ImagesView(listIndex: indexOfList, isScreenPresenting: $viewModel.isImagesScreenPresenting, image: $image)
+                    }
                     
                     Spacer()
                     
@@ -243,19 +253,33 @@ struct EditListView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        if viewModel.isListPrivate {
-                            viewModel.isListPrivate.toggle()
-                        } else {
-                            listViewModel.requestBiometricUnlock {
-                                DispatchQueue.main.async {
-                                    viewModel.isListPrivate.toggle()
+                    HStack {
+                        Button {
+                            if viewModel.isListPrivate {
+                                viewModel.isListPrivate.toggle()
+                            } else {
+                                listViewModel.requestBiometricUnlock {
+                                    DispatchQueue.main.async {
+                                        viewModel.isListPrivate.toggle()
+                                    }
+                                }
+                            }
+                        } label: {
+                            Image(systemName: viewModel.isListPrivate ? "lock" : "lock.open")
+                                .foregroundColor(Color(uiColor: .label))
+                        }
+                        
+                        if storageManager.isPro() {
+                            Button {
+                                viewModel.isImagesScreenPresenting.toggle()
+                            } label: {
+                                if image != "" {
+                                    Image(systemName: image)
+                                } else {
+                                    Image(systemName: "photo")
                                 }
                             }
                         }
-                    } label: {
-                        Image(systemName: viewModel.isListPrivate ? "lock" : "lock.open")
-                            .foregroundColor(Color(uiColor: .label))
                     }
                 }
             }
@@ -265,6 +289,12 @@ struct EditListView: View {
         .onAppear {
             viewModel.getLevelOfPrivate(listViewModel.lists[indexOfList].isPrivate)
             viewModel.getLevelOfImportant(listViewModel.lists[indexOfList].colorOfImportant)
+            
+            if storageManager.isPro() {
+                if listViewModel.lists[indexOfList].image != nil {
+                    image = listViewModel.lists[indexOfList].image ?? "globe"
+                }
+            }
         }
     }
 }

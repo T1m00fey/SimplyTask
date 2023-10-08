@@ -5,12 +5,15 @@
 //  Created by Тимофей Юдин on 17.07.2023.
 //
 
-import Foundation
+import SwiftUI
 
-struct Task: Codable, Identifiable {
+struct StructTask: Codable, Identifiable {
     var id = UUID()
     var title: String
     var isDone: Bool
     var notificationDate: Date?
     var isNotificationDone: Bool
+    var images: [Data]
+    var creationDate: Date
+    var isDateShowing: Bool
 }

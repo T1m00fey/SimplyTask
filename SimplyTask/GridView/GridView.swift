@@ -44,7 +44,7 @@ struct GridView: View {
                         ScrollView(showsIndicators: false) {
                             LazyVGrid(columns: viewModel.items, spacing: 15) {
                                 ForEach(0..<listViewModel.lists.count, id: \.self) { indexOfList in
-                                    NavigationLink(destination: TasksListView(indexOfList: indexOfList).environmentObject(TasksListViewModel())) {
+                                    NavigationLink(destination:TasksListView(indexOfList: indexOfList).environmentObject(TasksListViewModel())) {
                                         if listViewModel.lists[indexOfList].title != "" {
                                             GridRowView(index: indexOfList)
                                                 .scaleEffect(0.97)
@@ -75,6 +75,10 @@ struct GridView: View {
                                             .onChange(of: scenePhase) { scenePhase in
                                                 if scenePhase == .active {
                                                     storageManager.getDoneOfNotifications()
+                                                    withAnimation {
+                                                        listViewModel.reloadData()
+                                                    }
+                                                } else if scenePhase == .background {
                                                     withAnimation {
                                                         listViewModel.reloadData()
                                                     }
@@ -138,7 +142,7 @@ struct GridView: View {
                             
                             Button("OK", role: .none) {
                                 if viewModel.textFromAlert != "" {
-                                    if listViewModel.lists.count == 0{
+                                    if listViewModel.lists.count == 0 {
                                         storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: [], isDoneShowing: false, isMoveDoneToEnd: false))
                                     }
                                     
@@ -192,6 +196,8 @@ struct GridView: View {
                 }
             }
             .onAppear {
+//                listViewModel.reloadData()
+                
                 UIApplication.shared.applicationIconBadgeNumber = 0
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -204,7 +210,7 @@ struct GridView: View {
                                     viewModel.isList.toggle()
                                 }
                             } label: {
-                                Image(systemName: "square.and.pencil")
+                                Image(systemName: "text.line.first.and.arrowtriangle.forward")
                                     .foregroundColor(viewModel.isList ? Color(uiColor: .label) : .gray)
                             }
 

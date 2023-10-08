@@ -13,8 +13,9 @@ struct TaskList: Codable, Identifiable {
     var numberOfTasks: Int
     var colorOfImportant: Int
     var isPrivate: Bool
-    var tasks: [Task]
+    var tasks: [StructTask]
     var isDoneShowing: Bool
     var isMoveDoneToEnd: Bool
+    var image: String?
 }
 

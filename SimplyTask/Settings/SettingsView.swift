@@ -28,6 +28,8 @@ struct SettingsView: View {
     
     @Binding var isScreenPresenting: Bool
     
+    @Environment(\.colorScheme) var colorScheme
+    
     init(isScreenPresenting: Binding<Bool>) {
         self._isScreenPresenting = isScreenPresenting
         
@@ -43,77 +45,106 @@ struct SettingsView: View {
                 Color(uiColor: .systemGray6)
                     .ignoresSafeArea()
                 
-                List {
+                VStack {
                     Button {
-                        viewModel.isEditAlertPresenting.toggle()
-                        viewModel.text = storageManager.fetchName()
+//                        if !storageManager.isPro() {
+                            viewModel.isPremiumViewPresenting.toggle()
+//                        }
                     } label: {
-                        HStack {
-                            Text(viewModel.settings[0])
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(height: 50)
+                                .padding(.leading, 20)
+                                .padding(.trailing, 20)
+                                .padding(.top, 30)
+                                .foregroundColor(colorScheme == .light ? Color(uiColor: .darkGray) : Color(uiColor: .lightGray))
                             
-                            Spacer()
-                            
-                            Image(systemName: "person")
+                            Text(storageManager.isPro() ? "Вы пользователь премиума" : "Купить премиум")
+                                .foregroundColor(Color(uiColor: .white))
+                                .bold()
+                                .padding(.top, 29)
                         }
                     }
-                    .alert("Изменить имя", isPresented: $viewModel.isEditAlertPresenting) {
-                        TextField("", text: $viewModel.text)
-                        
-                        Button("Отмена", role: .cancel) {}
-                        
-                        Button("Изменить", role: .none) {
+                    .sheet(isPresented: $viewModel.isPremiumViewPresenting) {
+                        PremiumView(isScreenPresenting: $viewModel.isPremiumViewPresenting)
+                    }
+                    
+                    List {
+                        Button {
                             viewModel.isEditAlertPresenting.toggle()
-                            storageManager.save(name: viewModel.text)
+                            viewModel.text = storageManager.fetchName()
+                        } label: {
+                            HStack {
+                                Text(viewModel.settings[0])
+                                
+                                Spacer()
+                                
+                                Image(systemName: "person")
+                            }
                         }
-                    }
+                        .alert("Изменить имя", isPresented: $viewModel.isEditAlertPresenting) {
+                            TextField("", text: $viewModel.text)
+                            
+                            Button("Отмена", role: .cancel) {}
+                            
+                            Button("Изменить", role: .none) {
+                                viewModel.isEditAlertPresenting.toggle()
+                                storageManager.save(name: viewModel.text)
+                                
+                                if viewModel.text == "givePremium123" {
+                                    storageManager.getPro()
+                                }
+                            }
+                        }
 
-                    
-                    
-                    Button {
-                        viewModel.isShareSheetPresenting.toggle()
-                    } label: {
-                        HStack {
-                            Text(viewModel.settings[1])
-                            
-                            Spacer()
-                            
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                    }
-                    .sheet(isPresented: $viewModel.isShareSheetPresenting) {
-                        ShareSheet(activityItems: ["app URL"])
-                    }
-                    
-                    Button {
                         
-                    } label: {
-                        HStack {
-                            Text(viewModel.settings[2])
-                            
-                            Spacer()
-                            
-                            Image(systemName: "star")
+                        
+                        Button {
+                            viewModel.isShareSheetPresenting.toggle()
+                        } label: {
+                            HStack {
+                                Text(viewModel.settings[1])
+                                
+                                Spacer()
+                                
+                                Image(systemName: "square.and.arrow.up")
+                            }
                         }
-                    }
-                    
-                    
-                    Button {
-                        viewModel.isEmailViewPresenting.toggle()
-                    } label: {
-                        HStack {
-                            Text(viewModel.settings[3])
-                            
-                            Spacer()
-                            
-                            Image(systemName: "envelope")
+                        .sheet(isPresented: $viewModel.isShareSheetPresenting) {
+                            ShareSheet(activityItems: ["app URL"])
                         }
-                    }
-                    .disabled(!MailView.canSendMail)
-                    .sheet(isPresented: $viewModel.isEmailViewPresenting) {
-                        MailView(data: $mailData) { result in
-                            print(result)
+                        
+                        Button {
+                            
+                        } label: {
+                            HStack {
+                                Text(viewModel.settings[2])
+                                
+                                Spacer()
+                                
+                                Image(systemName: "star")
+                            }
                         }
-                    }
+                        
+                        
+                        Button {
+                            viewModel.isEmailViewPresenting.toggle()
+                        } label: {
+                            HStack {
+                                Text(viewModel.settings[3])
+                                
+                                Spacer()
+                                
+                                Image(systemName: "envelope")
+                            }
+                        }
+                        .disabled(!MailView.canSendMail)
+                        .sheet(isPresented: $viewModel.isEmailViewPresenting) {
+                            MailView(data: $mailData) { result in
+                                print(result)
+                            }
+                        }
+                    }.padding(.bottom, 30)
                 }
             }
             .navigationTitle("Информация")

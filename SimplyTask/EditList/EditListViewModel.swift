@@ -20,6 +20,7 @@ final class EditListViewModel: ObservableObject {
     @Published var isBiometricSuccess = false
     @Published var isDoneShowing = true
     @Published var isMoveDoneToEnd = true
+    @Published var isImagesScreenPresenting = false
     
     func getTittleColor(_ index: Int) -> Color {
         if index == selectedLevel {

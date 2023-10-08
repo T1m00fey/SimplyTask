@@ -7,16 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C41B779B2AC982DD009A6103 /* PremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41B779A2AC982DD009A6103 /* PremiumView.swift */; };
 		C447D2952A650CD100630F29 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C447D2942A650CD100630F29 /* ListViewModel.swift */; };
 		C447D2982A65247500630F29 /* TasksListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C447D2972A65247500630F29 /* TasksListView.swift */; };
 		C447D29A2A652BB300630F29 /* TasksListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C447D2992A652BB300630F29 /* TasksListViewModel.swift */; };
 		C455061A2AB5D56F00B64B54 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45506192AB5D56E00B64B54 /* NotificationManager.swift */; };
-		C459C1602A653F080051179A /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = C459C15F2A653F080051179A /* Task.swift */; };
+		C459C1602A653F080051179A /* StructTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C459C15F2A653F080051179A /* StructTask.swift */; };
 		C45D6DB52A8675BD00C8196F /* ErrorFaceIDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45D6DB42A8675BD00C8196F /* ErrorFaceIDView.swift */; };
+		C45FA4192AC9D84300E28683 /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45FA4182AC9D84300E28683 /* PhotoView.swift */; };
+		C45FA41B2ACAE0B500E28683 /* DetailPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45FA41A2ACAE0B500E28683 /* DetailPhotoView.swift */; };
 		C4746C422ABD5D1300FE9EF6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4746C412ABD5D1300FE9EF6 /* SettingsView.swift */; };
 		C4746C462ABD5D9800FE9EF6 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4746C452ABD5D9800FE9EF6 /* SettingsViewModel.swift */; };
 		C48251102AB22B81006EB5CE /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C482510F2AB22B81006EB5CE /* NotificationView.swift */; };
 		C482A1F32AC6F6F8000C2ED0 /* EditSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C482A1F22AC6F6F8000C2ED0 /* EditSheetView.swift */; };
+		C482A2132AC95522000C2ED0 /* ImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C482A2122AC95522000C2ED0 /* ImagesView.swift */; };
 		C48979192AB1EF47001E9697 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48979182AB1EF47001E9697 /* StorageManager.swift */; };
 		C493AA692A601E3F007E99F3 /* SimplyTaskApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C493AA682A601E3F007E99F3 /* SimplyTaskApp.swift */; };
 		C493AA6D2A601E40007E99F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C493AA6C2A601E40007E99F3 /* Assets.xcassets */; };
@@ -33,16 +37,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C41B779A2AC982DD009A6103 /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
 		C447D2942A650CD100630F29 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		C447D2972A65247500630F29 /* TasksListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksListView.swift; sourceTree = "<group>"; };
 		C447D2992A652BB300630F29 /* TasksListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksListViewModel.swift; sourceTree = "<group>"; };
 		C45506192AB5D56E00B64B54 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
-		C459C15F2A653F080051179A /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		C459C15F2A653F080051179A /* StructTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructTask.swift; sourceTree = "<group>"; };
 		C45D6DB42A8675BD00C8196F /* ErrorFaceIDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorFaceIDView.swift; sourceTree = "<group>"; };
+		C45FA4182AC9D84300E28683 /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
+		C45FA41A2ACAE0B500E28683 /* DetailPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPhotoView.swift; sourceTree = "<group>"; };
 		C4746C412ABD5D1300FE9EF6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C4746C452ABD5D9800FE9EF6 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		C482510F2AB22B81006EB5CE /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		C482A1F22AC6F6F8000C2ED0 /* EditSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSheetView.swift; sourceTree = "<group>"; };
+		C482A2122AC95522000C2ED0 /* ImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesView.swift; sourceTree = "<group>"; };
 		C48979182AB1EF47001E9697 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		C493AA652A601E3E007E99F3 /* SimplyTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimplyTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C493AA682A601E3F007E99F3 /* SimplyTaskApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplyTaskApp.swift; sourceTree = "<group>"; };
@@ -78,6 +86,8 @@
 				C447D2992A652BB300630F29 /* TasksListViewModel.swift */,
 				C45D6DB42A8675BD00C8196F /* ErrorFaceIDView.swift */,
 				C482510F2AB22B81006EB5CE /* NotificationView.swift */,
+				C45FA4182AC9D84300E28683 /* PhotoView.swift */,
+				C45FA41A2ACAE0B500E28683 /* DetailPhotoView.swift */,
 			);
 			path = TasksList;
 			sourceTree = "<group>";
@@ -96,6 +106,7 @@
 				C4746C412ABD5D1300FE9EF6 /* SettingsView.swift */,
 				C4746C452ABD5D9800FE9EF6 /* SettingsViewModel.swift */,
 				C4FFB3802AC2FD3A007B2322 /* ShareSheet.swift */,
+				C41B779A2AC982DD009A6103 /* PremiumView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -174,7 +185,7 @@
 			children = (
 				C493AA822A601EEF007E99F3 /* TaskList.swift */,
 				C447D2942A650CD100630F29 /* ListViewModel.swift */,
-				C459C15F2A653F080051179A /* Task.swift */,
+				C459C15F2A653F080051179A /* StructTask.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -185,6 +196,7 @@
 				C493AA8D2A602E80007E99F3 /* EditListView.swift */,
 				C493AA8F2A608291007E99F3 /* EditListViewModel.swift */,
 				C482A1F22AC6F6F8000C2ED0 /* EditSheetView.swift */,
+				C482A2122AC95522000C2ED0 /* ImagesView.swift */,
 			);
 			path = EditList;
 			sourceTree = "<group>";
@@ -274,15 +286,19 @@
 				C4A4F4962AB758470074DFD9 /* StartView.swift in Sources */,
 				C493AA892A6020A6007E99F3 /* GridViewModel.swift in Sources */,
 				C493AA832A601EEF007E99F3 /* TaskList.swift in Sources */,
+				C45FA41B2ACAE0B500E28683 /* DetailPhotoView.swift in Sources */,
 				C447D2982A65247500630F29 /* TasksListView.swift in Sources */,
-				C459C1602A653F080051179A /* Task.swift in Sources */,
+				C459C1602A653F080051179A /* StructTask.swift in Sources */,
 				C493AA8E2A602E80007E99F3 /* EditListView.swift in Sources */,
+				C45FA4192AC9D84300E28683 /* PhotoView.swift in Sources */,
 				C493AA872A60205A007E99F3 /* GridView.swift in Sources */,
+				C41B779B2AC982DD009A6103 /* PremiumView.swift in Sources */,
 				C493AA8B2A602119007E99F3 /* GridRowView.swift in Sources */,
 				C447D2952A650CD100630F29 /* ListViewModel.swift in Sources */,
 				C455061A2AB5D56F00B64B54 /* NotificationManager.swift in Sources */,
 				C493AA692A601E3F007E99F3 /* SimplyTaskApp.swift in Sources */,
 				C482A1F32AC6F6F8000C2ED0 /* EditSheetView.swift in Sources */,
+				C482A2132AC95522000C2ED0 /* ImagesView.swift in Sources */,
 				C4FFB3812AC2FD3A007B2322 /* ShareSheet.swift in Sources */,
 				C447D29A2A652BB300630F29 /* TasksListViewModel.swift in Sources */,
 				C48251102AB22B81006EB5CE /* NotificationView.swift in Sources */,
@@ -411,6 +427,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SimplyTask/Preview Content\"";
@@ -425,7 +442,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -433,6 +450,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Tim.SimplyTask;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -447,6 +465,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SimplyTask/Preview Content\"";
@@ -461,7 +480,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -469,6 +488,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Tim.SimplyTask;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

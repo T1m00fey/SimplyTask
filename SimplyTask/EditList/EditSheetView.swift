@@ -44,33 +44,40 @@ struct EditSheetView: View {
                     
                     if colorScheme == .light {
                         TextEditor(text: $text)
+                            .frame(width: UIScreen.main.bounds.width - 32, height: UIScreen.main.bounds.height)
                             .padding(EdgeInsets(top: 16, leading: 16, bottom: 0, trailing: 16))
                             .font(.system(size: 20))
                             .focused($isFocused)
                             .colorMultiply(Color(uiColor: .systemGray6))
-                            .onTapGesture {
-                                if navigationTitle == "Новая задача" {
-                                    text = ""
-                                }
-                            }
+//                            .onTapGesture {
+//                                if navigationTitle == "Новая задача" {
+//                                    text = ""
+//                                }
+//                            }
                     } else {
                         TextEditor(text: $text)
+                            .frame(width: UIScreen.main.bounds.width - 32, height: UIScreen.main.bounds.height)
                             .padding(EdgeInsets(top: 16, leading: 16, bottom: 0, trailing: 16))
                             .font(.system(size: 20))
                             .focused($isFocused)
-                            .onTapGesture {
-                                if navigationTitle == "Новая задача" {
-                                    text = ""
-                                }
-                            }
+//                            .onTapGesture {
+//                                if navigationTitle == "Новая задача" && text == "Нажмите, чтобы ввести название" {
+//                                    text = ""
+//                                }
+//
+//                                isFocused = true
+//                            }
                     }
                 }
                 .onAppear {
                     if navigationTitle == "Редактирование" {
                         text = listViewModel.lists[listIndex].tasks[taskIndex].title
-                    } else {
-                        text = "Введите название"
                     }
+//                    } else {
+//                        text = "Нажмите, чтобы ввести название"
+//                    }
+                    
+                    isFocused = true
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -87,7 +94,7 @@ struct EditSheetView: View {
                                 if text != "" && !text.isEmpty {
                                     storageManager.newTask(
                                         toList: listIndex,
-                                        newTask: Task(title: text, isDone: false, notificationDate: nil, isNotificationDone: false)
+                                        newTask: StructTask(title: text, isDone: false, notificationDate: nil, isNotificationDone: false, images: [], creationDate: Date.now, isDateShowing: false)
                                     )
                                     
                                     storageManager.plusOneTask(atIndex: listIndex)

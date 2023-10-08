@@ -41,17 +41,43 @@ struct GridRowView: View {
                 .foregroundColor(Color(uiColor: .systemBackground))
                 .shadow(radius: 3)
             
-            Circle()
-                .frame(width: 10, height: 10)
-                .foregroundColor(gridViewModel.getColorOfImportant(byNum: listViewModel.lists[index].colorOfImportant))
-                .offset(x: 60, y: -50)
+            if !storageManager.isPro() {
+                Circle()
+                    .frame(width: 10, height: 10)
+                    .foregroundColor(gridViewModel.getColorOfImportant(byNum: listViewModel.lists[index].colorOfImportant))
+                    .offset(x: 60, y: -50)
+            }
+                
+            if storageManager.isPro() && listViewModel.lists[index].image != nil && !gridViewModel.isGridEditing {
+                Image(systemName: listViewModel.lists[index].image ?? "globe")
+                .scaleEffect(1.5).offset(x: -55, y: -49)
+            }
             
-            if listViewModel.lists[index].isPrivate && !gridViewModel.isGridEditing {
+            if !storageManager.isPro() && listViewModel.lists[index].isPrivate && !gridViewModel.isGridEditing {
                 Image(systemName: "lock")
                     .resizable()
                     .frame(width: 17, height: 25)
                     .offset(x: -55, y: -49)
                     .foregroundColor(Color(uiColor: .label))
+            } else if listViewModel.lists[index].image == nil && listViewModel.lists[index].isPrivate && !gridViewModel.isGridEditing {
+                Image(systemName: "lock")
+                    .resizable()
+                    .frame(width: 17, height: 25)
+                    .offset(x: -55, y: -49)
+                    .foregroundColor(Color(uiColor: .label))
+            }
+            
+            if listViewModel.lists[index].isPrivate && storageManager.isPro() && listViewModel.lists[index].image != nil {
+                Image(systemName: "lock")
+                    .resizable()
+                    .frame(width: 17, height: 25)
+                    .offset(x: 55, y: -49)
+                    .foregroundColor(gridViewModel.getColorOfImportant(byNum: listViewModel.lists[index].colorOfImportant))
+            } else {
+                Circle()
+                    .frame(width: 10, height: 10)
+                    .foregroundColor(gridViewModel.getColorOfImportant(byNum: listViewModel.lists[index].colorOfImportant))
+                    .offset(x: 60, y: -50)
             }
             
             if getIsDoneNotification() {
