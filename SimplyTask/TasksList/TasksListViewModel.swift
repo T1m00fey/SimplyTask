@@ -21,6 +21,7 @@ final class TasksListViewModel: ObservableObject {
     @Published var isDetailPhotoScreenPresenting = false
     @Published var isAlertForDeletePresenting2 = false
     @Published var isShareSheetPresenting = false
+    @Published var isDateMenuShowing = false
     
     var selectedIndexForDelete = 0
     var textFromAlert = ""

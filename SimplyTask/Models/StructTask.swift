@@ -14,6 +14,5 @@ struct StructTask: Codable, Identifiable {
     var notificationDate: Date?
     var isNotificationDone: Bool
     var images: [Data]
-    var creationDate: Date
-    var isDateShowing: Bool
+    var date: Date?
 }

@@ -206,8 +206,10 @@ struct GridView: View {
                     if listViewModel.lists.count > 1 {
                         HStack {
                             Button {
-                                withAnimation {
-                                    viewModel.isList.toggle()
+                                if !viewModel.isGridEditing {
+                                    withAnimation {
+                                        viewModel.isList.toggle()
+                                    }
                                 }
                             } label: {
                                 Image(systemName: "text.line.first.and.arrowtriangle.forward")
@@ -215,8 +217,10 @@ struct GridView: View {
                             }
 
                             Button {
-                                withAnimation {
-                                    viewModel.isGridEditing.toggle()
+                                if !viewModel.isList {
+                                    withAnimation {
+                                        viewModel.isGridEditing.toggle()
+                                    }
                                 }
                             } label: {
                                 Image(systemName: "minus.circle")

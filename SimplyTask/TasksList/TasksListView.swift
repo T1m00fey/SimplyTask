@@ -53,7 +53,7 @@ struct TasksListView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 Color(uiColor: .systemGray6)
                     .ignoresSafeArea()
@@ -76,8 +76,8 @@ struct TasksListView: View {
                                                 
                                                 VStack {
                                                     if storageManager.isPro() {
-                                                        if task.isDateShowing {
-                                                            Text(viewModel.getStringDate(fromDate: task.creationDate))
+                                                        if task.date != nil {
+                                                            Text(viewModel.getStringDate(fromDate: task.date ?? Date.now))
                                                                 .frame(width: 318, height: 30, alignment: .leading)
                                                                 .foregroundColor(.gray)
                                                                 .font(.system(size: 14))
@@ -200,7 +200,7 @@ struct TasksListView: View {
                                                                 }
                                                                 
                                                                 Button("Отмена", role: .cancel) {
-                                                                    viewModel.isAlertForDeletePresenting.toggle()
+                                                                    viewModel.isAlertForDeletePresenting2.toggle()
                                                                 }
                                                             }
                                                             .padding(.trailing, 280)
@@ -237,6 +237,12 @@ struct TasksListView: View {
                                                                         .frame(width: 22, height: 22)
                                                                         .foregroundColor(Color(uiColor: .label))
                                                                 }
+                                                                .onChange(of: viewModel.isNotificationMenuShowing, perform: { isShowing in
+                                                                    if !isShowing {
+                                                                        listViewModel.reloadData()
+                                                                    }
+                                                                })
+                                                                
                                                                 .padding(.leading, 120)
                                                                 
                                                                 Button {
@@ -296,13 +302,12 @@ struct TasksListView: View {
                                                                     .padding()
                                                                     
                                                                     Button {
-                                                                        storageManager.toggleIsShowingDate(listIndex: indexOfList, taskIndex: index)
-                                                                        
                                                                         withAnimation {
-                                                                            listViewModel.reloadData()
+                                                                            viewModel.isDateMenuShowing.toggle()
+                                                                            viewModel.selectedIndexForDelete = index
                                                                         }
                                                                     } label: {
-                                                                        Image(systemName: task.isDateShowing ? "calendar.badge.minus" : "calendar.badge.plus")
+                                                                        Image(systemName: "calendar")
                                                                             .resizable()
                                                                             .frame(width: 27, height: 22)
                                                                             .foregroundColor(Color(uiColor: .label))
@@ -457,13 +462,16 @@ struct TasksListView: View {
                                     PhotoView(isScreenPresenting: $viewModel.isPhotoScreenPresenting, listIndex: indexOfList, taskIndex: viewModel.selectedIndexForDelete)
                                         .environmentObject(ListViewModel())
                                 }
-                                .sheet(isPresented: $viewModel.isDetailPhotoScreenPresenting) {
-                                    DetailPhotoView(
-                                        image: viewModel.image ?? UIImage(systemName: "xmark")!,
-                                        title: viewModel.titleOfTask,
-                                        isScreenPresenting: $viewModel.isDetailPhotoScreenPresenting
-                                    )
+                                .navigationDestination(isPresented: $viewModel.isDetailPhotoScreenPresenting) {
+                                    DetailPhotoView(image: viewModel.image ?? UIImage(systemName: "xmark")!, title: viewModel.titleOfTask)
                                 }
+//                                .sheet(isPresented: $viewModel.isDetailPhotoScreenPresenting) {
+//                                    DetailPhotoView(
+//                                        image: viewModel.image ?? UIImage(systemName: "xmark")!,
+//                                        title: viewModel.titleOfTask,
+//                                        isScreenPresenting: $viewModel.isDetailPhotoScreenPresenting
+//                                    )
+//                                }
 //                                .alert("Новая задача", isPresented: $viewModel.isAlertForNewTaskPresenting) {
 //                                    TextField("Название", text: $viewModel.textFromAlert)
 //
@@ -515,6 +523,8 @@ struct TasksListView: View {
                         if viewModel.isNotificationMenuShowing {
                             NotificationView(isShowing: $viewModel.isNotificationMenuShowing, listIndex: indexOfList, taskIndex: viewModel.selectedIndexForDelete)
                                 .environmentObject(ListViewModel())
+                        } else if viewModel.isDateMenuShowing {
+                            DateView(isShowing: $viewModel.isDateMenuShowing, listIndex: indexOfList, taskIndex: viewModel.selectedIndexForDelete)
                         }
                     }
                 } else if listViewModel.isFaceIDError {
@@ -535,8 +545,10 @@ struct TasksListView: View {
                     if listViewModel.lists[indexOfList].tasks.count > 0 {
                         HStack {
                             Button(action: {
-                                withAnimation {
-                                    viewModel.isList.toggle()
+                                if !viewModel.isListEditing {
+                                    withAnimation {
+                                        viewModel.isList.toggle()
+                                    }
                                 }
                             }) {
                                 Image(systemName: "text.line.first.and.arrowtriangle.forward")
@@ -544,9 +556,11 @@ struct TasksListView: View {
                             }
                             
                             Button {
-                                withAnimation {
-                                    viewModel.isListEditing.toggle()
-                                    listViewModel.reloadData()
+                                if !viewModel.isList {
+                                    withAnimation {
+                                        viewModel.isListEditing.toggle()
+                                        listViewModel.reloadData()
+                                    }
                                 }
                             } label: {
                                 Image(systemName: "ellipsis.circle")
@@ -578,6 +592,13 @@ struct TasksListView: View {
 //                withAnimation {
                     listViewModel.reloadData()
 //                }
+            }
+        }
+        .onChange(of: viewModel.isDateMenuShowing) { isShowing in
+            if !isShowing {
+                withAnimation {
+                    listViewModel.reloadData()
+                }
             }
         }
     }

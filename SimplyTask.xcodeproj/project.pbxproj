@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C40FC7FB2ADDA1DA0034700B /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40FC7FA2ADDA1DA0034700B /* DateView.swift */; };
 		C41B779B2AC982DD009A6103 /* PremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41B779A2AC982DD009A6103 /* PremiumView.swift */; };
 		C447D2952A650CD100630F29 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C447D2942A650CD100630F29 /* ListViewModel.swift */; };
 		C447D2982A65247500630F29 /* TasksListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C447D2972A65247500630F29 /* TasksListView.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C40FC7FA2ADDA1DA0034700B /* DateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
 		C41B779A2AC982DD009A6103 /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
 		C447D2942A650CD100630F29 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		C447D2972A65247500630F29 /* TasksListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksListView.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				C482510F2AB22B81006EB5CE /* NotificationView.swift */,
 				C45FA4182AC9D84300E28683 /* PhotoView.swift */,
 				C45FA41A2ACAE0B500E28683 /* DetailPhotoView.swift */,
+				C40FC7FA2ADDA1DA0034700B /* DateView.swift */,
 			);
 			path = TasksList;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C40FC7FB2ADDA1DA0034700B /* DateView.swift in Sources */,
 				C48979192AB1EF47001E9697 /* StorageManager.swift in Sources */,
 				C493AA902A608291007E99F3 /* EditListViewModel.swift in Sources */,
 				C4746C422ABD5D1300FE9EF6 /* SettingsView.swift in Sources */,

@@ -37,97 +37,99 @@ struct EditSheetView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                ZStack {
-                    Color(uiColor: .systemGray6)
-                        .ignoresSafeArea()
-                    
+            ZStack {
+                Color(uiColor: .systemGray6)
+                    .ignoresSafeArea()
+                
+                ScrollView {
                     if colorScheme == .light {
                         TextEditor(text: $text)
-                            .frame(width: UIScreen.main.bounds.width - 32, height: UIScreen.main.bounds.height)
+                            .frame(width: UIScreen.main.bounds.width - 32)
+                            .frame(minHeight: isFocused ? 50 : UIScreen.main.bounds.height - 16)
                             .padding(EdgeInsets(top: 16, leading: 16, bottom: 0, trailing: 16))
                             .font(.system(size: 20))
                             .focused($isFocused)
                             .colorMultiply(Color(uiColor: .systemGray6))
-//                            .onTapGesture {
-//                                if navigationTitle == "Новая задача" {
-//                                    text = ""
-//                                }
-//                            }
+                        //                            .onTapGesture {
+                        //                                if navigationTitle == "Новая задача" {
+                        //                                    text = ""
+                        //                                }
+                        //                            }
                     } else {
                         TextEditor(text: $text)
-                            .frame(width: UIScreen.main.bounds.width - 32, height: UIScreen.main.bounds.height)
+                            .frame(width: UIScreen.main.bounds.width - 32)
+                            .frame(minHeight: isFocused ? 50 : UIScreen.main.bounds.height - 16)
                             .padding(EdgeInsets(top: 16, leading: 16, bottom: 0, trailing: 16))
                             .font(.system(size: 20))
                             .focused($isFocused)
-//                            .onTapGesture {
-//                                if navigationTitle == "Новая задача" && text == "Нажмите, чтобы ввести название" {
-//                                    text = ""
-//                                }
-//
-//                                isFocused = true
-//                            }
+                        //                            .onTapGesture {
+                        //                                if navigationTitle == "Новая задача" && text == "Нажмите, чтобы ввести название" {
+                        //                                    text = ""
+                        //                                }
+                        //
+                        //                                isFocused = true
+                        //                            }
                     }
                 }
-                .onAppear {
-                    if navigationTitle == "Редактирование" {
-                        text = listViewModel.lists[listIndex].tasks[taskIndex].title
-                    }
+            }
+            .onAppear {
+                if navigationTitle == "Редактирование" {
+                    text = listViewModel.lists[listIndex].tasks[taskIndex].title
+                }
 //                    } else {
 //                        text = "Нажмите, чтобы ввести название"
 //                    }
-                    
-                    isFocused = true
-                }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            isScreenPresenting.toggle()
-                        } label: {
-                            Image(systemName: "xmark")
-                        }
+                
+                isFocused = true
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        isScreenPresenting.toggle()
+                    } label: {
+                        Image(systemName: "xmark")
                     }
-                    
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            if navigationTitle == "Новая задача" {
-                                if text != "" && !text.isEmpty {
-                                    storageManager.newTask(
-                                        toList: listIndex,
-                                        newTask: StructTask(title: text, isDone: false, notificationDate: nil, isNotificationDone: false, images: [], creationDate: Date.now, isDateShowing: false)
-                                    )
-                                    
-                                    storageManager.plusOneTask(atIndex: listIndex)
-                                }
-                            } else if navigationTitle == "Редактирование" {
-                                let title = listViewModel.lists[listIndex].tasks[taskIndex].title
+                }
+                
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        if navigationTitle == "Новая задача" {
+                            if text != "" && !text.isEmpty {
+                                storageManager.newTask(
+                                    toList: listIndex,
+                                    newTask: StructTask(title: text, isDone: false, notificationDate: nil, isNotificationDone: false, images: [], date: nil)
+                                )
                                 
-                                storageManager.editTask(indexOfList: listIndex, indexOfTask: taskIndex, newTitle: text)
-                                
-                                withAnimation {
-                                    listViewModel.reloadData()
-                                }
-                                
-                                let task = listViewModel.lists[listIndex].tasks[taskIndex]
-                                
-                                if task.notificationDate != nil && task.notificationDate ?? Date.now > Date.now {
-                                    notificationManager.scheduleNotification(text: task.title, date: task.notificationDate ?? Date.now)
-                                    
-                                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(title)\(task.notificationDate ?? Date())"])
-                                }
+                                storageManager.plusOneTask(atIndex: listIndex)
+                            }
+                        } else if navigationTitle == "Редактирование" {
+                            let title = listViewModel.lists[listIndex].tasks[taskIndex].title
+                            
+                            storageManager.editTask(indexOfList: listIndex, indexOfTask: taskIndex, newTitle: text)
+                            
+                            withAnimation {
+                                listViewModel.reloadData()
                             }
                             
-                            isScreenPresenting.toggle()
-                        } label: {
-                            Image(systemName: "checkmark")
+                            let task = listViewModel.lists[listIndex].tasks[taskIndex]
+                            
+                            if task.notificationDate != nil && task.notificationDate ?? Date.now > Date.now {
+                                notificationManager.scheduleNotification(text: task.title, date: task.notificationDate ?? Date.now)
+                                
+                                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(title)\(task.notificationDate ?? Date())"])
+                            }
                         }
+                        
+                        isScreenPresenting.toggle()
+                    } label: {
+                        Image(systemName: "checkmark")
                     }
                 }
-                .navigationTitle(navigationTitle)
-                .navigationBarTitleDisplayMode(.inline)
             }
-            .background(Color(uiColor: .systemGray6))
-            .ignoresSafeArea(.keyboard)
+            .navigationTitle(navigationTitle)
+            .navigationBarTitleDisplayMode(.inline)
+        
+//            .ignoresSafeArea(.keyboard)
         }
     }
 }

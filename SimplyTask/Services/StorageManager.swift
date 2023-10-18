@@ -288,9 +288,9 @@ final class StorageManager {
         userDefaults.set(data, forKey: key)
     }
     
-    func toggleIsShowingDate(listIndex: Int, taskIndex: Int) {
+    func add(date: Date?, listIndex: Int, taskIndex: Int) {
         var lists = fetchData()
-        lists[listIndex].tasks[taskIndex].isDateShowing.toggle()
+        lists[listIndex].tasks[taskIndex].date = date
         
         guard let data = try? JSONEncoder().encode(lists) else { return }
         userDefaults.set(data, forKey: key)
