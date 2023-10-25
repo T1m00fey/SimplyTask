@@ -15,6 +15,8 @@ struct DateView: View {
     @State private var date = Date.now
     @State private var isAlertShowing = false
     
+    @EnvironmentObject var listViewModel: ListViewModel
+    
     let listIndex: Int
     let taskIndex: Int
     
@@ -66,7 +68,8 @@ struct DateView: View {
             
             Button("Удалить дату") {
                 withAnimation {
-                    isShowing.toggle()
+//                    isShowing.toggle()
+                    isAlertShowing.toggle()
                 }
             }
             .foregroundColor(.red)
@@ -75,6 +78,7 @@ struct DateView: View {
                 Button("Удалить", role: .destructive) {
                     withAnimation {
                         isShowing.toggle()
+                        isAlertShowing = false
                         storageManager.add(date: nil, listIndex: listIndex, taskIndex: taskIndex)
                     }
                 }
@@ -83,6 +87,9 @@ struct DateView: View {
                     isAlertShowing.toggle()
                 }
             }
+        }
+        .onAppear {
+            date = listViewModel.lists[listIndex].tasks[taskIndex].date ?? Date.now
         }
     }
 }

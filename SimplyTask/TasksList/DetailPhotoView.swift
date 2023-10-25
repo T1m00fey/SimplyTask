@@ -32,6 +32,15 @@ struct DetailPhotoView: View {
             ZStack {
                 Color(uiColor: .systemGray6)
                     .ignoresSafeArea()
+                    .gesture(
+                        DragGesture()
+                                    .onEnded { value in
+                                        if value.translation.width > 50 {
+                                            self.presentationMode.wrappedValue.dismiss()
+                                        }
+                                    }
+
+                    )
                 
                 
                 Image(uiImage: image)
@@ -43,7 +52,7 @@ struct DetailPhotoView: View {
                     .onTapGesture(count: 2) {
                         if imageScale == 1 {
                             withAnimation(.spring()){
-                                imageScale = 3
+                                imageScale = 4
                                 
                             }
                         } else {

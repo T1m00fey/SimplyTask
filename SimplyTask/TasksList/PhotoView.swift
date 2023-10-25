@@ -17,6 +17,7 @@ struct PhotoView: View {
     @State private var avatarItem: PhotosPickerItem?
     @State private var isAlertPresenting = false
     @State private var isEditing = false
+    @State private var selectedIndex = 0
     
     @Binding var isScreenPresenting: Bool
     
@@ -77,13 +78,13 @@ struct PhotoView: View {
                                         .onTapGesture {
                                             if isEditing {
                                                 isAlertPresenting.toggle()
+                                                selectedIndex = imageIndex
                                             }
                                         }
                                         .alert("Удалить фото?", isPresented: $isAlertPresenting) {
                                             Button("Удалить", role: .destructive) {
                                                 withAnimation {
-                                                    images.remove(at: imageIndex)
-                                                    storageManager.deleteImage(atList: listIndex, atTask: taskIndex, indexOfPhoto: imageIndex)
+                                                    images.remove(at: selectedIndex)
                                                     
                                                     if images.count == 0 {
                                                         isEditing = false

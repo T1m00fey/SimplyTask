@@ -113,7 +113,7 @@ struct TasksListView: View {
                                                                 width: viewModel.isListEditing ? 100 : 230,
                                                                 alignment: .leading
                                                             )
-                                                            .padding(.leading, viewModel.isListEditing ? -90 : 20)
+                                                            .padding(.leading, viewModel.isListEditing ? -105 : 20)
                                                             .padding(.top, 16)
                                                             .padding(.bottom, 16)
                                                             .padding(.trailing, !listViewModel.lists[indexOfList].isDoneShowing ? 70 : 16)
@@ -464,6 +464,7 @@ struct TasksListView: View {
                                 }
                                 .navigationDestination(isPresented: $viewModel.isDetailPhotoScreenPresenting) {
                                     DetailPhotoView(image: viewModel.image ?? UIImage(systemName: "xmark")!, title: viewModel.titleOfTask)
+                                        .environmentObject(ListViewModel())
                                 }
 //                                .sheet(isPresented: $viewModel.isDetailPhotoScreenPresenting) {
 //                                    DetailPhotoView(
@@ -531,6 +532,15 @@ struct TasksListView: View {
                     ErrorFaceIDView(indexOfList: indexOfList)
                 }
             }
+            .gesture(
+                DragGesture()
+                            .onEnded { value in
+                                if value.translation.width > 50 {
+                                    self.presentationMode.wrappedValue.dismiss()
+                                }
+                            }
+
+            )
             .navigationBarTitle(listViewModel.lists[indexOfList].title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
