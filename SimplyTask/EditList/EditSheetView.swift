@@ -83,6 +83,9 @@ struct EditSheetView: View {
                 
                 isFocused = true
             }
+            .onDisappear {
+                text = ""
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
