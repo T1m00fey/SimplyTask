@@ -131,6 +131,8 @@ struct TasksListView: View {
                                                                 task.isDone.toggle()
                                                                 
                                                                 if !task.isDone {
+                                                                    mediumFeedback.impactOccurred()
+                                                                    
                                                                     storageManager.plusOneTask(atIndex: indexOfList)
                                                                     
                                                                     if listViewModel.lists[indexOfList].isMoveDoneToEnd {
@@ -286,6 +288,7 @@ struct TasksListView: View {
                                                                 withAnimation {
                                                                     viewModel.isNotificationMenuShowing = true
                                                                     viewModel.selectedIndexForDelete = index
+                                                                    softFeedback.impactOccurred()
                                                                 }
                                                             } label: {
                                                                 Image(systemName: "bell")
@@ -596,12 +599,21 @@ struct TasksListView: View {
                                         .environmentObject(ListViewModel())
                                 }
                                 .navigationDestination(isPresented: $viewModel.isRefactScreenPresenting) {
-                                    EditSheetView(
-                                        navigationTitle: viewModel.titleForEditScreen,
-                                       listIndex: indexOfList,
-                                       taskIndex: viewModel.selectedIndexForDelete
-                                   )
-                                    .environmentObject(ListViewModel())
+                                    if viewModel.titleForEditScreen == "Редактирование" {
+                                        EditSheetView(
+                                            navigationTitle: "Редактирование",
+                                           listIndex: indexOfList,
+                                           taskIndex: viewModel.selectedIndexForDelete
+                                       )
+                                        .environmentObject(ListViewModel())
+                                    } else {
+                                        EditSheetView(
+                                            navigationTitle: "Новая задача",
+                                           listIndex: indexOfList,
+                                           taskIndex: 0
+                                       )
+                                        .environmentObject(ListViewModel())
+                                    }
                                 }
                                 .navigationDestination(isPresented: $viewModel.isDetailPhotoScreenPresenting) {
                                     DetailPhotoView(image: viewModel.image ?? UIImage(systemName: "xmark")!, title: viewModel.titleOfTask)
@@ -709,6 +721,7 @@ struct TasksListView: View {
                                     withAnimation {
                                         viewModel.isList.toggle()
                                     }
+                                    softFeedback.impactOccurred()
                                 }
                             }) {
                                 Image(systemName: "text.line.first.and.arrowtriangle.forward")

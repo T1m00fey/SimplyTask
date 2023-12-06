@@ -14,6 +14,7 @@ struct GridView: View {
     
     private let storageManager = StorageManager.shared
     private let mediumFeedback = UIImpactFeedbackGenerator(style: .medium)
+    private let softFeedback = UIImpactFeedbackGenerator(style: .soft)
     
     @EnvironmentObject var viewModel: GridViewModel
     @EnvironmentObject var listViewModel: ListViewModel
@@ -128,7 +129,10 @@ struct GridView: View {
                     Spacer()
                     
                     HStack {
-                        Button(action: { viewModel.isAlertPresenting.toggle() }) {
+                        Button {
+                            viewModel.isAlertPresenting.toggle()
+                            mediumFeedback.impactOccurred()
+                        } label: {
                             Image(systemName: "plus.app.fill")
                                 .resizable()
                                 .frame(width: 25, height: 25)
@@ -219,6 +223,7 @@ struct GridView: View {
                                     withAnimation {
                                         viewModel.isList.toggle()
                                     }
+                                    softFeedback.impactOccurred()
                                 }
                             } label: {
                                 Image(systemName: "text.line.first.and.arrowtriangle.forward")
@@ -230,6 +235,7 @@ struct GridView: View {
                                     withAnimation {
                                         viewModel.isGridEditing.toggle()
                                     }
+                                    softFeedback.impactOccurred()
                                 }
                             } label: {
                                 Image(systemName: "minus.circle")

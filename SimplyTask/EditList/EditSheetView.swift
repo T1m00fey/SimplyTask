@@ -43,48 +43,21 @@ struct EditSheetView: View {
                     .ignoresSafeArea()
                 
                 ScrollView {
-                    if colorScheme == .light {
-                        TextEditor(text: $text)
-                            .frame(width: UIScreen.main.bounds.width - 32)
-                            .frame(minHeight: isFocused ? 50 : UIScreen.main.bounds.height - 16)
-                            .padding(EdgeInsets(top: 16, leading: 16, bottom: 0, trailing: 16))
-                            .font(.system(size: 20))
-                            .focused($isFocused)
-                            .colorMultiply(Color(uiColor: .systemGray6))
-                        //                            .onTapGesture {
-                        //                                if navigationTitle == "Новая задача" {
-                        //                                    text = ""
-                        //                                }
-                        //                            }
-                    } else {
-                        TextEditor(text: $text)
-                            .frame(width: UIScreen.main.bounds.width - 32)
-                            .frame(minHeight: isFocused ? 50 : UIScreen.main.bounds.height - 16)
-                            .padding(EdgeInsets(top: 16, leading: 16, bottom: 0, trailing: 16))
-                            .font(.system(size: 20))
-                            .focused($isFocused)
-                        //                            .onTapGesture {
-                        //                                if navigationTitle == "Новая задача" && text == "Нажмите, чтобы ввести название" {
-                        //                                    text = ""
-                        //                                }
-                        //
-                        //                                isFocused = true
-                        //                            }
-                    }
+                    TextEditor(text: $text)
+                        .frame(width: UIScreen.main.bounds.width - 32)
+                        .frame(minHeight: isFocused ? 50 : UIScreen.main.bounds.height - 16)
+                        .padding(EdgeInsets(top: 16, leading: 16, bottom: 0, trailing: 16))
+                        .font(.system(size: 20))
+                        .focused($isFocused)
+                        .scrollContentBackground(.hidden)
                 }
             }
             .onAppear {
                 if navigationTitle == "Редактирование" {
                     text = listViewModel.lists[listIndex].tasks[taskIndex].title
                 }
-//                    } else {
-//                        text = "Нажмите, чтобы ввести название"
-//                    }
                 
                 isFocused = true
-            }
-            .onDisappear {
-                text = ""
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
