@@ -12,19 +12,18 @@ struct EditSheetView: View {
     let taskIndex: Int
     let navigationTitle: String
     
-    @Binding var isScreenPresenting: Bool
-    
     @State private var text = ""
     @FocusState var isFocused: Bool
     
     @EnvironmentObject var listViewModel: ListViewModel
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.presentationMode) var presentationMode
     
     private let storageManager = StorageManager.shared
     private let notificationManager = NotificationManager.shared
+    private let mediumFeedback = UIImpactFeedbackGenerator(style: .medium)
     
-    init(isScreenPresenting: Binding<Bool>, navigationTitle: String, listIndex: Int, taskIndex: Int) {
-        self._isScreenPresenting = isScreenPresenting
+    init(navigationTitle: String, listIndex: Int, taskIndex: Int) {
         self.navigationTitle = navigationTitle
         self.listIndex = listIndex
         self.taskIndex = taskIndex
@@ -33,6 +32,8 @@ struct EditSheetView: View {
         navBarAppearance.backgroundColor = UIColor.systemGray6
         
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+        
+        mediumFeedback.prepare()
     }
     
     var body: some View {
@@ -83,15 +84,15 @@ struct EditSheetView: View {
                 isFocused = true
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        isScreenPresenting.toggle()
+                        presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Image(systemName: "xmark")
+                        Image(systemName: "chevron.left")
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         if navigationTitle == "Новая задача" {
                             if text != "" && !text.isEmpty {
@@ -120,22 +121,33 @@ struct EditSheetView: View {
                             }
                         }
                         
-                        isScreenPresenting.toggle()
+                        mediumFeedback.impactOccurred()
+                        presentationMode.wrappedValue.dismiss()
                     } label: {
                         Image(systemName: "checkmark")
                     }
                 }
             }
+            .gesture(
+                DragGesture()
+                            .onEnded { value in
+                                if value.translation.width > 50 {
+                                    self.presentationMode.wrappedValue.dismiss()
+                                }
+                            }
+
+            )
             .navigationTitle(navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
         
 //            .ignoresSafeArea(.keyboard)
         }
+        .navigationBarBackButtonHidden()
     }
 }
 
 struct EditSheetView_Previews: PreviewProvider {
     static var previews: some View {
-        EditSheetView(isScreenPresenting: .constant(true), navigationTitle: "View", listIndex: 0, taskIndex: 0)
+        EditSheetView(navigationTitle: "View", listIndex: 0, taskIndex: 0)
     }
 }

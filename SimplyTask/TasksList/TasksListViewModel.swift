@@ -14,7 +14,7 @@ final class TasksListViewModel: ObservableObject {
     @Published var isAlertForDeletePresenting = false
     @Published var isErrorAlertPresenting = false
     @Published var isEditScreenPresenting = false
-    @Published var isAlertForEditingPresenting = false
+    @Published var isRefactScreenPresenting = false
     @Published var isNotificationMenuShowing = false
     @Published var isList = false
     @Published var isPhotoScreenPresenting = false
@@ -22,7 +22,9 @@ final class TasksListViewModel: ObservableObject {
     @Published var isAlertForDeletePresenting2 = false
     @Published var isShareSheetPresenting = false
     @Published var isDateMenuShowing = false
+    @Published var isMenuShowing = false
     
+    var titleForEditScreen = ""
     var selectedIndexForDelete = 0
     var textFromAlert = ""
     var textFromEditAlert = ""

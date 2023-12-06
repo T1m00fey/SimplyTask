@@ -13,6 +13,9 @@ struct TasksListView: View {
     
     private let storageManager = StorageManager.shared
     private let notificationManager = NotificationManager.shared
+    private let softFeedback = UIImpactFeedbackGenerator(style: .soft)
+    private let mediumFeedback = UIImpactFeedbackGenerator(style: .medium)
+    private let generator = UINotificationFeedbackGenerator()
     
     @StateObject var viewModel = TasksListViewModel()
     
@@ -26,6 +29,9 @@ struct TasksListView: View {
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
         
         self.indexOfList = indexOfList
+        
+        softFeedback.prepare()
+        mediumFeedback.prepare()
     }
     
     func move(from source: IndexSet, to destination: Int) {
@@ -75,7 +81,7 @@ struct TasksListView: View {
                                                     .shadow(radius: 3)
                                                 
                                                 VStack {
-                                                    if storageManager.isPro() {
+//                                                    if storageManager.isPro() {
                                                         if task.date != nil {
                                                             Text(viewModel.getStringDate(fromDate: task.date ?? Date.now))
                                                                 .frame(width: 318, height: 30, alignment: .leading)
@@ -105,7 +111,7 @@ struct TasksListView: View {
                                                                     }
                                                             }
                                                         }
-                                                    }
+//                                                    }
                                                     
                                                     ZStack {
                                                         Text(task.title)
@@ -131,6 +137,8 @@ struct TasksListView: View {
                                                                         storageManager.moveTaskToBegin(listIndex: indexOfList, taskIndex: index)
                                                                     }
                                                                 } else {
+                                                                    generator.notificationOccurred(.success)
+                                                                    
                                                                     storageManager.deleteOneTask(atIndex: indexOfList)
                                                                     storageManager.deleteDateInTask(taskIndex: index, listIndex: indexOfList)
                                                                     
@@ -168,138 +176,73 @@ struct TasksListView: View {
                                                                     EmptyCircleView()
                                                                 }
                                                             }
-                                                            .alert("Удалить задачу?", isPresented: $viewModel.isAlertForDeletePresenting2) {
-                                                                Button("Удалить", role: .destructive) {
-                                                                    task = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete]
-                                                                    
-                                                                    viewModel.isAlertForDeletePresenting2.toggle()
-                                                                    
-                                                                    storageManager.deleteTask(atList: indexOfList, atIndex: viewModel.selectedIndexForDelete)
-                                                                    
-                                                                    if !task.isDone {
-                                                                        storageManager.deleteOneTask(atIndex: indexOfList)
-                                                                    }
-                                                                    
-                                                                    if task.notificationDate != nil {
-                                                                        UNUserNotificationCenter.current().removePendingNotificationRequests(
-                                                                            withIdentifiers: ["\(task.title)\(task.notificationDate ?? Date())"]
-                                                                        )
-                                                                    }
-                                                                    
-                                                                    if task.images.count > 0 {
-                                                                        listViewModel.reloadData()
-                                                                    } else {
-                                                                        withAnimation {
-                                                                            listViewModel.reloadData()
-                                                                        }
-                                                                    }
-                                                                    
-                                                                    if listViewModel.lists[indexOfList].tasks.count < 1 {
-                                                                        viewModel.isListEditing.toggle()
-                                                                    }
-                                                                }
-                                                                
-                                                                Button("Отмена", role: .cancel) {
-                                                                    viewModel.isAlertForDeletePresenting2.toggle()
-                                                                }
-                                                            }
+//                                                            .alert("Удалить задачу?", isPresented: $viewModel.isAlertForDeletePresenting2) {
+//                                                                Button("Удалить", role: .destructive) {
+//                                                                    task = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete]
+//                                                                    
+//                                                                    viewModel.isAlertForDeletePresenting2.toggle()
+//                                                                    
+//                                                                    storageManager.deleteTask(atList: indexOfList, atIndex: viewModel.selectedIndexForDelete)
+//                                                                    
+//                                                                    if !task.isDone {
+//                                                                        storageManager.deleteOneTask(atIndex: indexOfList)
+//                                                                    }
+//                                                                    
+//                                                                    if task.notificationDate != nil {
+//                                                                        UNUserNotificationCenter.current().removePendingNotificationRequests(
+//                                                                            withIdentifiers: ["\(task.title)\(task.notificationDate ?? Date())"]
+//                                                                        )
+//                                                                    }
+//                                                                    
+//                                                                    if task.images.count > 0 {
+//                                                                        listViewModel.reloadData()
+//                                                                    } else {
+//                                                                        withAnimation {
+//                                                                            listViewModel.reloadData()
+//                                                                        }
+//                                                                    }
+//                                                                    
+//                                                                    if listViewModel.lists[indexOfList].tasks.count < 1 {
+//                                                                        viewModel.isListEditing.toggle()
+//                                                                    }
+//                                                                }
+//                                                                
+//                                                                Button("Отмена", role: .cancel) {
+//                                                                    viewModel.isAlertForDeletePresenting2.toggle()
+//                                                                }
+//                                                            }
                                                             .padding(.trailing, 280)
                                                         }
                                                         
-                                                        if listViewModel.lists[indexOfList].tasks[index].notificationDate != nil && !viewModel.isListEditing {
-                                                            Image(systemName: "bell")
-                                                                .resizable()
-                                                                .frame(width: 22, height: 22)
-                                                                .padding(.leading, 280)
-                                                                .foregroundColor(
-                                                                    listViewModel.lists[indexOfList].tasks[index].isNotificationDone ? .red : .gray
-                                                                )
-                                                        }
-                                                        
-                                                        if viewModel.isListEditing {
-                                                            if !listViewModel.lists[indexOfList].tasks[index].isDone {
-                                                                Button {
-                                                                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, error in
-                                                                        if let error = error {
-                                                                            print(error.localizedDescription)
-                                                                        } else {
-                                                                            DispatchQueue.main.async {
-                                                                                withAnimation {
-                                                                                    viewModel.isNotificationMenuShowing = true
-                                                                                    viewModel.selectedIndexForDelete = index
+                                                        if viewModel.isMenuShowing {
+                                                            Menu {
+                                                                if !listViewModel.lists[indexOfList].tasks[index].isDone {
+                                                                    Button {
+                                                                        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, error in
+                                                                            if let error = error {
+                                                                                print(error.localizedDescription)
+                                                                            } else {
+                                                                                DispatchQueue.main.async {
+                                                                                    withAnimation {
+                                                                                        viewModel.isNotificationMenuShowing = true
+                                                                                        viewModel.selectedIndexForDelete = index
+                                                                                    }
                                                                                 }
                                                                             }
                                                                         }
-                                                                    }
-                                                                } label: {
-                                                                    Image(systemName: "bell")
-                                                                        .resizable()
-                                                                        .frame(width: 22, height: 22)
-                                                                        .foregroundColor(Color(uiColor: .label))
-                                                                }
-                                                                .onChange(of: viewModel.isNotificationMenuShowing, perform: { isShowing in
-                                                                    if !isShowing {
-                                                                        listViewModel.reloadData()
-                                                                    }
-                                                                })
-                                                                
-                                                                .padding(.leading, 120)
-                                                                
-                                                                Button {
-                                                                    viewModel.isShareSheetPresenting.toggle()
-                                                                    viewModel.selectedIndexForDelete = index
-                                                                } label: {
-                                                                    Image(systemName: "square.and.arrow.up")
-                                                                        .resizable()
-                                                                        .frame(width: 20, height: 27)
-                                                                        .foregroundColor(Color(uiColor: .label))
-                                                                }
-                                                                .padding(.leading, 43)
-                                                                .sheet(isPresented: $viewModel.isShareSheetPresenting) {
-                                                                    ShareSheet(activityItems: [
-                                                                        """
-                                                                        \(listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].title)
-                                                                        
-                                                                        # Sent from Simply Task
-                                                                        """
-                                                                    ])
-                                                                }
-                                                                
-
-                                                                
-                                                                Button {
-                                                                    viewModel.isAlertForEditingPresenting.toggle()
-                                                                    viewModel.textFromEditAlert = listViewModel.lists[indexOfList].tasks[index].title
-                                                                    viewModel.selectedIndexForDelete = index
-                                                                } label: {
-                                                                    Image(systemName: "square.and.pencil")
-                                                                        .resizable()
-                                                                        .frame(width: 22, height: 22)
-                                                                        .foregroundColor(Color(uiColor: .label))
-                                                                }
-                                                                .padding(.leading, 200)
-                                                                .sheet(isPresented: $viewModel.isAlertForEditingPresenting) {
-                                                                    EditSheetView(
-                                                                        isScreenPresenting: $viewModel.isAlertForEditingPresenting,
-                                                                        navigationTitle: "Редактирование",
-                                                                        listIndex: indexOfList,
-                                                                        taskIndex: viewModel.selectedIndexForDelete
-                                                                    )
-                                                                }
-                                                                
-                                                                if storageManager.isPro() {
-                                                                    Button {
-                                                                        viewModel.isPhotoScreenPresenting.toggle()
-                                                                        viewModel.selectedIndexForDelete = index
                                                                     } label: {
-                                                                        Image(systemName: "photo")
-                                                                            .resizable()
-                                                                            .frame(width: 27, height: 22)
-                                                                            .foregroundColor(Color(uiColor: .label))
+                                                                        Label("Уведомления", systemImage: "bell")
                                                                     }
-                                                                    .padding(.leading, 280)
-                                                                    .padding(.top, 85)
-                                                                    .padding()
+                                                                    
+                                                                    
+                                                                    Button {
+                                                                        viewModel.isRefactScreenPresenting.toggle()
+                                                                        viewModel.textFromEditAlert = listViewModel.lists[indexOfList].tasks[index].title
+                                                                        viewModel.selectedIndexForDelete = index
+                                                                        viewModel.titleForEditScreen = "Редактирование"
+                                                                    } label: {
+                                                                        Label("Редактировать", systemImage: "square.and.pencil")
+                                                                    }
                                                                     
                                                                     Button {
                                                                         withAnimation {
@@ -307,93 +250,233 @@ struct TasksListView: View {
                                                                             viewModel.selectedIndexForDelete = index
                                                                         }
                                                                     } label: {
-                                                                        Image(systemName: "calendar")
-                                                                            .resizable()
-                                                                            .frame(width: 27, height: 22)
-                                                                            .foregroundColor(Color(uiColor: .label))
-                                                                    }
-                                                                    .padding(.leading, 190)
-                                                                    .padding(.top, 85)
-                                                                    .padding()
-
-                                                                }
-
-                                                                //                                                        .alert("Изменить задачу", isPresented: $viewModel.isAlertForEditingPresenting) {
-                                                                //                                                            TextField("", text: $viewModel.textFromEditAlert)
-                                                                //
-                                                                //                                                            Button("Изменить", role: .none) {
-                                                                //
-                                                                //                                                                let title = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].title
-                                                                //
-                                                                //                                                                storageManager.editTask(indexOfList: indexOfList, indexOfTask: viewModel.selectedIndexForDelete, newTitle: viewModel.textFromEditAlert)
-                                                                //
-                                                                //                                                                withAnimation {
-                                                                //                                                                    listViewModel.reloadData()
-                                                                //                                                                }
-                                                                //
-                                                                //                                                                task = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete]
-                                                                //
-                                                                //                                                                if task.notificationDate != nil && task.notificationDate ?? Date.now > Date.now {
-                                                                //                                                                    notificationManager.scheduleNotification(text: task.title, date: task.notificationDate ?? Date.now)
-                                                                //
-                                                                //                                                                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(title)\(task.notificationDate ?? Date())"])
-                                                                //                                                                }
-                                                                //
-                                                                //                                                                viewModel.textFromEditAlert = ""
-                                                                //                                                            }
-                                                                //
-                                                                //                                                            Button("Отмена", role: .cancel) {
-                                                                //                                                                viewModel.textFromEditAlert = ""
-                                                                //                                                            }
-                                                                //                                                        }
-                                                            }
-                                                            
-                                                            Button(action: {
-                                                                viewModel.isAlertForDeletePresenting = true
-                                                                viewModel.selectedIndexForDelete = index
-                                                            }) {
-                                                                Image(systemName: "minus.circle")
-                                                                    .resizable()
-                                                                    .frame(width: 23, height: 23)
-                                                                    .foregroundColor(.red)
-                                                            }
-                                                            .padding(.leading, 280)
-                                                            .alert("Удалить задачу?", isPresented: $viewModel.isAlertForDeletePresenting) {
-                                                                Button("Удалить", role: .destructive) {
-                                                                    task = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete]
-                                                                    
-                                                                    viewModel.isAlertForDeletePresenting.toggle()
-                                                                    
-                                                                    storageManager.deleteTask(atList: indexOfList, atIndex: viewModel.selectedIndexForDelete)
-                                                                    
-                                                                    if !task.isDone {
-                                                                        storageManager.deleteOneTask(atIndex: indexOfList)
+                                                                        Label("Дата", systemImage: "calendar")
                                                                     }
                                                                     
-                                                                    if task.notificationDate != nil {
-                                                                        UNUserNotificationCenter.current().removePendingNotificationRequests(
-                                                                            withIdentifiers: ["\(task.title)\(task.notificationDate ?? Date())"]
-                                                                        )
-                                                                    }
-                                                                    
-                                                                    if task.images.count > 0 {
-                                                                        listViewModel.reloadData()
-                                                                    } else {
-                                                                        withAnimation {
-                                                                            listViewModel.reloadData()
-                                                                        }
-                                                                    }
-                                                                    
-                                                                    if listViewModel.lists[indexOfList].tasks.count < 1 {
-                                                                        viewModel.isListEditing.toggle()
+                                                                    Button {
+                                                                        viewModel.isPhotoScreenPresenting.toggle()
+                                                                        viewModel.selectedIndexForDelete = index
+                                                                    } label: {
+                                                                        Label("Фото", systemImage: "photo")
                                                                     }
                                                                 }
                                                                 
-                                                                Button("Отмена", role: .cancel) {
-                                                                    viewModel.isAlertForDeletePresenting.toggle()
+                                                                Button {
+                                                                    viewModel.isShareSheetPresenting.toggle()
+                                                                    viewModel.selectedIndexForDelete = index
+                                                                } label: {
+                                                                    Label("Поделиться", systemImage: "square.and.arrow.up")
                                                                 }
+                                                                
+                                                                Button {
+                                                                    viewModel.isAlertForDeletePresenting = true
+                                                                    viewModel.selectedIndexForDelete = index
+                                                                } label: {
+                                                                    Label("Удалить", systemImage: "minus.circle")
+                                                                }
+                                                            } label: {
+                                                                Label("", systemImage: "ellipsis.circle")
                                                             }
+                                                            .scaleEffect(1.3)
+                                                            .padding(.leading, 290)
                                                         }
+                                                        
+                                                        if listViewModel.lists[indexOfList].tasks[index].notificationDate != nil && !viewModel.isMenuShowing {
+                                                            Button {
+                                                                withAnimation {
+                                                                    viewModel.isNotificationMenuShowing = true
+                                                                    viewModel.selectedIndexForDelete = index
+                                                                }
+                                                            } label: {
+                                                                Image(systemName: "bell")
+                                                                    .resizable()
+                                                                    .frame(width: 22, height: 22)
+                                                                    .padding(.leading, 280)
+                                                                    .foregroundColor(
+                                                                        listViewModel.lists[indexOfList].tasks[index].isNotificationDone ? .red : .gray
+                                                                    )
+                                                            }
+
+                                                        }
+                                                        
+//                                                        if viewModel.isListEditing {
+//                                                            if !listViewModel.lists[indexOfList].tasks[index].isDone {
+//                                                                Button {
+//                                                                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, error in
+//                                                                        if let error = error {
+//                                                                            print(error.localizedDescription)
+//                                                                        } else {
+//                                                                            DispatchQueue.main.async {
+//                                                                                withAnimation {
+//                                                                                    viewModel.isNotificationMenuShowing = true
+//                                                                                    viewModel.selectedIndexForDelete = index
+//                                                                                }
+//                                                                            }
+//                                                                        }
+//                                                                    }
+//                                                                } label: {
+//                                                                    Image(systemName: "bell")
+//                                                                        .resizable()
+//                                                                        .frame(width: 22, height: 22)
+//                                                                        .foregroundColor(Color(uiColor: .label))
+//                                                                }
+//                                                                .onChange(of: viewModel.isNotificationMenuShowing, perform: { isShowing in
+//                                                                    if !isShowing {
+//                                                                        listViewModel.reloadData()
+//                                                                    }
+//                                                                })
+//                                                                
+//                                                                .padding(.leading, 120)
+//                                                                
+//                                                                Button {
+//                                                                    viewModel.isShareSheetPresenting.toggle()
+//                                                                    viewModel.selectedIndexForDelete = index
+//                                                                } label: {
+//                                                                    Image(systemName: "square.and.arrow.up")
+//                                                                        .resizable()
+//                                                                        .frame(width: 20, height: 27)
+//                                                                        .foregroundColor(Color(uiColor: .label))
+//                                                                }
+//                                                                .padding(.leading, 43)
+//                                                                .sheet(isPresented: $viewModel.isShareSheetPresenting) {
+//                                                                    ShareSheet(activityItems: [
+//                                                                        """
+//                                                                        \(listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].title)
+//                                                                        
+//                                                                        # Sent from Simply Task
+//                                                                        """
+//                                                                    ])
+//                                                                }
+//                                                                
+//
+//                                                                
+//                                                                Button {
+//                                                                    viewModel.isAlertForEditingPresenting.toggle()
+//                                                                    viewModel.textFromEditAlert = listViewModel.lists[indexOfList].tasks[index].title
+//                                                                    viewModel.selectedIndexForDelete = index
+//                                                                } label: {
+//                                                                    Image(systemName: "square.and.pencil")
+//                                                                        .resizable()
+//                                                                        .frame(width: 22, height: 22)
+//                                                                        .foregroundColor(Color(uiColor: .label))
+//                                                                }
+//                                                                .padding(.leading, 200)
+////                                                                .sheet(isPresented: $viewModel.isAlertForEditingPresenting) {
+////                                                                    EditSheetView(
+////                                                                        isScreenPresenting: $viewModel.isAlertForEditingPresenting,
+////                                                                        navigationTitle: "Редактирование",
+////                                                                        listIndex: indexOfList,
+////                                                                        taskIndex: viewModel.selectedIndexForDelete
+////                                                                    )
+////                                                                }
+//                                                                
+//                                                                if storageManager.isPro() {
+//                                                                    Button {
+//                                                                        viewModel.isPhotoScreenPresenting.toggle()
+//                                                                        viewModel.selectedIndexForDelete = index
+//                                                                    } label: {
+//                                                                        Image(systemName: "photo")
+//                                                                            .resizable()
+//                                                                            .frame(width: 27, height: 22)
+//                                                                            .foregroundColor(Color(uiColor: .label))
+//                                                                    }
+//                                                                    .padding(.leading, 280)
+//                                                                    .padding(.top, 85)
+//                                                                    .padding()
+//                                                                    
+//                                                                    Button {
+//                                                                        withAnimation {
+//                                                                            viewModel.isDateMenuShowing.toggle()
+//                                                                            viewModel.selectedIndexForDelete = index
+//                                                                        }
+//                                                                    } label: {
+//                                                                        Image(systemName: "calendar")
+//                                                                            .resizable()
+//                                                                            .frame(width: 27, height: 22)
+//                                                                            .foregroundColor(Color(uiColor: .label))
+//                                                                    }
+//                                                                    .padding(.leading, 190)
+//                                                                    .padding(.top, 85)
+//                                                                    .padding()
+//
+//                                                                }
+//
+//                                                                //                                                        .alert("Изменить задачу", isPresented: $viewModel.isAlertForEditingPresenting) {
+//                                                                //                                                            TextField("", text: $viewModel.textFromEditAlert)
+//                                                                //
+//                                                                //                                                            Button("Изменить", role: .none) {
+//                                                                //
+//                                                                //                                                                let title = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].title
+//                                                                //
+//                                                                //                                                                storageManager.editTask(indexOfList: indexOfList, indexOfTask: viewModel.selectedIndexForDelete, newTitle: viewModel.textFromEditAlert)
+//                                                                //
+//                                                                //                                                                withAnimation {
+//                                                                //                                                                    listViewModel.reloadData()
+//                                                                //                                                                }
+//                                                                //
+//                                                                //                                                                task = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete]
+//                                                                //
+//                                                                //                                                                if task.notificationDate != nil && task.notificationDate ?? Date.now > Date.now {
+//                                                                //                                                                    notificationManager.scheduleNotification(text: task.title, date: task.notificationDate ?? Date.now)
+//                                                                //
+//                                                                //                                                                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(title)\(task.notificationDate ?? Date())"])
+//                                                                //                                                                }
+//                                                                //
+//                                                                //                                                                viewModel.textFromEditAlert = ""
+//                                                                //                                                            }
+//                                                                //
+//                                                                //                                                            Button("Отмена", role: .cancel) {
+//                                                                //                                                                viewModel.textFromEditAlert = ""
+//                                                                //                                                            }
+//                                                                //                                                        }
+//                                                            }
+//                                                            
+//                                                            Button(action: {
+//                                                                viewModel.isAlertForDeletePresenting = true
+//                                                                viewModel.selectedIndexForDelete = index
+//                                                            }) {
+//                                                                Image(systemName: "minus.circle")
+//                                                                    .resizable()
+//                                                                    .frame(width: 23, height: 23)
+//                                                                    .foregroundColor(.red)
+//                                                            }
+//                                                            .padding(.leading, 280)
+//                                                            .alert("Удалить задачу?", isPresented: $viewModel.isAlertForDeletePresenting) {
+//                                                                Button("Удалить", role: .destructive) {
+//                                                                    task = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete]
+//                                                                    
+//                                                                    viewModel.isAlertForDeletePresenting.toggle()
+//                                                                    
+//                                                                    storageManager.deleteTask(atList: indexOfList, atIndex: viewModel.selectedIndexForDelete)
+//                                                                    
+//                                                                    if !task.isDone {
+//                                                                        storageManager.deleteOneTask(atIndex: indexOfList)
+//                                                                    }
+//                                                                    
+//                                                                    if task.notificationDate != nil {
+//                                                                        UNUserNotificationCenter.current().removePendingNotificationRequests(
+//                                                                            withIdentifiers: ["\(task.title)\(task.notificationDate ?? Date())"]
+//                                                                        )
+//                                                                    }
+//                                                                    
+//                                                                    if task.images.count > 0 {
+//                                                                        listViewModel.reloadData()
+//                                                                    } else {
+//                                                                        withAnimation {
+//                                                                            listViewModel.reloadData()
+//                                                                        }
+//                                                                    }
+//                                                                    
+//                                                                    if listViewModel.lists[indexOfList].tasks.count < 1 {
+//                                                                        viewModel.isListEditing.toggle()
+//                                                                    }
+//                                                                }
+//                                                                
+//                                                                Button("Отмена", role: .cancel) {
+//                                                                    viewModel.isAlertForDeletePresenting.toggle()
+//                                                                }
+//                                                            }
+//                                                        }
                                                     }
                                                 }
                                             }
@@ -427,7 +510,12 @@ struct TasksListView: View {
                             Spacer()
                             
                             HStack {
-                                Button(action: { viewModel.isAlertForNewTaskPresenting = true }) {
+                                Button {
+                                    viewModel.isRefactScreenPresenting = true
+                                    viewModel.titleForEditScreen = "Новая задача"
+                                    
+                                    mediumFeedback.impactOccurred()
+                                } label: {
                                     Image(systemName: "plus.app.fill")
                                         .resizable()
                                         .frame(width: 25, height: 25)
@@ -442,14 +530,59 @@ struct TasksListView: View {
                                         .padding(.bottom, 15)
                                         .fixedSize(horizontal: true, vertical: true)
                                 }
-                                .sheet(isPresented: $viewModel.isAlertForNewTaskPresenting) {
-                                    EditSheetView(
-                                        isScreenPresenting: $viewModel.isAlertForNewTaskPresenting,
-                                        navigationTitle: "Новая задача",
-                                        listIndex: indexOfList,
-                                        taskIndex: 0
-                                    )
-                                    .environmentObject(ListViewModel())
+                                .alert("Удалить задачу?", isPresented: $viewModel.isAlertForDeletePresenting) {
+                                    Button("Удалить", role: .destructive) {
+                                        let task = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete]
+                                        
+                                        withAnimation {
+                                            listViewModel.lists[indexOfList].tasks.remove(at: viewModel.selectedIndexForDelete)
+                                            viewModel.isAlertForDeletePresenting.toggle()
+                                        }
+                                        
+                                        
+                                        if !task.isDone {
+                                            storageManager.deleteOneTask(atIndex: indexOfList)
+                                        }
+                                        
+                                        if task.notificationDate != nil {
+                                            UNUserNotificationCenter.current().removePendingNotificationRequests(
+                                                withIdentifiers: ["\(task.title)\(task.notificationDate ?? Date())"]
+                                            )
+                                        }
+                                        
+                                        storageManager.deleteTask(atList: indexOfList, atIndex: viewModel.selectedIndexForDelete)
+                                        
+                                        withAnimation {
+                                            listViewModel.reloadData()
+                                        }
+                                    
+                                        if listViewModel.lists[indexOfList].tasks.count < 1 {
+                                            viewModel.isListEditing.toggle()
+                                        }
+                                        
+                                        mediumFeedback.impactOccurred()
+                                    }
+                                    
+                                    Button("Отмена", role: .cancel) {
+                                        viewModel.isAlertForDeletePresenting.toggle()
+                                    }
+                                }
+//                                .sheet(isPresented: $viewModel.isAlertForNewTaskPresenting) {
+//                                    EditSheetView(
+//                                        navigationTitle: "Новая задача",
+//                                        listIndex: indexOfList,
+//                                        taskIndex: 0
+//                                    )
+//                                    .environmentObject(ListViewModel())
+//                                }
+                                .sheet(isPresented: $viewModel.isShareSheetPresenting) {
+                                    ShareSheet(activityItems: [
+                                        """
+                                        \(listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].title)
+                                        
+                                        # Sent from Simply Task
+                                        """
+                                    ])
                                 }
                                 .onChange(of: viewModel.isAlertForNewTaskPresenting) { isPresenting in
                                     if isPresenting == false {
@@ -462,9 +595,20 @@ struct TasksListView: View {
                                     PhotoView(isScreenPresenting: $viewModel.isPhotoScreenPresenting, listIndex: indexOfList, taskIndex: viewModel.selectedIndexForDelete)
                                         .environmentObject(ListViewModel())
                                 }
+                                .navigationDestination(isPresented: $viewModel.isRefactScreenPresenting) {
+                                    EditSheetView(
+                                        navigationTitle: viewModel.titleForEditScreen,
+                                       listIndex: indexOfList,
+                                       taskIndex: viewModel.selectedIndexForDelete
+                                   )
+                                    .environmentObject(ListViewModel())
+                                }
                                 .navigationDestination(isPresented: $viewModel.isDetailPhotoScreenPresenting) {
                                     DetailPhotoView(image: viewModel.image ?? UIImage(systemName: "xmark")!, title: viewModel.titleOfTask)
                                         .environmentObject(ListViewModel())
+                                }
+                                .navigationDestination(isPresented: $viewModel.isEditScreenPresenting) {
+                                    EditListView(indexOfList: indexOfList)
                                 }
 //                                .sheet(isPresented: $viewModel.isDetailPhotoScreenPresenting) {
 //                                    DetailPhotoView(
@@ -515,9 +659,10 @@ struct TasksListView: View {
                                         .padding(.bottom, 15)
                                         .padding(.trailing, 20)
                                 }
-                                .sheet(isPresented: $viewModel.isEditScreenPresenting) {
-                                    EditListView(indexOfList: indexOfList, isScreenPresenting: $viewModel.isEditScreenPresenting)
-                                }
+//                                .sheet(isPresented: $viewModel.isEditScreenPresenting) {
+//                                    EditListView(indexOfList: indexOfList, isScreenPresenting: $viewModel.isEditScreenPresenting)
+//                                }
+                                
                             }
                         }
                         
@@ -532,6 +677,11 @@ struct TasksListView: View {
                     ErrorFaceIDView(indexOfList: indexOfList)
                 }
             }
+            .onChange(of: viewModel.isNotificationMenuShowing, perform: { isShowing in
+                if !isShowing {
+                    listViewModel.reloadData()
+                }
+            })
             .gesture(
                 DragGesture()
                             .onEnded { value in
@@ -555,7 +705,7 @@ struct TasksListView: View {
                     if listViewModel.lists[indexOfList].tasks.count > 0 {
                         HStack {
                             Button(action: {
-                                if !viewModel.isListEditing {
+                                if !viewModel.isMenuShowing {
                                     withAnimation {
                                         viewModel.isList.toggle()
                                     }
@@ -568,13 +718,14 @@ struct TasksListView: View {
                             Button {
                                 if !viewModel.isList {
                                     withAnimation {
-                                        viewModel.isListEditing.toggle()
+                                        viewModel.isMenuShowing.toggle()
                                         listViewModel.reloadData()
                                     }
+                                    softFeedback.impactOccurred()
                                 }
                             } label: {
                                 Image(systemName: "ellipsis.circle")
-                                    .foregroundColor(viewModel.isListEditing ? Color(uiColor: .label) : .gray)
+                                    .foregroundColor(viewModel.isMenuShowing ? Color(uiColor: .label) : .gray)
                             }
 
                         }
@@ -590,6 +741,8 @@ struct TasksListView: View {
             UIApplication.shared.applicationIconBadgeNumber = 0
 //
             getNotificationsDone()
+            
+            softFeedback.impactOccurred()
         }
         .onDisappear {
             listViewModel.isFaceIDSuccess = false
@@ -606,6 +759,13 @@ struct TasksListView: View {
         }
         .onChange(of: viewModel.isDateMenuShowing) { isShowing in
             if !isShowing {
+                withAnimation {
+                    listViewModel.reloadData()
+                }
+            }
+        }
+        .onChange(of: viewModel.isRefactScreenPresenting) { isPresenting in
+            if !isPresenting {
                 withAnimation {
                     listViewModel.reloadData()
                 }

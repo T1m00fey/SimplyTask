@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct DateView: View {
-    private var storageManager = StorageManager.shared
+    private let storageManager = StorageManager.shared
+    private let mediumFeedback = UIImpactFeedbackGenerator(style: .medium)
     
     @Binding var isShowing: Bool
     
@@ -24,6 +25,8 @@ struct DateView: View {
         self._isShowing = isShowing
         self.listIndex = listIndex
         self.taskIndex = taskIndex
+        
+        mediumFeedback.prepare()
     }
     
     var body: some View {
@@ -54,6 +57,8 @@ struct DateView: View {
                     storageManager.add(date: date, listIndex: listIndex, taskIndex: taskIndex)
                     isShowing.toggle()
                 }
+                
+                mediumFeedback.impactOccurred()
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 7)
@@ -66,25 +71,27 @@ struct DateView: View {
             }
             .padding(.top, 80)
             
-            Button("Удалить дату") {
-                withAnimation {
-//                    isShowing.toggle()
-                    isAlertShowing.toggle()
-                }
-            }
-            .foregroundColor(.red)
-            .padding(.top, 170)
-            .alert("Удалить дату?", isPresented: $isAlertShowing) {
-                Button("Удалить", role: .destructive) {
+            if listViewModel.lists[listIndex].tasks[taskIndex].date != nil {
+                Button("Удалить дату") {
                     withAnimation {
-                        isShowing.toggle()
-                        isAlertShowing = false
-                        storageManager.add(date: nil, listIndex: listIndex, taskIndex: taskIndex)
+    //                    isShowing.toggle()
+                        isAlertShowing.toggle()
                     }
                 }
-                
-                Button("Отмена", role: .cancel) {
-                    isAlertShowing.toggle()
+                .foregroundColor(.red)
+                .padding(.top, 170)
+                .alert("Удалить дату?", isPresented: $isAlertShowing) {
+                    Button("Удалить", role: .destructive) {
+                        withAnimation {
+                            isShowing.toggle()
+                            isAlertShowing = false
+                            storageManager.add(date: nil, listIndex: listIndex, taskIndex: taskIndex)
+                        }
+                    }
+                    
+                    Button("Отмена", role: .cancel) {
+                        isAlertShowing.toggle()
+                    }
                 }
             }
         }

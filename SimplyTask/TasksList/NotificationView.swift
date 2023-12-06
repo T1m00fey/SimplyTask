@@ -11,6 +11,7 @@ import UserNotifications
 struct NotificationView: View {
     private let notificationManager = NotificationManager.shared
     private let storageManager = StorageManager.shared
+    private let mediumFeedback = UIImpactFeedbackGenerator(style: .medium)
     
     @State private var date = Date.now
     @State private var isErrorAlertShowing = false
@@ -22,6 +23,14 @@ struct NotificationView: View {
     
     let listIndex: Int
     let taskIndex: Int
+    
+    init(isShowing: Binding<Bool>, listIndex: Int, taskIndex: Int) {
+        self._isShowing = isShowing
+        self.listIndex = listIndex
+        self.taskIndex = taskIndex
+        
+        mediumFeedback.prepare()
+    }
     
     func getDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
@@ -127,6 +136,8 @@ struct NotificationView: View {
                     isShowing.toggle()
                     listViewModel.reloadData()
                 }
+                
+                mediumFeedback.impactOccurred()
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 7)

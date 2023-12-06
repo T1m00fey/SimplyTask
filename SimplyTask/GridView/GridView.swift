@@ -13,6 +13,7 @@ struct GridView: View {
     @Binding var name: String
     
     private let storageManager = StorageManager.shared
+    private let mediumFeedback = UIImpactFeedbackGenerator(style: .medium)
     
     @EnvironmentObject var viewModel: GridViewModel
     @EnvironmentObject var listViewModel: ListViewModel
@@ -25,6 +26,8 @@ struct GridView: View {
         navBarAppearance.backgroundColor = UIColor.systemGray6
         
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+        
+        mediumFeedback.prepare()
     }
     
     func move(from source: IndexSet, to destination: Int) {
@@ -70,6 +73,8 @@ struct GridView: View {
                                                     withAnimation {
                                                         listViewModel.reloadData()
                                                     }
+                                                    
+                                                    mediumFeedback.impactOccurred()
                                                 }
                                             }
                                             .onChange(of: scenePhase) { scenePhase in
@@ -197,6 +202,10 @@ struct GridView: View {
             }
             .onAppear {
 //                listViewModel.reloadData()
+                
+                if !storageManager.isPro() {
+                    storageManager.getPro()
+                }
                 
                 UIApplication.shared.applicationIconBadgeNumber = 0
             }

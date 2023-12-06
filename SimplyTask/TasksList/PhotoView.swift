@@ -24,6 +24,7 @@ struct PhotoView: View {
     @EnvironmentObject var listViewModel: ListViewModel
     
     private let storageManager = StorageManager.shared
+    private let mediumFeedback = UIImpactFeedbackGenerator(style: .medium)
     
     init(isScreenPresenting: Binding<Bool>, listIndex: Int, taskIndex: Int) {
         self._isScreenPresenting = isScreenPresenting
@@ -34,6 +35,8 @@ struct PhotoView: View {
         navBarAppearance.backgroundColor = UIColor.systemGray6
         
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+        
+        mediumFeedback.prepare()
     }
     
     var body: some View {
@@ -143,6 +146,8 @@ struct PhotoView: View {
                             withAnimation {
                                 listViewModel.reloadData()
                             }
+                            
+                            mediumFeedback.impactOccurred()
                         } label: {
                             Image(systemName: "checkmark")
                         }

@@ -46,28 +46,28 @@ struct SettingsView: View {
                     .ignoresSafeArea()
                 
                 VStack {
-                    Button {
-//                        if !storageManager.isPro() {
-                            viewModel.isPremiumViewPresenting.toggle()
+//                    Button {
+////                        if !storageManager.isPro() {
+//                            viewModel.isPremiumViewPresenting.toggle()
+////                        }
+//                    } label: {
+//                        ZStack {
+//                            RoundedRectangle(cornerRadius: 10)
+//                                .frame(height: 50)
+//                                .padding(.leading, 20)
+//                                .padding(.trailing, 20)
+//                                .padding(.top, 30)
+//                                .foregroundColor(colorScheme == .light ? Color(uiColor: .darkGray) : Color(uiColor: .lightGray))
+//                            
+//                            Text(storageManager.isPro() ? "Вы пользователь премиума" : "Купить премиум")
+//                                .foregroundColor(Color(uiColor: .white))
+//                                .bold()
+//                                .padding(.top, 29)
 //                        }
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(height: 50)
-                                .padding(.leading, 20)
-                                .padding(.trailing, 20)
-                                .padding(.top, 30)
-                                .foregroundColor(colorScheme == .light ? Color(uiColor: .darkGray) : Color(uiColor: .lightGray))
-                            
-                            Text(storageManager.isPro() ? "Вы пользователь премиума" : "Купить премиум")
-                                .foregroundColor(Color(uiColor: .white))
-                                .bold()
-                                .padding(.top, 29)
-                        }
-                    }
-                    .sheet(isPresented: $viewModel.isPremiumViewPresenting) {
-                        PremiumView(isScreenPresenting: $viewModel.isPremiumViewPresenting)
-                    }
+//                    }
+//                    .sheet(isPresented: $viewModel.isPremiumViewPresenting) {
+//                        PremiumView(isScreenPresenting: $viewModel.isPremiumViewPresenting)
+//                    }
                     
                     List {
                         Button {

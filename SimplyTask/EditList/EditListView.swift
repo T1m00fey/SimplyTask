@@ -13,22 +13,25 @@ struct EditListView: View {
     let indexOfList: Int
     
     private let storageManager = StorageManager.shared
+    private let softFeedback = UIImpactFeedbackGenerator(style: .soft)
+    private let mediumFeedback = UIImpactFeedbackGenerator(style: .medium)
     
     @FocusState private var isFocused: Bool
     @StateObject private var viewModel = EditListViewModel()
     
-    @Binding var isScreenPresenting: Bool
-    
     @EnvironmentObject var listViewModel: ListViewModel
+    @Environment(\.presentationMode) var presentationMode
     
-    init(indexOfList: Int, isScreenPresenting: Binding<Bool>) {
+    init(indexOfList: Int) {
         self.indexOfList = indexOfList
-        self._isScreenPresenting = isScreenPresenting
         
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = UIColor.systemGray6
         
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+        
+        softFeedback.prepare()
+        mediumFeedback.prepare()
     }
     
     func getColorOfTF() -> Color {
@@ -108,6 +111,7 @@ struct EditListView: View {
                             withAnimation {
                                 viewModel.isDoneShowing.toggle()
                             }
+                            softFeedback.impactOccurred()
                         } label: {
                             if viewModel.isDoneShowing {
                                 Image(systemName: "checkmark.circle.fill")
@@ -137,6 +141,7 @@ struct EditListView: View {
                                     viewModel.isMoveDoneToEnd.toggle()
                                 }
                             }
+                            mediumFeedback.impactOccurred()
                         } label: {
                             if viewModel.isMoveDoneToEnd && viewModel.isDoneShowing {
                                 Image(systemName: "checkmark.circle.fill")
@@ -181,8 +186,9 @@ struct EditListView: View {
                             }
                         }
                         
-                        isScreenPresenting.toggle()
-                        listViewModel.reloadData()
+                        mediumFeedback.impactOccurred()
+                        
+                        presentationMode.wrappedValue.dismiss()
                     }) {
                         HStack {
                             Image(systemName: "checkmark.square.fill")
@@ -245,15 +251,27 @@ struct EditListView: View {
                 isFocused = false
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { isScreenPresenting.toggle() }) {
-                        Image(systemName: "xmark")
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: { presentationMode.wrappedValue.dismiss() }) {
+                        Image(systemName: "chevron.left")
                             .foregroundColor(Color(uiColor: .label))
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     HStack {
+//                        if storageManager.isPro() {
+                            Button {
+                                viewModel.isImagesScreenPresenting.toggle()
+                            } label: {
+                                if image != "" {
+                                    Image(systemName: image)
+                                } else {
+                                    Image(systemName: "photo")
+                                }
+                            }
+//                        }
+                        
                         Button {
                             if viewModel.isListPrivate {
                                 viewModel.isListPrivate.toggle()
@@ -268,40 +286,37 @@ struct EditListView: View {
                             Image(systemName: viewModel.isListPrivate ? "lock" : "lock.open")
                                 .foregroundColor(Color(uiColor: .label))
                         }
-                        
-                        if storageManager.isPro() {
-                            Button {
-                                viewModel.isImagesScreenPresenting.toggle()
-                            } label: {
-                                if image != "" {
-                                    Image(systemName: image)
-                                } else {
-                                    Image(systemName: "photo")
-                                }
-                            }
-                        }
                     }
                 }
             }
             .ignoresSafeArea(.keyboard)
         }
+        .gesture(
+            DragGesture()
+                        .onEnded { value in
+                            if value.translation.width > 50 {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }
+                        }
+
+        )
         .navigationBarBackButtonHidden(true)
         .onAppear {
             viewModel.getLevelOfPrivate(listViewModel.lists[indexOfList].isPrivate)
             viewModel.getLevelOfImportant(listViewModel.lists[indexOfList].colorOfImportant)
             
-            if storageManager.isPro() {
+//            if storageManager.isPro() {
                 if listViewModel.lists[indexOfList].image != nil {
                     image = listViewModel.lists[indexOfList].image ?? "globe"
                 }
-            }
+//            }
         }
     }
 }
 
 struct NewTaskView_Previews: PreviewProvider {
     static var previews: some View {
-        EditListView(indexOfList: 0, isScreenPresenting: .constant(true))
+        EditListView(indexOfList: 0)
             .environmentObject(ListViewModel())
     }
 }
