@@ -178,6 +178,8 @@ struct TasksListView: View {
                                                                     EmptyCircleView()
                                                                 }
                                                             }
+                                                            .padding(.trailing, 280)
+                                                            
 //                                                            .alert("Удалить задачу?", isPresented: $viewModel.isAlertForDeletePresenting2) {
 //                                                                Button("Удалить", role: .destructive) {
 //                                                                    task = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete]
@@ -213,7 +215,6 @@ struct TasksListView: View {
 //                                                                    viewModel.isAlertForDeletePresenting2.toggle()
 //                                                                }
 //                                                            }
-                                                            .padding(.trailing, 280)
                                                         }
                                                         
                                                         if viewModel.isMenuShowing {
@@ -294,12 +295,11 @@ struct TasksListView: View {
                                                                 Image(systemName: "bell")
                                                                     .resizable()
                                                                     .frame(width: 22, height: 22)
-                                                                    .padding(.leading, 280)
                                                                     .foregroundColor(
                                                                         listViewModel.lists[indexOfList].tasks[index].isNotificationDone ? .red : .gray
                                                                     )
                                                             }
-
+                                                            .padding(.leading, 280)
                                                         }
                                                         
 //                                                        if viewModel.isListEditing {
