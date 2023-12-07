@@ -33,6 +33,8 @@
 		C493AA8E2A602E80007E99F3 /* EditListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C493AA8D2A602E80007E99F3 /* EditListView.swift */; };
 		C493AA902A608291007E99F3 /* EditListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C493AA8F2A608291007E99F3 /* EditListViewModel.swift */; };
 		C4A4F4962AB758470074DFD9 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4F4952AB758470074DFD9 /* StartView.swift */; };
+		C4CD9C5A2B21EF3600D765E4 /* EmptyCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CD9C592B21EF3600D765E4 /* EmptyCircleView.swift */; };
+		C4CD9C5C2B21EF4E00D765E4 /* CheckmarkCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CD9C5B2B21EF4E00D765E4 /* CheckmarkCircleView.swift */; };
 		C4FFB37F2AC2F447007B2322 /* SwiftUIMailView in Frameworks */ = {isa = PBXBuildFile; productRef = C4FFB37E2AC2F447007B2322 /* SwiftUIMailView */; };
 		C4FFB3812AC2FD3A007B2322 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FFB3802AC2FD3A007B2322 /* ShareSheet.swift */; };
 /* End PBXBuildFile section */
@@ -66,6 +68,8 @@
 		C493AA8F2A608291007E99F3 /* EditListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditListViewModel.swift; sourceTree = "<group>"; };
 		C4A4F4942AB6CABE0074DFD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4A4F4952AB758470074DFD9 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
+		C4CD9C592B21EF3600D765E4 /* EmptyCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCircleView.swift; sourceTree = "<group>"; };
+		C4CD9C5B2B21EF4E00D765E4 /* CheckmarkCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmarkCircleView.swift; sourceTree = "<group>"; };
 		C4FFB3802AC2FD3A007B2322 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -142,6 +146,7 @@
 		C493AA672A601E3F007E99F3 /* SimplyTask */ = {
 			isa = PBXGroup;
 			children = (
+				C4CD9C582B21EF2200D765E4 /* CircleView */,
 				C4746C402ABD5CB200FE9EF6 /* Settings */,
 				C48979172AB1EF2F001E9697 /* Services */,
 				C493AA812A601EC6007E99F3 /* Models */,
@@ -202,6 +207,15 @@
 				C482A2122AC95522000C2ED0 /* ImagesView.swift */,
 			);
 			path = EditList;
+			sourceTree = "<group>";
+		};
+		C4CD9C582B21EF2200D765E4 /* CircleView */ = {
+			isa = PBXGroup;
+			children = (
+				C4CD9C592B21EF3600D765E4 /* EmptyCircleView.swift */,
+				C4CD9C5B2B21EF4E00D765E4 /* CheckmarkCircleView.swift */,
+			);
+			path = CircleView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -286,6 +300,7 @@
 				C493AA902A608291007E99F3 /* EditListViewModel.swift in Sources */,
 				C4746C422ABD5D1300FE9EF6 /* SettingsView.swift in Sources */,
 				C45D6DB52A8675BD00C8196F /* ErrorFaceIDView.swift in Sources */,
+				C4CD9C5C2B21EF4E00D765E4 /* CheckmarkCircleView.swift in Sources */,
 				C4746C462ABD5D9800FE9EF6 /* SettingsViewModel.swift in Sources */,
 				C4A4F4962AB758470074DFD9 /* StartView.swift in Sources */,
 				C493AA892A6020A6007E99F3 /* GridViewModel.swift in Sources */,
@@ -305,6 +320,7 @@
 				C482A2132AC95522000C2ED0 /* ImagesView.swift in Sources */,
 				C4FFB3812AC2FD3A007B2322 /* ShareSheet.swift in Sources */,
 				C447D29A2A652BB300630F29 /* TasksListViewModel.swift in Sources */,
+				C4CD9C5A2B21EF3600D765E4 /* EmptyCircleView.swift in Sources */,
 				C48251102AB22B81006EB5CE /* NotificationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

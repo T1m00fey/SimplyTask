@@ -123,7 +123,11 @@ struct TasksListView: View {
                                                             .padding(.top, 16)
                                                             .padding(.bottom, 16)
                                                             .padding(.trailing, !listViewModel.lists[indexOfList].isDoneShowing ? 70 : 16)
-                                                            .foregroundColor(viewModel.getTitleOfTask(task.isDone))
+                                                            .foregroundColor(
+                                                                listViewModel.lists[indexOfList].isDoneShowing 
+                                                                ? viewModel.getTitleOfTask(task.isDone)
+                                                                : Color(uiColor: .label)
+                                                            )
                                                         
                                                         if listViewModel.lists[indexOfList].isDoneShowing {
                                                             Button {
@@ -791,24 +795,5 @@ struct TasksListView_Previews: PreviewProvider {
     static var previews: some View {
         TasksListView(indexOfList: 0)
             .environmentObject(ListViewModel())
-    }
-}
-
-struct EmptyCircleView: View {
-    var body: some View {
-        Circle()
-            .frame(width: 23, height: 23)
-            .overlay(Circle().stroke(Color(uiColor: .label), lineWidth: 1))
-            .foregroundColor(Color(uiColor: .systemBackground))
-    }
-}
-
-struct CheckmarkCircleView: View {
-    var body: some View {
-        Image(systemName: "checkmark.circle.fill")
-            .resizable()
-            .frame(width: 23, height: 23)
-            .foregroundColor(.green)
-            //.overlay(Circle().stroke(Color(uiColor: .label), lineWidth: 1))
     }
 }

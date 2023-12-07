@@ -9,7 +9,10 @@ import SwiftUI
 
 struct EmptyCircleView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Circle()
+            .frame(width: 23, height: 23)
+            .overlay(Circle().stroke(Color(uiColor: .label), lineWidth: 1))
+            .foregroundColor(Color(uiColor: .systemBackground))
     }
 }
 

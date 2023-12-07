@@ -9,7 +9,11 @@ import SwiftUI
 
 struct CheckmarkCircleView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Image(systemName: "checkmark.circle.fill")
+            .resizable()
+            .frame(width: 23, height: 23)
+            .foregroundColor(.green)
+            //.overlay(Circle().stroke(Color(uiColor: .label), lineWidth: 1))
     }
 }
 

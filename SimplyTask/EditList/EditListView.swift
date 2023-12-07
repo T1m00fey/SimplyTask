@@ -122,7 +122,7 @@ struct EditListView: View {
                                 Circle()
                                     .frame(width: 23, height: 23)
                                     .overlay(Circle().stroke(Color(uiColor: .label), lineWidth: 1))
-                                    .foregroundColor(Color(uiColor: .systemBackground))
+                                    .foregroundColor(Color(uiColor: .systemGray6))
                             }
                         }
                         .offset(x: -70, y: 27)
@@ -152,7 +152,7 @@ struct EditListView: View {
                                 Circle()
                                     .frame(width: 23, height: 23)
                                     .overlay(Circle().stroke(viewModel.isDoneShowing ? Color(uiColor: .label) : .gray, lineWidth: 1))
-                                    .foregroundColor(viewModel.isDoneShowing ? Color(uiColor: .systemBackground) : Color(uiColor: .systemGray6))
+                                    .foregroundColor(Color(uiColor: .systemGray6))
                             }
                         }
                         .offset(x: 20, y: 15)
