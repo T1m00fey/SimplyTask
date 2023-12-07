@@ -51,7 +51,7 @@ struct DetailPhotoView: View {
                     .onTapGesture(count: 2) {
                         if imageScale == 1 {
                             withAnimation(.spring()){
-                                imageScale = 4
+                                imageScale = 3
                                 
                             }
                         } else {

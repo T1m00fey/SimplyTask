@@ -141,7 +141,7 @@ struct EditListView: View {
                                     viewModel.isMoveDoneToEnd.toggle()
                                 }
                             }
-                            mediumFeedback.impactOccurred()
+                            softFeedback.impactOccurred()
                         } label: {
                             if viewModel.isMoveDoneToEnd && viewModel.isDoneShowing {
                                 Image(systemName: "checkmark.circle.fill")

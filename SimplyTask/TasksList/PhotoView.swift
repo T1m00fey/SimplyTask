@@ -25,6 +25,7 @@ struct PhotoView: View {
     
     private let storageManager = StorageManager.shared
     private let mediumFeedback = UIImpactFeedbackGenerator(style: .medium)
+    private let softFeedback = UIImpactFeedbackGenerator(style: .soft)
     
     init(isScreenPresenting: Binding<Bool>, listIndex: Int, taskIndex: Int) {
         self._isScreenPresenting = isScreenPresenting
@@ -37,6 +38,7 @@ struct PhotoView: View {
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
         
         mediumFeedback.prepare()
+        softFeedback.prepare()
     }
     
     var body: some View {
@@ -92,6 +94,8 @@ struct PhotoView: View {
                                                     if images.count == 0 {
                                                         isEditing = false
                                                     }
+                                                    
+                                                    mediumFeedback.impactOccurred()
                                                 }
                                             }
                                             
@@ -157,6 +161,8 @@ struct PhotoView: View {
                                 withAnimation {
                                     isEditing.toggle()
                                 }
+                                
+                                softFeedback.impactOccurred()
                             } label: {
                                 Image(systemName: "minus.circle")
                                     .foregroundColor(isEditing ? .red : .gray)

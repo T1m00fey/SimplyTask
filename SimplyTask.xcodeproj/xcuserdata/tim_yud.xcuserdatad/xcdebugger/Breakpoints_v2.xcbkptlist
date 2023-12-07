@@ -126,10 +126,10 @@
             filePath = "SimplyTask/TasksList/PhotoView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "PhotoView"
-            landmarkType = "14">
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "body"
+            landmarkType = "24">
             <Locations>
                <Location
                   uuid = "6608432D-D32E-4C16-BD42-25660C6AF34A - c9a854f95d55b625"
