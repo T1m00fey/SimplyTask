@@ -238,7 +238,7 @@ struct TasksListView: View {
                                                                             }
                                                                         }
                                                                     } label: {
-                                                                        Label("Уведомления", systemImage: "bell")
+                                                                        Label("Уведомление", systemImage: "bell")
                                                                     }
                                                                     
                                                                     
@@ -565,6 +565,7 @@ struct TasksListView: View {
                                     
                                         if listViewModel.lists[indexOfList].tasks.count < 1 {
                                             viewModel.isListEditing.toggle()
+                                            viewModel.isMenuShowing = false
                                         }
                                         
                                         mediumFeedback.impactOccurred()
