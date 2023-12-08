@@ -238,6 +238,9 @@ struct NotificationView: View {
                 }
             }
         }
+        .onAppear {
+            date = listViewModel.lists[listIndex].tasks[taskIndex].notificationDate ?? Date()
+        }
     }
 }
 
