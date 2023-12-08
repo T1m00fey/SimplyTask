@@ -32,12 +32,67 @@ struct NotificationView: View {
         mediumFeedback.prepare()
     }
     
-    func getDate(_ date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yy HH:mm"
-        let dateString = dateFormatter.string(from: date)
+//    func getDate(_ date: Date) -> String {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "dd.MM.yy HH:mm"
+//        let dateString = dateFormatter.string(from: date)
+//        
+//        return dateString
+//    }
+//    
+    
+    func getDate(fromDate date: Date) -> String {
+        let calendar = Calendar.current
         
-        return dateString
+        let nowDate = Date()
+        let nowDay = calendar.component(.day, from: nowDate)
+        let nowMonth = calendar.component(.month, from: nowDate)
+        let nowYear = calendar.component(.year, from: nowDate)
+        
+        let day = calendar.component(.day, from: date)
+        let month = calendar.component(.month, from: date)
+        let year = calendar.component(.year, from: date)
+        let hour = calendar.component(.hour, from: date)
+        let min = calendar.component(.minute, from: date)
+        
+        var stringMonth = ""
+        
+        switch month {
+        case 1:
+            stringMonth = "Января"
+        case 2:
+            stringMonth = "Февраля"
+        case 3:
+            stringMonth = "Марта"
+        case 4:
+            stringMonth = "Аперля"
+        case 5:
+            stringMonth = "Мая"
+        case 6:
+            stringMonth = "Июня"
+        case 7:
+            stringMonth = "Июля"
+        case 8:
+            stringMonth = "Августа"
+        case 9:
+            stringMonth = "Сентября"
+        case 10:
+            stringMonth = "Октября"
+        case 11:
+            stringMonth = "Ноября"
+        default:
+            stringMonth = "Декабря"
+        }
+        
+        if year == nowYear && month == nowMonth && day == nowDay {
+            return "Сегодня, \(hour):\(min)"
+        } else if year == nowYear && month == nowMonth && nowDay == day - 1 {
+            return "Завтра, \(hour):\(min)"
+        } else if year == nowYear && month == nowMonth && nowDay == day + 1 {
+            return "Вчера, \(hour):\(min)"
+        }
+        
+        return "\(day) \(stringMonth), \(hour):\(min)"
     }
     
     var body: some View {
@@ -68,7 +123,7 @@ struct NotificationView: View {
                         Text("Записано на:")
                     }
                     
-                    Text(getDate(listViewModel.lists[listIndex].tasks[taskIndex].notificationDate ?? Date.now))
+                    Text(getDate(fromDate: listViewModel.lists[listIndex].tasks[taskIndex].notificationDate ?? Date.now))
                         .offset(x: 0, y: 10)
                         .foregroundColor(listViewModel.lists[listIndex].tasks[taskIndex].isNotificationDone ? .red : Color(uiColor: .label))
                 }

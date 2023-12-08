@@ -50,6 +50,12 @@ final class TasksListViewModel: ObservableObject {
     
     func getStringDate(fromDate date: Date) -> String {
         let calendar = Calendar.current
+        
+        let nowDate = Date()
+        let nowDay = calendar.component(.day, from: nowDate)
+        let nowMonth = calendar.component(.month, from: nowDate)
+        let nowYear = calendar.component(.year, from: nowDate)
+        
         let day = calendar.component(.day, from: date)
         let month = calendar.component(.month, from: date)
         let year = calendar.component(.year, from: date)
@@ -83,6 +89,6 @@ final class TasksListViewModel: ObservableObject {
             stringMonth = "Декабря"
         }
         
-        return "\(day) \(stringMonth) \(year)"
+        return "\(day) \(stringMonth) \(year),"
     }
 }
