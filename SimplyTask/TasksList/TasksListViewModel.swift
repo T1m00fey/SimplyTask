@@ -84,6 +84,6 @@ final class TasksListViewModel: ObservableObject {
             stringMonth = "Декабря"
         }
         
-        return "\(day) \(stringMonth) \(year),"
+        return "\(day) \(stringMonth) \(year)"
     }
 }
