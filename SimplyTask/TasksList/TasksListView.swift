@@ -221,6 +221,21 @@ struct TasksListView: View {
 //                                                            }
                                                         }
                                                         
+                                                        if listViewModel.lists[indexOfList].isDoneShowing && !viewModel.isMenuShowing {
+                                                            if listViewModel.lists[indexOfList].tasks[index].isDone {
+                                                                Button(action: {
+                                                                    viewModel.isAlertForDeletePresenting = true
+                                                                    viewModel.selectedIndexForDelete = index
+                                                                }) {
+                                                                    Image(systemName: "minus.circle")
+                                                                        .resizable()
+                                                                        .frame(width: 23, height: 23)
+                                                                        .foregroundColor(.gray)
+                                                                }
+                                                                .padding(.leading, 280)
+                                                            }
+                                                        }
+                                                        
                                                         if viewModel.isMenuShowing {
                                                             Menu {
                                                                 if !listViewModel.lists[indexOfList].tasks[index].isDone {
@@ -668,6 +683,7 @@ struct TasksListView: View {
                                 
                                 Button {
                                     viewModel.isEditScreenPresenting.toggle()
+                                    mediumFeedback.impactOccurred()
                                 } label: {
                                     Image(systemName: "gearshape.fill")
                                         .resizable()

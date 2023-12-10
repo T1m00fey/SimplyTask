@@ -52,8 +52,12 @@ struct NotificationView: View {
         let day = calendar.component(.day, from: date)
         let month = calendar.component(.month, from: date)
         let year = calendar.component(.year, from: date)
-        let hour = calendar.component(.hour, from: date)
-        let min = calendar.component(.minute, from: date)
+//        let hour = calendar.component(.hour, from: date)
+//        let min = calendar.component(.minute, from: date)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        let timeString = dateFormatter.string(from: date)
         
         var stringMonth = ""
         
@@ -85,14 +89,14 @@ struct NotificationView: View {
         }
         
         if year == nowYear && month == nowMonth && day == nowDay {
-            return "Сегодня, \(hour):\(min)"
+            return "Сегодня, \(timeString)"
         } else if year == nowYear && month == nowMonth && nowDay == day - 1 {
-            return "Завтра, \(hour):\(min)"
+            return "Завтра, \(timeString)"
         } else if year == nowYear && month == nowMonth && nowDay == day + 1 {
-            return "Вчера, \(hour):\(min)"
+            return "Вчера, \(timeString)"
         }
         
-        return "\(day) \(stringMonth), \(hour):\(min)"
+        return "\(day) \(stringMonth), \(timeString)"
     }
     
     var body: some View {
