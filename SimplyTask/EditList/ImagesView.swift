@@ -71,7 +71,7 @@ struct ImagesView: View {
                             Button {
                                 image = ""
                             } label: {
-                                Image(systemName: "trash")
+                                Image(systemName: "minus.circle")
                             }
                         }
                     }
