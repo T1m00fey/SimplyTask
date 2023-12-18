@@ -207,7 +207,7 @@ struct GridView: View {
                 }
             }
             .onAppear {
-//                listViewModel.reloadData()
+                listViewModel.reloadData()
                 
                 if !storageManager.isPro() {
                     storageManager.getPro()
