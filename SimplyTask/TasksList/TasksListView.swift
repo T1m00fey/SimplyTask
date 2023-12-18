@@ -513,8 +513,10 @@ struct TasksListView: View {
                                             .foregroundColor(task.isDone ? .gray : Color(uiColor: .label))
                                     }
                                     .onMove(perform: move)
+                                    .listRowBackground(Color(uiColor: .systemBackground))
                                 }
                                 .environment(\.editMode, .constant(viewModel.isList ? EditMode.active : EditMode.inactive))
+                                .scrollContentBackground(.hidden)
                             } else if listViewModel.lists[indexOfList].tasks.count <= 0 {
                                 VStack(spacing: 20) {
                                     Image(systemName: "tree")

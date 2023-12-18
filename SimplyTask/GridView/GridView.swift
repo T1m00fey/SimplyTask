@@ -110,8 +110,10 @@ struct GridView: View {
                                 }
                             }
                             .onMove(perform: move)
+                            .listRowBackground(Color(uiColor: .systemBackground))
                         }
                         .environment(\.editMode, .constant(viewModel.isList ? EditMode.active : EditMode.inactive))
+                        .scrollContentBackground(.hidden)
                     } else if listViewModel.lists.count <= 1 {
                         VStack(spacing: 20) {
                             Image(systemName: "tree")
