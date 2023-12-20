@@ -829,6 +829,7 @@ struct TasksListView: View {
                 }
             }
         }
+        
     }
 }
 
