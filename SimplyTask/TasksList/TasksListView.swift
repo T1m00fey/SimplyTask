@@ -281,6 +281,14 @@ struct TasksListView: View {
                                                                     } label: {
                                                                         Label("Фото", systemImage: "photo")
                                                                     }
+                                                                    
+                                                                    Button {
+                                                                        viewModel.selectedIndexForDelete = index
+                                                                        viewModel.isListsScreenPresenting.toggle()
+                                                                    } label: {
+                                                                        Label("Перенести", systemImage: "arrowshape.turn.up.right")
+                                                                    }
+
                                                                 }
                                                                 
                                                                 Button {
@@ -554,6 +562,13 @@ struct TasksListView: View {
                                         .padding(.bottom, 15)
                                         .fixedSize(horizontal: true, vertical: true)
                                 }
+                                .sheet(isPresented: $viewModel.isListsScreenPresenting) {
+                                    ListsView(
+                                        listIndex: indexOfList,
+                                        taskIndex: viewModel.selectedIndexForDelete,
+                                        isScreenPresenting: $viewModel.isListsScreenPresenting
+                                    )
+                                }
                                 .alert("Удалить задачу?", isPresented: $viewModel.isAlertForDeletePresenting) {
                                     Button("Удалить", role: .destructive) {
                                         let task = listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete]
@@ -801,6 +816,13 @@ struct TasksListView: View {
             }
         }
         .onChange(of: viewModel.isRefactScreenPresenting) { isPresenting in
+            if !isPresenting {
+                withAnimation {
+                    listViewModel.reloadData()
+                }
+            }
+        }
+        .onChange(of: viewModel.isListsScreenPresenting) { isPresenting in
             if !isPresenting {
                 withAnimation {
                     listViewModel.reloadData()

@@ -23,6 +23,7 @@ final class TasksListViewModel: ObservableObject {
     @Published var isShareSheetPresenting = false
     @Published var isDateMenuShowing = false
     @Published var isMenuShowing = false
+    @Published var isListsScreenPresenting = false
     
     var titleForEditScreen = ""
     var selectedIndexForDelete = 0
