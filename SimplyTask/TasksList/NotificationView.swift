@@ -186,6 +186,7 @@ struct NotificationView: View {
                     
                     withAnimation {
                         listViewModel.lists[listIndex].tasks[taskIndex].notificationDate = date
+                        listViewModel.lists[listIndex].tasks[taskIndex].isNotificationDone = false
                     }
                     
                 } else {
