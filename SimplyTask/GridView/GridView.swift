@@ -33,8 +33,18 @@ struct GridView: View {
     
     func move(from source: IndexSet, to destination: Int) {
         listViewModel.lists.move(fromOffsets: source, toOffset: destination)
-        
-        storageManager.newLists(lists: listViewModel.lists)
+    }
+    
+    private func getDoneOfNotifications() {
+        for listIndex in 0..<listViewModel.lists.count {
+            for taskIndex in 0..<listViewModel.lists[listIndex].tasks.count {
+                if listViewModel.lists[listIndex].tasks[taskIndex].notificationDate != nil {
+                    if listViewModel.lists[listIndex].tasks[taskIndex].notificationDate ?? Date.now <= Date.now {
+                        listViewModel.lists[listIndex].tasks[taskIndex].isNotificationDone = true
+                    }
+                }
+            }
+        }
     }
     
     var body: some View {
@@ -44,7 +54,7 @@ struct GridView: View {
                     .ignoresSafeArea()
                 
                 VStack {
-                    if listViewModel.lists.count > 1 && !viewModel.isList {
+                    if !viewModel.isList && listViewModel.lists.count > 1 {
                         ScrollView(showsIndicators: false) {
                             LazyVGrid(columns: viewModel.items, spacing: 15) {
                                 ForEach(0..<listViewModel.lists.count, id: \.self) { indexOfList in
@@ -58,36 +68,25 @@ struct GridView: View {
                                                 }
                                                 
                                                 Button("Удалить", role: .destructive) {
-                                                    viewModel.isDeleteAlertPresenting.toggle()
-                                                    
-                                                    if listViewModel.lists[indexOfList].isPrivate && viewModel.isPrivateListPermitForDelete {
-                                                        storageManager.deleteList(atIndex: viewModel.selectedIndexForDelete)
-                                                        viewModel.isPrivateListPermitForDelete = false
+                                                    if listViewModel.lists[viewModel.selectedIndexForDelete].isPrivate && viewModel.isPrivateListPermitForDelete {
+                                                        withAnimation {
+                                                            listViewModel.lists.remove(at: viewModel.selectedIndexForDelete)
+                                                            viewModel.isPrivateListPermitForDelete = false
+                                                        }
                                                     } else {
-                                                        storageManager.deleteList(atIndex: viewModel.selectedIndexForDelete)
+                                                        withAnimation {
+                                                            listViewModel.lists.remove(at: viewModel.selectedIndexForDelete)
+                                                            viewModel.isPrivateListPermitForDelete = false
+                                                        }
                                                     }
                                                     
-                                                    if listViewModel.lists.count <= 1 {
+                                                    if listViewModel.lists.count < 1 {
                                                         viewModel.isGridEditing = false
                                                     }
                                                     
-                                                    withAnimation {
-                                                        listViewModel.reloadData()
-                                                    }
+                                                    viewModel.isDeleteAlertPresenting.toggle()
                                                     
                                                     mediumFeedback.impactOccurred()
-                                                }
-                                            }
-                                            .onChange(of: scenePhase) { scenePhase in
-                                                if scenePhase == .active {
-                                                    storageManager.getDoneOfNotifications()
-                                                    withAnimation {
-                                                        listViewModel.reloadData()
-                                                    }
-                                                } else if scenePhase == .background {
-                                                    withAnimation {
-                                                        listViewModel.reloadData()
-                                                    }
                                                 }
                                             }
                                         }
@@ -152,30 +151,48 @@ struct GridView: View {
                             TextField("Название", text: $viewModel.textFromAlert)
                             
                             Button("OK", role: .none) {
-                                if viewModel.textFromAlert != "" {
+                                withAnimation {
                                     if listViewModel.lists.count == 0 {
-                                        storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: [], isDoneShowing: false, isMoveDoneToEnd: false))
+                                        listViewModel.lists.append(
+                                            TaskList(
+                                                title: "",
+                                                numberOfTasks: 0,
+                                                colorOfImportant: 4,
+                                                isPrivate: false,
+                                                tasks: [],
+                                                isDoneShowing: false,
+                                                isMoveDoneToEnd: false
+                                            )
+                                        )
                                     }
                                     
-                                    storageManager.deleteLastList()
+                                    listViewModel.lists.removeLast()
                                     
-                                    storageManager.new(
-                                        list: TaskList(
-                                            title: viewModel.textFromAlert,
+                                    if viewModel.textFromAlert != "" {
+                                        listViewModel.lists.append(
+                                            TaskList(
+                                                title: viewModel.textFromAlert,
+                                                numberOfTasks: 0,
+                                                colorOfImportant: 4,
+                                                isPrivate: false,
+                                                tasks: [],
+                                                isDoneShowing: true,
+                                                isMoveDoneToEnd: true
+                                            )
+                                        )
+                                    }
+                                    
+                                    listViewModel.lists.append(
+                                        TaskList(
+                                            title: "",
                                             numberOfTasks: 0,
                                             colorOfImportant: 4,
                                             isPrivate: false,
                                             tasks: [],
-                                            isDoneShowing: true,
-                                            isMoveDoneToEnd: true
+                                            isDoneShowing: false,
+                                            isMoveDoneToEnd: false
                                         )
                                     )
-                                    
-                                    storageManager.new(list: TaskList(title: "", numberOfTasks: 0, colorOfImportant: 4, isPrivate: false, tasks: [], isDoneShowing: false, isMoveDoneToEnd: false))
-                                    
-                                    withAnimation {
-                                        listViewModel.reloadData()
-                                    }
                                 }
                                 
                                 viewModel.isAlertPresenting.toggle()
@@ -206,12 +223,22 @@ struct GridView: View {
                     }
                 }
             }
-            .onAppear {
-                listViewModel.reloadData()
-                
-                if !storageManager.isPro() {
-                    storageManager.getPro()
+            .onChange(of: scenePhase) { scenePhase in
+                switch scenePhase {
+                case .background:
+                    storageManager.newLists(lists: listViewModel.lists)
+                default:
+                    storageManager.newLists(lists: listViewModel.lists)
                 }
+            }
+            .onAppear {
+                if listViewModel.lists.count == 0 {
+                    withAnimation {
+                        listViewModel.reloadData()
+                    }
+                }
+                
+                getDoneOfNotifications()
                 
                 UIApplication.shared.applicationIconBadgeNumber = 0
             }

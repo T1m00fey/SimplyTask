@@ -184,7 +184,9 @@ struct NotificationView: View {
                         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(task.title)\(task.notificationDate ?? Date())"])
                     }
                     
-                    storageManager.addDateToTask(taskIndex: taskIndex, listIndex: listIndex, date: date)
+                    withAnimation {
+                        listViewModel.lists[listIndex].tasks[taskIndex].notificationDate = date
+                    }
                     
                 } else {
                     isShowing = false
@@ -193,7 +195,6 @@ struct NotificationView: View {
                 
                 withAnimation {
                     isShowing.toggle()
-                    listViewModel.reloadData()
                 }
                 
                 mediumFeedback.impactOccurred()
@@ -226,7 +227,10 @@ struct NotificationView: View {
                     Button("Отмена", role: .cancel) {}
                     
                     Button("Удалить", role: .destructive) {
-                        storageManager.deleteDateInTask(taskIndex: taskIndex, listIndex: listIndex)
+                        withAnimation {
+                            listViewModel.lists[listIndex].tasks[taskIndex].notificationDate = nil
+                            listViewModel.lists[listIndex].tasks[taskIndex].isNotificationDone = false
+                        }
                         
                         UNUserNotificationCenter.current().removePendingNotificationRequests(
                             withIdentifiers: [
@@ -236,7 +240,6 @@ struct NotificationView: View {
                         
                         withAnimation {
                             isShowing.toggle()
-                            listViewModel.reloadData()
                         }
                     }
                 }

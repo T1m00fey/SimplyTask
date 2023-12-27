@@ -170,19 +170,10 @@ struct EditListView: View {
                             listViewModel.lists[indexOfList].isPrivate = viewModel.isListPrivate
                             listViewModel.lists[indexOfList].isDoneShowing = viewModel.isDoneShowing
                             
-                            storageManager.resave(
-                                title: viewModel.textFromTF,
-                                colorOfImportant: viewModel.getNewColorOfImportant(),
-                                isPrivate: viewModel.isListPrivate,
-                                isDoneShowing: viewModel.isDoneShowing,
-                                isMoveDoneToEnd: viewModel.isMoveDoneToEnd,
-                                atIndex: indexOfList
-                            )
-                            
                             if image != "" {
-                                storageManager.addImage(toList: indexOfList, image: image)
+                                listViewModel.lists[indexOfList].image = image
                             } else {
-                                storageManager.deleteImage(atList: indexOfList)
+                                listViewModel.lists[indexOfList].image = nil
                             }
                         }
                         

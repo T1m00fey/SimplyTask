@@ -72,20 +72,27 @@ struct EditSheetView: View {
                     Button {
                         if navigationTitle == "Новая задача" {
                             if text != "" && !text.isEmpty {
-                                storageManager.newTask(
-                                    toList: listIndex,
-                                    newTask: StructTask(title: text, isDone: false, notificationDate: nil, isNotificationDone: false, images: [], date: nil)
-                                )
-                                
-                                storageManager.plusOneTask(atIndex: listIndex)
+                                withAnimation {
+                                    listViewModel.newTask(
+                                        toList: listIndex,
+                                        newTask: StructTask(
+                                            title: text,
+                                            isDone: false,
+                                            notificationDate: nil,
+                                            isNotificationDone: false,
+                                            images: [],
+                                            date: nil
+                                        )
+                                    )
+                                    
+                                    listViewModel.lists[listIndex].numberOfTasks += 1
+                                }
                             }
-                        } else if navigationTitle == "Редактирование" {
+                        } else if navigationTitle == "Редактирование" && !text.isEmpty {
                             let title = listViewModel.lists[listIndex].tasks[taskIndex].title
                             
-                            storageManager.editTask(indexOfList: listIndex, indexOfTask: taskIndex, newTitle: text)
-                            
                             withAnimation {
-                                listViewModel.reloadData()
+                                listViewModel.lists[listIndex].tasks[taskIndex].title = text
                             }
                             
                             let task = listViewModel.lists[listIndex].tasks[taskIndex]

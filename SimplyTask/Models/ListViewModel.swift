@@ -10,7 +10,7 @@ import LocalAuthentication
 
 final class ListViewModel: ObservableObject {
     
-    @Published var lists: [TaskList] = StorageManager().fetchData()
+    @Published var lists: [TaskList] = []
 //    [
 //        TaskList(
 //            title: "Напоминания",
@@ -125,7 +125,7 @@ final class ListViewModel: ObservableObject {
         "building.columns"
     ]
     
-    func requestBiometricUnlock(_ closure: @escaping  () -> Void) {
+    func requestBiometricUnlock(_ closure: @escaping () -> Void) {
         let context = LAContext()
         
         var error: NSError? = nil
@@ -171,8 +171,6 @@ final class ListViewModel: ObservableObject {
         } else {
             isFaceIDSuccess = true
         }
-        
-        reloadData()
     }
     
     func getColor(by index: Int64) -> Color {
@@ -190,5 +188,63 @@ final class ListViewModel: ObservableObject {
     
     func reloadData() {
         lists = StorageManager().fetchData()
+    }
+    
+    func getImages(fromList listIndex: Int, fromTask taskIndex: Int) -> [UIImage] {
+        var images: [UIImage] = []
+        let imagesData = lists[listIndex].tasks[taskIndex].images
+        
+        for image in imagesData {
+            images.append(UIImage(data: image) ?? UIImage(systemName: "bell")!)
+        }
+        
+        return images
+    }
+    
+    func moveTaskToBegin(listIndex: Int, taskIndex: Int) {
+        for indexOfTask in 0..<taskIndex {
+            if lists[listIndex].tasks[indexOfTask].isDone {
+                lists[listIndex].tasks.move(fromOffsets: IndexSet(integer: taskIndex), toOffset: indexOfTask)
+                break;
+            }
+        }
+    }
+    
+    func moveTaskToEnd(listIndex: Int, taskIndex: Int) {
+        lists[listIndex].tasks.move(fromOffsets: IndexSet(integer: taskIndex), toOffset: lists[listIndex].tasks.count)
+    }
+    
+    func addImage(toList listIndex: Int, andTask taskIndex: Int, photos: [UIImage]) {
+        var data: [Data] = []
+        
+        for photo in photos {
+            data.append(photo.jpegData(compressionQuality: 1) ?? Data())
+        }
+        
+        withAnimation {
+            lists[listIndex].tasks[taskIndex].images = data
+        }
+    }
+    
+    func getImage(fromList listIndex: Int, fromTask taskIndex: Int) -> [UIImage] {
+        var images: [UIImage] = []
+        let imagesData = lists[listIndex].tasks[taskIndex].images
+        
+        for image in imagesData {
+            images.append(UIImage(data: image) ?? UIImage(systemName: "bell")!)
+        }
+        
+        return images
+    }
+    
+    func newTask(toList index: Int, newTask task: StructTask) {
+        lists[index].tasks.append(task)
+        
+        for indexOfTask in 0..<lists[index].tasks.count {
+            if lists[index].tasks[indexOfTask].isDone {
+                lists[index].tasks.move(fromOffsets: IndexSet(integer: lists[index].tasks.count - 1), toOffset: indexOfTask)
+                break;
+            }
+        }
     }
 }

@@ -11,12 +11,15 @@ struct GridRowView: View {
     let index: Int
     
     private let storageManager = StorageManager.shared
+    private let mediumFeedback = UIImpactFeedbackGenerator(style: .medium)
     
     @EnvironmentObject var gridViewModel: GridViewModel
     @EnvironmentObject var listViewModel: ListViewModel
     
     init(index: Int) {
         self.index = index
+        
+        mediumFeedback.prepare()
     }
     
     func getIsDoneNotification() -> Bool {
@@ -40,26 +43,13 @@ struct GridRowView: View {
                 .frame(width: 170, height: 170)
                 .foregroundColor(Color(uiColor: .systemBackground))
                 .shadow(radius: 3)
-            
-            if !storageManager.isPro() {
-                Circle()
-                    .frame(width: 10, height: 10)
-                    .foregroundColor(gridViewModel.getColorOfImportant(byNum: listViewModel.lists[index].colorOfImportant))
-                    .offset(x: 60, y: -50)
-            }
                 
-            if storageManager.isPro() && listViewModel.lists[index].image != nil && !gridViewModel.isGridEditing {
+            if listViewModel.lists[index].image != nil && !gridViewModel.isGridEditing {
                 Image(systemName: listViewModel.lists[index].image ?? "globe")
                 .scaleEffect(1.5).offset(x: -55, y: -49)
             }
             
-            if !storageManager.isPro() && listViewModel.lists[index].isPrivate && !gridViewModel.isGridEditing {
-                Image(systemName: "lock")
-                    .resizable()
-                    .frame(width: 17, height: 25)
-                    .offset(x: -55, y: -49)
-                    .foregroundColor(Color(uiColor: .label))
-            } else if listViewModel.lists[index].image == nil && listViewModel.lists[index].isPrivate && !gridViewModel.isGridEditing {
+           if listViewModel.lists[index].image == nil && listViewModel.lists[index].isPrivate && !gridViewModel.isGridEditing {
                 Image(systemName: "lock")
                     .resizable()
                     .frame(width: 17, height: 25)
@@ -67,7 +57,7 @@ struct GridRowView: View {
                     .foregroundColor(Color(uiColor: .label))
             }
             
-            if listViewModel.lists[index].isPrivate && storageManager.isPro() && listViewModel.lists[index].image != nil {
+            if listViewModel.lists[index].isPrivate && listViewModel.lists[index].image != nil {
                 Image(systemName: "lock")
                     .resizable()
                     .frame(width: 17, height: 25)

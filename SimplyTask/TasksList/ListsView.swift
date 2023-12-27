@@ -11,8 +11,6 @@ struct ListsView: View {
     let listIndex: Int
     let taskIndex: Int
     
-    @State private var lists: [TaskList] = []
-    
     @Binding var isScreenPresenting: Bool
     
     @EnvironmentObject var listViewModel: ListViewModel
@@ -42,6 +40,8 @@ struct ListsView: View {
         navBarAppearance.backgroundColor = UIColor.systemGray6
         
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+        
+        lightFeedback.prepare()
     }
     
     var body: some View {
@@ -51,26 +51,24 @@ struct ListsView: View {
                     .ignoresSafeArea()
                 
                 List {
-                    ForEach(0..<lists.count, id: \.self) { index in
-                        if lists[index].title != "" {
+                    ForEach(0..<listViewModel.lists.count, id: \.self) { index in
+                        if listViewModel.lists[index].title != "" {
                             HStack {
                                 Circle()
                                     .frame(width: 10, height: 10)
-                                    .foregroundColor(getColorOfImportant(byNum: lists[index].colorOfImportant))
+                                    .foregroundColor(getColorOfImportant(byNum: listViewModel.lists[index].colorOfImportant))
                                 
-                                Text(lists[index].title)
+                                Text(listViewModel.lists[index].title)
                                 
                                 Spacer()
                             }
                             .onTapGesture {
-                                let task = lists[listIndex].tasks[taskIndex]
-                                lists[index].tasks.append(task)
-                                lists[listIndex].tasks.remove(at: taskIndex)
+                                let task = listViewModel.lists[listIndex].tasks[taskIndex]
+                                listViewModel.lists[index].tasks.append(task)
+                                listViewModel.lists[listIndex].tasks.remove(at: taskIndex)
                                 
-                                lists[index].numberOfTasks += 1
-                                lists[listIndex].numberOfTasks -= 1
-                                
-                                storageManager.newLists(lists: lists)
+                                listViewModel.lists[index].numberOfTasks += 1
+                                listViewModel.lists[listIndex].numberOfTasks -= 1
                                 
                                 lightFeedback.impactOccurred()
                                 
@@ -80,11 +78,6 @@ struct ListsView: View {
                     }
                     .listRowBackground(Color(uiColor: .systemBackground))
                 }
-            }
-            .onAppear {
-                lists = listViewModel.lists
-                
-                lightFeedback.prepare()
             }
             .navigationTitle("Списки")
             .navigationBarTitleDisplayMode(.inline)

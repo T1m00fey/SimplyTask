@@ -54,7 +54,7 @@ struct DateView: View {
             
             Button {
                 withAnimation {
-                    storageManager.add(date: date, listIndex: listIndex, taskIndex: taskIndex)
+                    listViewModel.lists[listIndex].tasks[taskIndex].date = date
                     isShowing.toggle()
                 }
                 
@@ -85,7 +85,7 @@ struct DateView: View {
                         withAnimation {
                             isShowing.toggle()
                             isAlertShowing = false
-                            storageManager.add(date: nil, listIndex: listIndex, taskIndex: taskIndex)
+                            listViewModel.lists[listIndex].tasks[taskIndex].date = nil
                         }
                     }
                     

@@ -90,10 +90,6 @@ struct SettingsView: View {
                             Button("Изменить", role: .none) {
                                 viewModel.isEditAlertPresenting.toggle()
                                 storageManager.save(name: viewModel.text)
-                                
-                                if viewModel.text == "givePremium123" {
-                                    storageManager.getPro()
-                                }
                             }
                         }
 

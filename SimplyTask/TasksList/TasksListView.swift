@@ -36,10 +36,6 @@ struct TasksListView: View {
     
     func move(from source: IndexSet, to destination: Int) {
         listViewModel.lists[indexOfList].tasks.move(fromOffsets: source, toOffset: destination)
-        
-        storageManager.newLists(lists: listViewModel.lists)
-        
-        listViewModel.reloadData()
     }
     
     func getNotificationsDone() {
@@ -50,12 +46,12 @@ struct TasksListView: View {
         for index in 0..<tasks.count {
             if tasks[index].notificationDate != nil {
                 if tasks[index].notificationDate ?? date <= date {
-                    storageManager.toggleIsNotificationDone(taskIndex: index, listIndex: indexOfList)
+                    withAnimation {
+                        listViewModel.lists[indexOfList].tasks[index].isNotificationDone = true
+                    }
                 }
             }
         }
-        
-        listViewModel.reloadData()
     }
     
     var body: some View {
@@ -92,7 +88,7 @@ struct TasksListView: View {
                                                         }
                                                         
                                                         if task.images.count > 0 {
-                                                            let images = storageManager.getImage(fromList: indexOfList, fromTask: index)
+                                                            let images = listViewModel.getImages(fromList: indexOfList, fromTask: index)
                                                             
                                                             ForEach(0..<images.count , id: \.self) { imageIndex in
                                                                 Image(uiImage: images[imageIndex])
@@ -131,22 +127,31 @@ struct TasksListView: View {
                                                         
                                                         if listViewModel.lists[indexOfList].isDoneShowing {
                                                             Button {
-                                                                storageManager.toggleIsDone(indexOfTask: index, indexOfList: indexOfList)
+                                                                withAnimation {
+                                                                    listViewModel.lists[indexOfList].tasks[index].isDone.toggle()
+                                                                }
+                                                                
                                                                 task.isDone.toggle()
                                                                 
                                                                 if !task.isDone {
                                                                     mediumFeedback.impactOccurred()
                                                                     
-                                                                    storageManager.plusOneTask(atIndex: indexOfList)
+                                                                    withAnimation {
+                                                                        listViewModel.lists[indexOfList].numberOfTasks += 1
+                                                                    }
                                                                     
                                                                     if listViewModel.lists[indexOfList].isMoveDoneToEnd {
-                                                                        storageManager.moveTaskToBegin(listIndex: indexOfList, taskIndex: index)
+                                                                        withAnimation {
+                                                                            listViewModel.moveTaskToBegin(listIndex: indexOfList, taskIndex: index)
+                                                                        }
                                                                     }
                                                                 } else {
                                                                     generator.notificationOccurred(.success)
                                                                     
-                                                                    storageManager.deleteOneTask(atIndex: indexOfList)
-                                                                    storageManager.deleteDateInTask(taskIndex: index, listIndex: indexOfList)
+                                                                    withAnimation {
+                                                                        listViewModel.lists[indexOfList].numberOfTasks -= 1
+                                                                        listViewModel.lists[indexOfList].tasks[index].notificationDate = nil
+                                                                    }
                                                                     
                                                                     UNUserNotificationCenter.current().removePendingNotificationRequests(
                                                                         withIdentifiers: [
@@ -155,16 +160,14 @@ struct TasksListView: View {
                                                                     )
                                                                     
                                                                     if listViewModel.lists[indexOfList].isMoveDoneToEnd {
-                                                                        storageManager.moveTaskToEnd(listIndex: indexOfList, taskIndex: index)
+                                                                        withAnimation {
+                                                                            listViewModel.moveTaskToEnd(listIndex: indexOfList, taskIndex: index)
+                                                                        }
                                                                     }
                                                                 }
                                                                 
                                                                 if listViewModel.lists[indexOfList].numberOfTasks < 1 {
                                                                     viewModel.isListEditing = false
-                                                                }
-                                                                
-                                                                withAnimation {
-                                                                    listViewModel.reloadData()
                                                                 }
                                                                 
                                                                 if task.isDone {
@@ -580,19 +583,15 @@ struct TasksListView: View {
                                         
                                         
                                         if !task.isDone {
-                                            storageManager.deleteOneTask(atIndex: indexOfList)
+                                            withAnimation {
+                                                listViewModel.lists[indexOfList].numberOfTasks -= 1
+                                            }
                                         }
                                         
                                         if task.notificationDate != nil {
                                             UNUserNotificationCenter.current().removePendingNotificationRequests(
                                                 withIdentifiers: ["\(task.title)\(task.notificationDate ?? Date())"]
                                             )
-                                        }
-                                        
-                                        storageManager.deleteTask(atList: indexOfList, atIndex: viewModel.selectedIndexForDelete)
-                                        
-                                        withAnimation {
-                                            listViewModel.reloadData()
                                         }
                                     
                                         if listViewModel.lists[indexOfList].tasks.count < 1 {
@@ -624,16 +623,8 @@ struct TasksListView: View {
                                         """
                                     ])
                                 }
-                                .onChange(of: viewModel.isAlertForNewTaskPresenting) { isPresenting in
-                                    if isPresenting == false {
-                                        withAnimation {
-                                            listViewModel.reloadData()
-                                        }
-                                    }
-                                }
                                 .sheet(isPresented: $viewModel.isPhotoScreenPresenting) {
                                     PhotoView(isScreenPresenting: $viewModel.isPhotoScreenPresenting, listIndex: indexOfList, taskIndex: viewModel.selectedIndexForDelete)
-                                        .environmentObject(ListViewModel())
                                 }
                                 .navigationDestination(isPresented: $viewModel.isRefactScreenPresenting) {
                                     if viewModel.titleForEditScreen == "Редактирование" {
@@ -642,19 +633,16 @@ struct TasksListView: View {
                                            listIndex: indexOfList,
                                            taskIndex: viewModel.selectedIndexForDelete
                                        )
-                                        .environmentObject(ListViewModel())
                                     } else {
                                         EditSheetView(
                                             navigationTitle: "Новая задача",
                                            listIndex: indexOfList,
                                            taskIndex: 0
                                        )
-                                        .environmentObject(ListViewModel())
                                     }
                                 }
                                 .navigationDestination(isPresented: $viewModel.isDetailPhotoScreenPresenting) {
                                     DetailPhotoView(image: viewModel.image ?? UIImage(systemName: "xmark")!, title: viewModel.titleOfTask)
-                                        .environmentObject(ListViewModel())
                                 }
                                 .navigationDestination(isPresented: $viewModel.isEditScreenPresenting) {
                                     EditListView(indexOfList: indexOfList)
@@ -718,7 +706,6 @@ struct TasksListView: View {
                         
                         if viewModel.isNotificationMenuShowing {
                             NotificationView(isShowing: $viewModel.isNotificationMenuShowing, listIndex: indexOfList, taskIndex: viewModel.selectedIndexForDelete)
-                                .environmentObject(ListViewModel())
                         } else if viewModel.isDateMenuShowing {
                             DateView(isShowing: $viewModel.isDateMenuShowing, listIndex: indexOfList, taskIndex: viewModel.selectedIndexForDelete)
                         }
@@ -727,11 +714,6 @@ struct TasksListView: View {
                     ErrorFaceIDView(indexOfList: indexOfList)
                 }
             }
-            .onChange(of: viewModel.isNotificationMenuShowing, perform: { isShowing in
-                if !isShowing {
-                    listViewModel.reloadData()
-                }
-            })
             .gesture(
                 DragGesture()
                             .onEnded { value in
@@ -770,7 +752,6 @@ struct TasksListView: View {
                                 if !viewModel.isList {
                                     withAnimation {
                                         viewModel.isMenuShowing.toggle()
-                                        listViewModel.reloadData()
                                     }
                                     softFeedback.impactOccurred()
                                 }
@@ -787,11 +768,11 @@ struct TasksListView: View {
         }
         .navigationBarBackButtonHidden()
         .onAppear {
+            getNotificationsDone()
+            
             listViewModel.requestBiometricUnlock(index: indexOfList)
 //
             UIApplication.shared.applicationIconBadgeNumber = 0
-//
-            getNotificationsDone()
             
             softFeedback.impactOccurred()
         }
@@ -801,35 +782,6 @@ struct TasksListView: View {
             
 //            getNotificationsDone()
         }
-        .onChange(of: viewModel.isPhotoScreenPresenting) { newValue in
-            if !newValue {
-//                withAnimation {
-                    listViewModel.reloadData()
-//                }
-            }
-        }
-        .onChange(of: viewModel.isDateMenuShowing) { isShowing in
-            if !isShowing {
-                withAnimation {
-                    listViewModel.reloadData()
-                }
-            }
-        }
-        .onChange(of: viewModel.isRefactScreenPresenting) { isPresenting in
-            if !isPresenting {
-                withAnimation {
-                    listViewModel.reloadData()
-                }
-            }
-        }
-        .onChange(of: viewModel.isListsScreenPresenting) { isPresenting in
-            if !isPresenting {
-                withAnimation {
-                    listViewModel.reloadData()
-                }
-            }
-        }
-        
     }
 }
 

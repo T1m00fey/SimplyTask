@@ -141,15 +141,11 @@ struct PhotoView: View {
                     HStack {
                         
                         Button {
-                            
-                            storageManager.addImage(toList: listIndex, andTask: taskIndex, photos: images)
-                            
+                            withAnimation {
+                                listViewModel.addImage(toList: listIndex, andTask: taskIndex, photos: images)
+                            }
                             
                             isScreenPresenting.toggle()
-                            
-                            withAnimation {
-                                listViewModel.reloadData()
-                            }
                             
                             mediumFeedback.impactOccurred()
                         } label: {
@@ -172,7 +168,7 @@ struct PhotoView: View {
                 }
             }
             .onAppear {
-                images = storageManager.getImage(fromList: listIndex, fromTask: taskIndex)
+                images = listViewModel.getImage(fromList: listIndex, fromTask: taskIndex)
             }
             .onChange(of: avatarItem) { _ in
                 Task {

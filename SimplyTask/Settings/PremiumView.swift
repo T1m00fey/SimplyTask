@@ -82,23 +82,23 @@ struct PremiumView: View {
                     
                     Spacer()
                     
-                    Button {
-                        storageManager.getPro()
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(height: 50)
-                                .padding(.leading, 20)
-                                .padding(.trailing, 20)
-                                .padding(.top, 30)
-                                .foregroundColor(colorScheme == .light ? Color(uiColor: .darkGray) : Color(uiColor: .lightGray))
-                            
-                            Text(storageManager.isPro() ? "Вы пользователь премиума" : "Купить премиум")
-                                .foregroundColor(Color(uiColor: .white))
-                                .bold()
-                                .padding(.top, 29)
-                        }
-                    }
+//                    Button {
+//                        storageManager.getPro()
+//                    } label: {
+//                        ZStack {
+//                            RoundedRectangle(cornerRadius: 10)
+//                                .frame(height: 50)
+//                                .padding(.leading, 20)
+//                                .padding(.trailing, 20)
+//                                .padding(.top, 30)
+//                                .foregroundColor(colorScheme == .light ? Color(uiColor: .darkGray) : Color(uiColor: .lightGray))
+//                            
+//                            Text(storageManager.isPro() ? "Вы пользователь премиума" : "Купить премиум")
+//                                .foregroundColor(Color(uiColor: .white))
+//                                .bold()
+//                                .padding(.top, 29)
+//                        }
+//                    }
                     
                     Spacer()
                 }

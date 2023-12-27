@@ -89,10 +89,6 @@ struct StartView: View {
             }
             .onDisappear {
                 storageManager.save(name: text)
-                
-//                if text == "givePremium123" {
-                storageManager.getPro()
-//                }
             }
         }
     }
