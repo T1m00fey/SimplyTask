@@ -78,6 +78,7 @@ struct ListsView: View {
                     }
                     .listRowBackground(Color(uiColor: .systemBackground))
                 }
+                .scrollContentBackground(.hidden)
             }
             .navigationTitle("Списки")
             .navigationBarTitleDisplayMode(.inline)
