@@ -169,6 +169,7 @@ struct EditListView: View {
                             listViewModel.lists[indexOfList].colorOfImportant = viewModel.getNewColorOfImportant()
                             listViewModel.lists[indexOfList].isPrivate = viewModel.isListPrivate
                             listViewModel.lists[indexOfList].isDoneShowing = viewModel.isDoneShowing
+                            listViewModel.lists[indexOfList].isMoveDoneToEnd = viewModel.isMoveDoneToEnd
                             
                             if image != "" {
                                 listViewModel.lists[indexOfList].image = image
