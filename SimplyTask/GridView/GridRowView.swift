@@ -26,8 +26,10 @@ struct GridRowView: View {
         var result = false
         
         listViewModel.lists[index].tasks.forEach { task in
-            if task.isNotificationDone {
-                result = true
+            if task.notificationDate != nil {
+                if task.isNotificationDone {
+                    result = true
+                }
             }
         }
         

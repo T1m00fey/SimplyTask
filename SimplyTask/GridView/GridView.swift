@@ -227,8 +227,10 @@ struct GridView: View {
                 switch scenePhase {
                 case .background:
                     storageManager.newLists(lists: listViewModel.lists)
-                default:
+                case .inactive:
                     storageManager.newLists(lists: listViewModel.lists)
+                default:
+                    getDoneOfNotifications()
                 }
             }
             .onAppear {
