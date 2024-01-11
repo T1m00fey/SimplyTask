@@ -119,6 +119,22 @@ struct GridRowView: View {
                 .padding(.top, 110)
                 .padding(.trailing, 30)
         }
+        .contextMenu {
+            Button {
+                if listViewModel.lists[index].isPrivate {
+                    listViewModel.requestBiometricUnlock {
+                        DispatchQueue.main.async {
+                            gridViewModel.isPrivateListPermitForDelete = true
+                            gridViewModel.isDeleteAlertPresenting.toggle()
+                        }
+                    }
+                } else {
+                    gridViewModel.isDeleteAlertPresenting.toggle()
+                }
+            } label: {
+                Label("Удалить", systemImage: "minus.circle")
+            }
+        }
     }
 }
 

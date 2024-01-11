@@ -72,6 +72,7 @@ struct ImagesView: View {
                                 image = ""
                             } label: {
                                 Image(systemName: "minus.circle")
+                                    .foregroundStyle(Color.red)
                             }
                         }
                     }

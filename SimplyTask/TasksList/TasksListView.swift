@@ -227,6 +227,8 @@ struct TasksListView: View {
                                                         if listViewModel.lists[indexOfList].isDoneShowing && !viewModel.isMenuShowing {
                                                             if listViewModel.lists[indexOfList].tasks[index].isDone {
                                                                 Button(action: {
+                                                                    softFeedback.impactOccurred()
+                                                                    
                                                                     viewModel.isAlertForDeletePresenting = true
                                                                     viewModel.selectedIndexForDelete = index
                                                                 }) {
@@ -239,80 +241,80 @@ struct TasksListView: View {
                                                             }
                                                         }
                                                         
-                                                        if viewModel.isMenuShowing {
-                                                            Menu {
-                                                                if !listViewModel.lists[indexOfList].tasks[index].isDone {
-                                                                    Button {
-                                                                        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, error in
-                                                                            if let error = error {
-                                                                                print(error.localizedDescription)
-                                                                            } else {
-                                                                                DispatchQueue.main.async {
-                                                                                    withAnimation {
-                                                                                        viewModel.isNotificationMenuShowing = true
-                                                                                        viewModel.selectedIndexForDelete = index
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    } label: {
-                                                                        Label("Уведомление", systemImage: "bell")
-                                                                    }
-                                                                    
-                                                                    
-                                                                    Button {
-                                                                        viewModel.isRefactScreenPresenting.toggle()
-                                                                        viewModel.textFromEditAlert = listViewModel.lists[indexOfList].tasks[index].title
-                                                                        viewModel.selectedIndexForDelete = index
-                                                                        viewModel.titleForEditScreen = "Редактирование"
-                                                                    } label: {
-                                                                        Label("Редактировать", systemImage: "square.and.pencil")
-                                                                    }
-                                                                    
-                                                                    Button {
-                                                                        withAnimation {
-                                                                            viewModel.isDateMenuShowing.toggle()
-                                                                            viewModel.selectedIndexForDelete = index
-                                                                        }
-                                                                    } label: {
-                                                                        Label("Дата", systemImage: "calendar")
-                                                                    }
-                                                                    
-                                                                    Button {
-                                                                        viewModel.isPhotoScreenPresenting.toggle()
-                                                                        viewModel.selectedIndexForDelete = index
-                                                                    } label: {
-                                                                        Label("Фото", systemImage: "photo")
-                                                                    }
-                                                                    
-                                                                    Button {
-                                                                        viewModel.selectedIndexForDelete = index
-                                                                        viewModel.isListsScreenPresenting.toggle()
-                                                                    } label: {
-                                                                        Label("Перенести", systemImage: "arrowshape.turn.up.right")
-                                                                    }
-
-                                                                }
-                                                                
-                                                                Button {
-                                                                    viewModel.isShareSheetPresenting.toggle()
-                                                                    viewModel.selectedIndexForDelete = index
-                                                                } label: {
-                                                                    Label("Поделиться", systemImage: "square.and.arrow.up")
-                                                                }
-                                                                
-                                                                Button {
-                                                                    viewModel.isAlertForDeletePresenting = true
-                                                                    viewModel.selectedIndexForDelete = index
-                                                                } label: {
-                                                                    Label("Удалить", systemImage: "minus.circle")
-                                                                }
-                                                            } label: {
-                                                                Label("", systemImage: "ellipsis.circle")
-                                                            }
-                                                            .scaleEffect(1.3)
-                                                            .padding(.leading, 290)
-                                                        }
+//                                                        if viewModel.isMenuShowing {
+//                                                            Menu {
+//                                                                if !listViewModel.lists[indexOfList].tasks[index].isDone {
+//                                                                    Button {
+//                                                                        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, error in
+//                                                                            if let error = error {
+//                                                                                print(error.localizedDescription)
+//                                                                            } else {
+//                                                                                DispatchQueue.main.async {
+//                                                                                    withAnimation {
+//                                                                                        viewModel.isNotificationMenuShowing = true
+//                                                                                        viewModel.selectedIndexForDelete = index
+//                                                                                    }
+//                                                                                }
+//                                                                            }
+//                                                                        }
+//                                                                    } label: {
+//                                                                        Label("Уведомление", systemImage: "bell")
+//                                                                    }
+//                                                                    
+//                                                                    
+//                                                                    Button {
+//                                                                        viewModel.isRefactScreenPresenting.toggle()
+//                                                                        viewModel.textFromEditAlert = listViewModel.lists[indexOfList].tasks[index].title
+//                                                                        viewModel.selectedIndexForDelete = index
+//                                                                        viewModel.titleForEditScreen = "Редактирование"
+//                                                                    } label: {
+//                                                                        Label("Редактировать", systemImage: "square.and.pencil")
+//                                                                    }
+//                                                                    
+//                                                                    Button {
+//                                                                        withAnimation {
+//                                                                            viewModel.isDateMenuShowing.toggle()
+//                                                                            viewModel.selectedIndexForDelete = index
+//                                                                        }
+//                                                                    } label: {
+//                                                                        Label("Дата", systemImage: "calendar")
+//                                                                    }
+//                                                                    
+//                                                                    Button {
+//                                                                        viewModel.isPhotoScreenPresenting.toggle()
+//                                                                        viewModel.selectedIndexForDelete = index
+//                                                                    } label: {
+//                                                                        Label("Фото", systemImage: "photo")
+//                                                                    }
+//                                                                    
+//                                                                    Button {
+//                                                                        viewModel.selectedIndexForDelete = index
+//                                                                        viewModel.isListsScreenPresenting.toggle()
+//                                                                    } label: {
+//                                                                        Label("Перенести", systemImage: "arrowshape.turn.up.right")
+//                                                                    }
+//
+//                                                                }
+//                                                                
+//                                                                Button {
+//                                                                    viewModel.isShareSheetPresenting.toggle()
+//                                                                    viewModel.selectedIndexForDelete = index
+//                                                                } label: {
+//                                                                    Label("Поделиться", systemImage: "square.and.arrow.up")
+//                                                                }
+//                                                                
+//                                                                Button {
+//                                                                    viewModel.isAlertForDeletePresenting = true
+//                                                                    viewModel.selectedIndexForDelete = index
+//                                                                } label: {
+//                                                                    Label("Удалить", systemImage: "minus.circle")
+//                                                                }
+//                                                            } label: {
+//                                                                Label("", systemImage: "ellipsis.circle")
+//                                                            }
+//                                                            .scaleEffect(1.3)
+//                                                            .padding(.leading, 290)
+//                                                        }
                                                         
                                                         if listViewModel.lists[indexOfList].tasks[index].notificationDate != nil && !viewModel.isMenuShowing {
                                                             Button {
@@ -513,9 +515,79 @@ struct TasksListView: View {
                                                     }
                                                 }
                                             }
+                                            .contextMenu {
+                                                if !listViewModel.lists[indexOfList].tasks[index].isDone {
+                                                    Button {
+                                                        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, error in
+                                                            if let error = error {
+                                                                print(error.localizedDescription)
+                                                            } else {
+                                                                DispatchQueue.main.async {
+                                                                    withAnimation {
+                                                                        viewModel.isNotificationMenuShowing = true
+                                                                        viewModel.selectedIndexForDelete = index
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    } label: {
+                                                        Label("Уведомление", systemImage: "bell")
+                                                    }
+                                                    
+                                                    
+                                                    Button {
+                                                        viewModel.isRefactScreenPresenting.toggle()
+                                                        viewModel.textFromEditAlert = listViewModel.lists[indexOfList].tasks[index].title
+                                                        viewModel.selectedIndexForDelete = index
+                                                        viewModel.titleForEditScreen = "Редактирование"
+                                                    } label: {
+                                                        Label("Редактировать", systemImage: "square.and.pencil")
+                                                    }
+                                                    
+                                                    Button {
+                                                        withAnimation {
+                                                            viewModel.isDateMenuShowing.toggle()
+                                                            viewModel.selectedIndexForDelete = index
+                                                        }
+                                                    } label: {
+                                                        Label("Дата", systemImage: "calendar")
+                                                    }
+                                                    
+                                                    Button {
+                                                        viewModel.isPhotoScreenPresenting.toggle()
+                                                        viewModel.selectedIndexForDelete = index
+                                                    } label: {
+                                                        Label("Фото", systemImage: "photo")
+                                                    }
+                                                    
+                                                    Button {
+                                                        viewModel.selectedIndexForDelete = index
+                                                        viewModel.isListsScreenPresenting.toggle()
+                                                    } label: {
+                                                        Label("Перенести", systemImage: "arrowshape.turn.up.right")
+                                                    }
+
+                                                }
+                                                
+                                                Button {
+                                                    viewModel.isShareSheetPresenting.toggle()
+                                                    viewModel.selectedIndexForDelete = index
+                                                } label: {
+                                                    Label("Поделиться", systemImage: "square.and.arrow.up")
+                                                }
+                                                
+                                                Button {
+                                                    viewModel.isAlertForDeletePresenting = true
+                                                    viewModel.selectedIndexForDelete = index
+                                                } label: {
+                                                    Label("Удалить", systemImage: "minus.circle")
+                                                }
+                                            }
+                                            
                                         }
                                     }
                                     .padding()
+                                    
                                 }
                             } else if viewModel.isList {
                                 List {
@@ -748,17 +820,17 @@ struct TasksListView: View {
                                     .foregroundColor(viewModel.isList ? Color(uiColor: .label) : .gray)
                             }
                             
-                            Button {
-                                if !viewModel.isList {
-                                    withAnimation {
-                                        viewModel.isMenuShowing.toggle()
-                                    }
-                                    softFeedback.impactOccurred()
-                                }
-                            } label: {
-                                Image(systemName: "ellipsis.circle")
-                                    .foregroundColor(viewModel.isMenuShowing ? Color(uiColor: .label) : .gray)
-                            }
+//                            Button {
+//                                if !viewModel.isList {
+//                                    withAnimation {
+//                                        viewModel.isMenuShowing.toggle()
+//                                    }
+//                                    softFeedback.impactOccurred()
+//                                }
+//                            } label: {
+//                                Image(systemName: "ellipsis.circle")
+//                                    .foregroundColor(viewModel.isMenuShowing ? Color(uiColor: .label) : .gray)
+//                            }
 
                         }
                     }
