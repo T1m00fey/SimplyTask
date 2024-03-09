@@ -110,6 +110,7 @@ struct GridView: View {
                             }
                             .onMove(perform: move)
                             .listRowBackground(Color(uiColor: .systemBackground))
+                            .frame(maxHeight: 100)
                         }
                         .environment(\.editMode, .constant(viewModel.isList ? EditMode.active : EditMode.inactive))
                         .scrollContentBackground(.hidden)
@@ -233,10 +234,63 @@ struct GridView: View {
                     getDoneOfNotifications()
                 }
             }
+            .onChange(of: viewModel.isSettingsScreenPresenting) { isPresenting in
+                if !isPresenting {
+                    viewModel.modeForMainScreen = storageManager.fetchModeForMainScreen()
+                }
+            }
             .onAppear {
+                viewModel.modeForMainScreen = storageManager.fetchModeForMainScreen()
+                
                 if listViewModel.lists.count == 0 {
                     withAnimation {
                         listViewModel.reloadData()
+                        
+                        print(listViewModel.lists)
+                        
+                        if listViewModel.lists.count == 0 {
+                            listViewModel.lists = [
+                                TaskList(
+                                    title: "Инструкция",
+                                    numberOfTasks: 3,
+                                    colorOfImportant: 1,
+                                    isPrivate: false,
+                                    tasks: [
+                                        StructTask(
+                                            title: "Чтобы добавить к задаче уведомление, фото, дату и т.д. просто зажмите ее",
+                                            isDone: false,
+                                            isNotificationDone: false,
+                                            images: []
+                                        ),
+                                        StructTask(
+                                            title: "Чтобы удалить список нажмите на изображение минуса на главном экране и выберите список для удаления, либо зажмите саму ячейку списка",
+                                            isDone: false,
+                                            isNotificationDone: false,
+                                            images: []
+                                        ),
+                                        StructTask(
+                                            title: "Чтобы изменить порядок задач, нажмите на кнопку в правом верхнем углу. Чтобы изменить порядок списков, нажмите на ту же кнопку на главной странице",
+                                            isDone: false,
+                                            isNotificationDone: false,
+                                            images: []
+                                        )
+                                    ],
+                                    isDoneShowing: true,
+                                    isMoveDoneToEnd: true
+                                ),
+                                TaskList(
+                                    title: "",
+                                    numberOfTasks: 0,
+                                    colorOfImportant: 4,
+                                    isPrivate: false,
+                                    tasks: [],
+                                    isDoneShowing: false,
+                                    isMoveDoneToEnd: false
+                                )
+                            ]
+                        }
+                        
+                        storageManager.newLists(lists: listViewModel.lists)
                     }
                 }
                 
@@ -281,7 +335,11 @@ struct GridView: View {
                         Image(systemName: viewModel.getGreetingImage())
                             .foregroundColor(Color(uiColor: .label))
                         
-                        Text("\(viewModel.getGreeting()), \(name)")
+                        if viewModel.modeForMainScreen == "name" {
+                            Text("\(viewModel.getGreeting()), \(name)")
+                        } else {
+                            Text("\(viewModel.getWeekday()), \(viewModel.getDate())")
+                        }
                     }
                     .onChange(of: viewModel.isSettingsScreenPresenting) { isPresenting in
                         if !isPresenting {

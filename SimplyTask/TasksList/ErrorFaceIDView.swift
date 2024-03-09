@@ -22,13 +22,13 @@ struct ErrorFaceIDView: View {
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
-                        .frame(width: 120, height: 120)
+                        .frame(width: 130, height: 130)
                         .foregroundColor(Color(uiColor: .systemBackground))
                     
-                    Image(systemName: "faceid")
+                    Image(systemName: "lock")
                         .resizable()
                         .foregroundColor(Color(uiColor: .label))
-                        .frame(width: 70, height: 70)
+                        .frame(width: 65, height: 95)
                 }
             }
         }

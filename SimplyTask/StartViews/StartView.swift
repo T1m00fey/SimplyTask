@@ -89,6 +89,7 @@ struct StartView: View {
             }
             .onDisappear {
                 storageManager.save(name: text)
+                storageManager.setModeForMainScreen("name")
             }
         }
     }

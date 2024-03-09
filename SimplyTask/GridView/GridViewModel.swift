@@ -15,6 +15,7 @@ final class GridViewModel: ObservableObject {
     @Published var isSettingsScreenPresenting = false
     @Published var greeting = ""
     @Published var isList = false
+    @Published var modeForMainScreen = ""
 
     var textFromAlert = ""
     var selectedIndexForDelete = 0
@@ -82,26 +83,65 @@ final class GridViewModel: ObservableObject {
         return result
     }
     
-//    func getWeekday() -> String {
-//        let date = Date()
-//        let calendar = Calendar.current
-//        let weekday = calendar.component(.weekday, from: date)
-//        
-//        switch weekday {
-//        case 1:
-//            return "Воскресенье"
-//        case 2:
-//            return "Понедельник"
-//        case 3:
-//            return "Вторник"
-//        case 4:
-//            return  "Среда"
-//        case 5:
-//            return "Четверг"
-//        case 6:
-//            return "Пятница"
-//        default:
-//            return "Cуббота"
-//        }
-//    }
+    func getWeekday() -> String {
+        let date = Date()
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: date)
+        
+        switch weekday {
+        case 1:
+            return "Воскресенье"
+        case 2:
+            return "Понедельник"
+        case 3:
+            return "Вторник"
+        case 4:
+            return  "Среда"
+        case 5:
+            return "Четверг"
+        case 6:
+            return "Пятница"
+        default:
+            return "Cуббота"
+        }
+    }
+    
+    func getDate() -> String {
+        let date = Date.now
+        
+        let calendar = Calendar.current
+        let day = calendar.component(.day, from: date)
+        let month = calendar.component(.month, from: date)
+        
+        var stringMonth = ""
+        
+        switch month {
+        case 1:
+           stringMonth = "января"
+        case 2:
+           stringMonth = "февраля"
+        case 3:
+           stringMonth = "марта"
+        case 4:
+           stringMonth = "апреля"
+        case 5:
+           stringMonth = "мая"
+        case 6:
+           stringMonth = "июня"
+        case 7:
+           stringMonth = "июля"
+        case 8:
+           stringMonth = "августа"
+        case 9:
+           stringMonth = "сентября"
+        case 10:
+           stringMonth = "октября"
+        case 11:
+           stringMonth = "ноября"
+        default:
+           stringMonth = "декабря"
+        }
+        
+        return "\(day) \(stringMonth)"
+    }
 }

@@ -127,8 +127,10 @@ struct TasksListView: View {
                                                         
                                                         if listViewModel.lists[indexOfList].isDoneShowing {
                                                             Button {
+                                                                viewModel.selectedIndexForDelete = index
+                                                                
                                                                 withAnimation {
-                                                                    listViewModel.lists[indexOfList].tasks[index].isDone.toggle()
+                                                                    listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].isDone.toggle()
                                                                 }
                                                                 
                                                                 task.isDone.toggle()
@@ -142,7 +144,7 @@ struct TasksListView: View {
                                                                     
                                                                     if listViewModel.lists[indexOfList].isMoveDoneToEnd {
                                                                         withAnimation {
-                                                                            listViewModel.moveTaskToBegin(listIndex: indexOfList, taskIndex: index)
+                                                                            listViewModel.moveTaskToBegin(listIndex: indexOfList, taskIndex: viewModel.selectedIndexForDelete)
                                                                         }
                                                                     }
                                                                 } else {
@@ -150,18 +152,22 @@ struct TasksListView: View {
                                                                     
                                                                     withAnimation {
                                                                         listViewModel.lists[indexOfList].numberOfTasks -= 1
-                                                                        listViewModel.lists[indexOfList].tasks[index].notificationDate = nil
                                                                     }
+                        
                                                                     
-                                                                    UNUserNotificationCenter.current().removePendingNotificationRequests(
-                                                                        withIdentifiers: [
-                                                                            "\(listViewModel.lists[indexOfList].tasks[index].title)\(listViewModel.lists[indexOfList].tasks[index].notificationDate ?? Date())"
-                                                                        ]
-                                                                    )
+                                                                    if listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].notificationDate != nil {
+                                                                        UNUserNotificationCenter.current().removePendingNotificationRequests(
+                                                                            withIdentifiers: [
+                                                                                "\(listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].title)\(listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].notificationDate ?? Date())"
+                                                                            ]
+                                                                        )
+                                                                        
+                                                                        listViewModel.lists[indexOfList].tasks[viewModel.selectedIndexForDelete].notificationDate = nil
+                                                                    }
                                                                     
                                                                     if listViewModel.lists[indexOfList].isMoveDoneToEnd {
                                                                         withAnimation {
-                                                                            listViewModel.moveTaskToEnd(listIndex: indexOfList, taskIndex: index)
+                                                                            listViewModel.moveTaskToEnd(listIndex: indexOfList, taskIndex: viewModel.selectedIndexForDelete)
                                                                         }
                                                                     }
                                                                 }
@@ -597,6 +603,7 @@ struct TasksListView: View {
                                     }
                                     .onMove(perform: move)
                                     .listRowBackground(Color(uiColor: .systemBackground))
+                                    .frame(maxHeight: 100)
                                 }
                                 .environment(\.editMode, .constant(viewModel.isList ? EditMode.active : EditMode.inactive))
                                 .scrollContentBackground(.hidden)

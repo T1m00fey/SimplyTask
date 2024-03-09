@@ -77,6 +77,7 @@ struct ListsView: View {
                         }
                     }
                     .listRowBackground(Color(uiColor: .systemBackground))
+                    .frame(maxHeight: 100)
                 }
                 .scrollContentBackground(.hidden)
             }

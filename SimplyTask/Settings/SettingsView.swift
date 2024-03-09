@@ -11,6 +11,7 @@ import SwiftUIMailView
 
 struct SettingsView: View {
     private let storageManager = StorageManager.shared
+    private let softFeedback = UIImpactFeedbackGenerator(style: .soft)
     
     @State private var mailData = ComposeMailData(
         subject: "Разработчику",
@@ -37,6 +38,8 @@ struct SettingsView: View {
         navBarAppearance.backgroundColor = UIColor.systemGray6
         
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+        
+        softFeedback.prepare()
     }
     
     var body: some View {
@@ -92,14 +95,69 @@ struct SettingsView: View {
                                 storageManager.save(name: viewModel.text)
                             }
                         }
-
                         
+                        Button {
+                            
+                        } label: {
+                            VStack {
+                                HStack {
+                                    Text(viewModel.settings[1])
+                                    
+                                    Spacer()
+                                }
+                                
+                                HStack {
+                                    Text("Имя")
+                                    
+//                                    Spacer()
+                                    
+                                    Button {
+                                        storageManager.setModeForMainScreen("name")
+                                        
+                                        withAnimation {
+                                            viewModel.modeForMainScreen = "name"
+                                        }
+                                        
+                                        softFeedback.impactOccurred()
+                                    } label: {
+                                        if viewModel.modeForMainScreen == "name" {
+                                            CheckmarkCircleView()
+                                        } else {
+                                            EmptyCircleView()
+                                        }
+                                    }
+                                }
+                                
+                                HStack {
+                                    Text("Дата")
+                                    
+//                                    Spacer()
+                                    
+                                    Button {
+                                        storageManager.setModeForMainScreen("date")
+                                        
+                                        withAnimation {
+                                            viewModel.modeForMainScreen = "date"
+                                        }
+                                        
+                                        softFeedback.impactOccurred()
+                                    } label: {
+                                        if viewModel.modeForMainScreen == "date" {
+                                            CheckmarkCircleView()
+                                        } else {
+                                            EmptyCircleView()
+                                        }
+                                    }
+                                }
+                                
+                            }
+                        }
                         
                         Button {
                             viewModel.isShareSheetPresenting.toggle()
                         } label: {
                             HStack {
-                                Text(viewModel.settings[1])
+                                Text(viewModel.settings[2])
                                 
                                 Spacer()
                                 
@@ -114,7 +172,7 @@ struct SettingsView: View {
                             
                         } label: {
                             HStack {
-                                Text(viewModel.settings[2])
+                                Text(viewModel.settings[3])
                                 
                                 Spacer()
                                 
@@ -127,7 +185,7 @@ struct SettingsView: View {
                             viewModel.isEmailViewPresenting.toggle()
                         } label: {
                             HStack {
-                                Text(viewModel.settings[3])
+                                Text(viewModel.settings[4])
                                 
                                 Spacer()
                                 
@@ -145,6 +203,9 @@ struct SettingsView: View {
             }
             .navigationTitle("Информация")
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                viewModel.modeForMainScreen = storageManager.fetchModeForMainScreen()
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {

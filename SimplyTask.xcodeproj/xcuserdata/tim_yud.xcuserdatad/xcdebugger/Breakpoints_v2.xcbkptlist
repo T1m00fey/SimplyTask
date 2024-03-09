@@ -14,8 +14,8 @@
             filePath = "SimplyTask/GridView/GridView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -31,8 +31,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "50"
-                  endingLineNumber = "50"
-                  offsetFromSymbolStart = "460">
+                  endingLineNumber = "50">
                </Location>
                <Location
                   uuid = "0382E7A5-77F2-4968-ADFA-4EB14A36F7AF - 1484fce19bcc8c31"
@@ -46,8 +45,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "50"
-                  endingLineNumber = "50"
-                  offsetFromSymbolStart = "500">
+                  endingLineNumber = "50">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -62,8 +60,8 @@
             filePath = "SimplyTask/GridView/GridView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -79,8 +77,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "49"
-                  endingLineNumber = "49"
-                  offsetFromSymbolStart = "360">
+                  endingLineNumber = "49">
                </Location>
                <Location
                   uuid = "AF113B32-7192-495B-8028-DA10CB30660E - 1484fce19bcc83d0"
@@ -94,8 +91,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "49"
-                  endingLineNumber = "49"
-                  offsetFromSymbolStart = "320">
+                  endingLineNumber = "49">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -127,8 +123,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "32"
-                  endingLineNumber = "32"
-                  offsetFromSymbolStart = "508">
+                  endingLineNumber = "32">
                </Location>
                <Location
                   uuid = "6608432D-D32E-4C16-BD42-25660C6AF34A - 644c0c248954eda5"
@@ -142,8 +137,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "34"
-                  endingLineNumber = "34"
-                  offsetFromSymbolStart = "928">
+                  endingLineNumber = "34">
                </Location>
                <Location
                   uuid = "6608432D-D32E-4C16-BD42-25660C6AF34A - f6c03127132fd41f"
@@ -157,8 +151,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "34"
-                  endingLineNumber = "34"
-                  offsetFromSymbolStart = "184">
+                  endingLineNumber = "34">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -173,8 +166,8 @@
             filePath = "SimplyTask/GridView/GridRowView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>

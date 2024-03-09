@@ -12,11 +12,13 @@ final class SettingsViewModel: ObservableObject {
     @Published var isShareSheetPresenting = false
     @Published var isEditAlertPresenting = false
     @Published var isPremiumViewPresenting = false
+    @Published var modeForMainScreen = ""
     
     var text = ""
     
     let settings = [
         "Изменить имя",
+        "Отображать на главном экране: ",
         "Поделиться приложением",
         "Оценить приложение",
         "Написать разработчику"

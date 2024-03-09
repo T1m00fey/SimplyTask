@@ -168,6 +168,14 @@ final class StorageManager {
         userDefaults.set(data, forKey: key)
     }
     
+    func fetchModeForMainScreen() -> String {
+        return userDefaults.string(forKey: "mainScreen") ?? "name"
+    }
+    
+    func setModeForMainScreen(_ mode: String) {
+        userDefaults.setValue(mode, forKey: "mainScreen")
+    }
+    
 //    func toggleIsNotificationDone(taskIndex: Int, listIndex: Int) {
 //        var lists = fetchData()
 //        lists[listIndex].tasks[taskIndex].isNotificationDone = true
